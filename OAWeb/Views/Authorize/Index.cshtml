@@ -1,0 +1,234 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>权限管理</title>
+    @Html.Partial("~/Views/Shared/_Head.cshtml")
+    <style>
+        #DivLeft {
+            float: left;
+            height: 100%;
+            width: 50%;
+        }
+
+        #DivRight {
+            box-sizing: border-box;
+            float: left;
+            width: 50%;
+            height: 100%;
+            border-left: 2px solid #E4E7ED;
+            overflow-y: auto;
+        }
+
+        .el-tree-node__label {
+            font-size: 16px;
+        }
+
+        .el-tree-node__content {
+            padding-top: 3px;
+            padding-bottom: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div id="App" v-loading="Loading.bodyLoading">
+        <template>
+            <div id="DivLeft">
+                <el-table ref="dataTable"
+                          :data="tableData"
+                          highlight-current-row
+                          @@current-change="rowChange"
+                          style="width: 100%;height:100%;"
+                          element-loading-text="拼命加载中"
+                          element-loading-spinner="el-icon-loading"
+                          element-loading-background="rgba(200, 200,200, 0.5)"
+                          v-loading="Loading.tableLoading">
+                    <el-table-column type="index"
+                                     label=" ">
+                    </el-table-column>
+                    
+                    <el-table-column prop="RoleName"
+                                     label="角色名称">
+                    </el-table-column>
+                    <el-table-column prop="RoleDesc"
+                                     label="角色描述">
+                    </el-table-column>
+                    <el-table-column prop="IsEnabled"
+                                     label="是否启用">
+                        <template slot-scope="scope">
+                            {{ scope.row.IsEnabled?"是":"否" }}
+                        </template>
+                    </el-table-column>
+                  
+                </el-table>
+            </div>
+            <div id="DivRight">
+                <el-row class="Table_Button_Row">
+                    <el-col :span="24">
+                        <el-button type="primary" @@click="selectAll">全选</el-button>
+                        <el-button type="primary" @@click="saveAuthor">保存</el-button>
+                        <el-button type="primary" @@click="expandTree">展开</el-button>
+                        <el-button type="primary" @@click="shrinkTree">收缩</el-button>
+                    </el-col>
+                </el-row>
+                <el-row style="margin-top:10px;">
+                    <el-col :span="24">
+                        <el-tree  style=""
+                                 :data="MenuData"
+                                 :highlight-current="true"
+                                 :props="DefaultProps"
+                                 show-checkbox
+                                 node-key="Id"
+                                 @@node-click="MenuClick"
+                                 ref="MenuTree">
+                            <span class="custom-tree-node" slot-scope="scope" :style="{color:scope.data.IsEnabled?'':'#e4e4e4'}">
+                                <i :class="scope.data.IconClass"></i>
+                                <span>{{ scope.data.MenuName }}</span>
+                            </span>
+                        </el-tree>
+                    </el-col>
+                </el-row>
+            </div>
+          
+
+        </template>
+    </div>
+</body>
+</html>
+<script>
+    $vue = new Vue({
+        el: "#App",
+        data: {
+            tableData: [],
+            MenuData: [],
+            DefaultProps: {
+                children: 'Children',
+                label: 'MenuName'
+            },
+            Loading: {
+                bodyLoading: false,
+                tableLoading: false
+            },
+            postData: {
+                RoleId: "",
+                MenuIdList:[]
+            }
+        },
+        methods: {
+            MenuClick: function (menu) {
+            },
+            rowChange: function (row) {
+                this.Loading.bodyLoading = true;
+                this.postData.RoleId = row.Id;
+                axios.post("GetAuthorize", { roleId: row.Id }).then(function (response) {
+                    $vue.MenuData.forEach(function (v) {
+                        $vue.$refs.MenuTree.setChecked(v.Id, false, true);
+                    });
+                    response.data.forEach(function (v) {
+                        $vue.$refs.MenuTree.setChecked(v, true, true);
+                    });
+                    $vue.Loading.bodyLoading = false;
+                }).catch(function (error) {
+                    $vue.Loading.bodyLoading = false;
+                    $vue.$message({
+                        type: 'error',
+                        message: '服务器异常'
+                    });
+                    console.log(error);
+                });
+            },
+            selectAll: function () {
+                this.MenuData.forEach(function (v) {
+                    $vue.$refs.MenuTree.setChecked(v.Id, true, true);
+                });
+            },
+            saveAuthor: function () {
+                if ($vue.postData.RoleId == "") {
+                    $vue.$message({
+                        type: 'info',
+                        message: '请选择用户角色！',
+                        showClose:true
+                    });
+                    return;
+                }
+                this.Loading.bodyLoading = true;
+                this.postData.MenuIdList = [];
+                this.$refs.MenuTree.getCheckedNodes().forEach(function (v) {
+                    if (v.MenuType == "Action") {
+                        $vue.postData.MenuIdList.push(v.Id);
+                    }
+                });
+                if ($vue.postData.MenuIdList.length == 0) {
+                    this.Loading.bodyLoading = false;
+                    $vue.$message({
+                        type: 'info',
+                        message: '未选择任何菜单！',
+                        showClose: true
+                    });
+                    return;
+                }
+                axios.post("SetAuthorize", $vue.postData).then(function (response) {
+                    $vue.Loading.bodyLoading = false;
+                    if (response.data.success) {
+                        $vue.$message({
+                            type: 'success',
+                            message: '保存成功',
+                            showClose: true
+                        });
+                    }
+                    else {
+                        $vue.$message({
+                            type: 'info',
+                            message: '保存失败',
+                            showClose: true
+                        });
+                    }
+                }).catch(function (error) {
+                    $vue.Loading.bodyLoading = false;
+                    $vue.$message({
+                        type: 'error',
+                        message: '服务器异常',
+                        showClose: true
+                    });
+                    console.log(error);
+                });
+            },
+            expandTree: function () {
+                for (var i = 0; i < this.$refs.MenuTree.store._getAllNodes().length; i++) {
+                    this.$refs.MenuTree.store._getAllNodes()[i].expanded = true;
+                }
+            },
+            shrinkTree: function () {
+                for (var i = 0; i < this.$refs.MenuTree.store._getAllNodes().length; i++) {
+                    this.$refs.MenuTree.store._getAllNodes()[i].expanded = false;
+                }
+            }
+        }
+
+    });
+
+    function getTree() {
+        axios.post("/Menu/GetAllMenu").then(function (response) {
+            $vue.MenuData = response.data;
+        });
+    }
+    function getList(filter) {
+        axios.post("/Role/GetRoleList", { Page: 1, PageSize:1000000}).then(function (response) {  
+            $vue.tableData = response.data.List;
+        }).catch(function (error) {  
+            $vue.tableData = [];
+            $vue.$message({
+                type: 'error',
+                message: '服务器出错'
+            });
+        });
+    }
+    getTree();
+    getList();
+</script>

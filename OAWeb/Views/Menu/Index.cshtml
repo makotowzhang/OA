@@ -1,0 +1,584 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>菜单管理</title>
+    @Html.Partial("~/Views/Shared/_Head.cshtml")
+    <style>
+
+        #App {
+            height: 100%;
+        }
+
+        #DivLeft {
+            float: left;
+            height: 100%;
+            width: 40%;
+        }
+
+        #DivRight {
+            padding: 20px;
+            box-sizing: border-box;
+            float: left;
+            width: 60%;
+            height: 100%;
+            border-left: 2px solid #E4E7ED;
+        }
+
+        .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+            background-color: deepskyblue;
+        }
+
+        .el-tree-node__label {
+            font-size: 16px;
+        }
+
+        .el-tree-node__content {
+            padding-top: 3px;
+            padding-bottom: 3px;
+        }
+
+        .MenuIcon {
+            font-size: 28px;
+            margin-left: 15px;
+            margin-top: 15px;
+            display: inline-block;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="App" v-loading="Loading.bodyLoading">
+        <template>
+            <div id="DivLeft">
+                <el-row class="Table_Button_Row">
+                    <el-col :span="24">
+                        <el-button type="primary" @@click="addRoot">新增根节点</el-button>
+                        <el-button type="primary" @@click="addMenu">新增</el-button>
+                        <el-button type="primary" @@click="editMenu">编辑</el-button>
+                        <el-button type="danger" @@click="deleteMenu">删除</el-button>
+                    </el-col>
+                </el-row>
+                <el-row style="margin-top:10px;">
+                    <el-col :span="24">
+                        <el-tree style=""
+                                 :data="MenuData"
+                                 :highlight-current="true"
+                                 :props="DefaultProps"
+                                 node-key="Id"
+                                 @@node-click="MenuClick"
+                                 ref="MenuTree">
+                            <span class="custom-tree-node" slot-scope="scope" :style="{color:scope.data.IsEnabled?'':'#e4e4e4'}">
+                                <i :class="scope.data.IconClass"></i>
+                                <span>{{ scope.data.MenuName }}</span>
+                            </span>
+                        </el-tree>
+                    </el-col>
+                </el-row>
+            </div>
+            <div id="DivRight">
+
+                <el-form ref="AddForm" :rules="AddFormRule" :model="AddFormData" v-if="FormStatus.addForm" label-width="80px">
+                    <el-tag type="success">{{addFormTitle}}</el-tag>
+                    <el-form-item v-if="MenuTypeDisabled.RadioGroup" label="菜单类型" prop="MenuType">
+                        <el-radio-group v-model="AddFormData.MenuType" @@change="addMenuTypeChange">
+                            <el-radio label="Group" :disabled="MenuTypeDisabled.Group" border>菜单组</el-radio>
+                            <el-radio label="Router" :disabled="MenuTypeDisabled.Router" border>路由</el-radio>
+                            <el-radio label="Action" :disabled="MenuTypeDisabled.Action" border>动作</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="菜单名称" prop="MenuName">
+                        <el-input v-model="AddFormData.MenuName" placeholder="请输入菜单名称"></el-input>
+                    </el-form-item>
+                    <el-form-item label="菜单地址" prop="MenuUrl" v-if="AddFormData.MenuType=='Router'">
+                        <el-input v-model="AddFormData.MenuUrl" placeholder="请输入菜单地址"></el-input>
+                    </el-form-item>
+                    <el-form-item label="动作编码" prop="ActionCode" v-if="AddFormData.MenuType=='Action'">
+                        <el-input v-model="AddFormData.ActionCode" placeholder="请输入动作编码"></el-input>
+                    </el-form-item>
+                    <el-form-item label="动作描述" prop="ActionDesc" v-if="AddFormData.MenuType=='Action'">
+                        <el-input v-model="AddFormData.ActionDesc" placeholder="请输入动作描述"></el-input>
+                    </el-form-item>
+                    <el-form-item label="图标" prop="IconClass" v-if="AddFormData.MenuType!='Action'">
+                        <el-input v-model="AddFormData.IconClass" readonly>
+                            <el-button slot="append" @@click="openIconDialog(AddFormData.IconClass)" icon="el-icon-search"></el-button>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item label="排序" prop="Sort">
+                        <el-input-number v-model="AddFormData.Sort"></el-input-number>
+                    </el-form-item>
+                    <el-form-item label="是否启用" prop="IsEnabled">
+                        <el-switch v-model="AddFormData.IsEnabled"
+                                   active-color="#13ce66"
+                                   inactive-color="#ff4949">
+                        </el-switch>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @@click="addFormSubmit">保 存</el-button>
+                        <el-button type="warning" @@click="addMenuTypeChange">重 置</el-button>
+                    </el-form-item>
+                </el-form>
+
+                <el-form ref="EditForm" :rules="EditFormRule" :model="EditFormData" v-if="FormStatus.editForm" label-width="80px">
+                    <el-tag type="success">编辑</el-tag>
+                    <el-form-item label="菜单名称" prop="MenuName">
+                        <el-input v-model="EditFormData.MenuName" placeholder="请输入菜单名称"></el-input>
+                    </el-form-item>
+                    <el-form-item label="菜单地址" prop="MenuUrl" v-if="EditFormData.MenuType=='Router'">
+                        <el-input v-model="EditFormData.MenuUrl" placeholder="请输入菜单地址"></el-input>
+                    </el-form-item>
+                    <el-form-item label="动作编码" prop="ActionCode" v-if="EditFormData.MenuType=='Action'">
+                        <el-input v-model="EditFormData.ActionCode" placeholder="请输入动作编码"></el-input>
+                    </el-form-item>
+                    <el-form-item label="动作描述" prop="ActionDesc" v-if="EditFormData.MenuType=='Action'">
+                        <el-input v-model="EditFormData.ActionDesc" placeholder="请输入动作描述"></el-input>
+                    </el-form-item>
+                    <el-form-item label="图标" prop="IconClass" v-if="EditFormData.MenuType!='Action'">
+                        <el-input v-model="EditFormData.IconClass" readonly>
+                            <el-button slot="append" @@click="openIconDialog(EditFormData.IconClass)" icon="el-icon-search"></el-button>
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item label="排序" prop="Sort">
+                        <el-input-number v-model="EditFormData.Sort"></el-input-number>
+                    </el-form-item>
+                    <el-form-item label="是否启用" prop="IsEnabled">
+                        <el-switch v-model="EditFormData.IsEnabled"
+                                   active-color="#13ce66"
+                                   inactive-color="#ff4949">
+                        </el-switch>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @@click="editFormSubmit">保 存</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <el-dialog title="选择图标"
+                       :visible.sync="Dialog.iconDialog"
+                       width="50%">
+                <div style="max-height:200px;overflow-y:auto;overflow-x:hidden">
+                    <i v-for="icon in Iconfont" :title="icon.ClassName" :class="'MenuIcon '+icon.ClassName" :style="{color:icon.IconColor}" @@click="iconClick(icon,Iconfont)"></i>
+                </div>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @@click="IconDialogSure">确 定</el-button>
+                    <el-button @@click="Dialog.iconDialog=false">取 消</el-button>
+                </span>
+            </el-dialog>
+
+        </template>
+    </div>
+</body>
+</html>
+<script>
+    $vue = new Vue({
+        el: "#App",
+        data: {
+            MenuData: [],
+            DefaultProps: {
+                children: 'Children',
+                label: 'MenuName'
+            },
+            SelectedMenu: null,
+            AddFormData: {
+                MenuName: "",
+                MenuType: "",
+                MenuUrl: "",
+                ActionCode: "",
+                ActionDesc: "",
+                IconClass: "",
+                ParentId: "",
+                Sort: 0,
+                IsEnabled: true,
+            },
+            AddFormRule: {
+                MenuName: [
+                    { required: true, message: '请输入菜单名称', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                MenuType: [
+                    { required: true, message: '请选择菜单类型', trigger: 'change' }
+                ],
+                MenuUrl: [
+                    { required: true, message: '请输入菜单路径', trigger: 'change' },
+                    { max: 100, message: '长度不能超过100个字符', trigger: 'change' }
+                ],
+                ActionCode: [
+                    { required: true, message: '请输入动作编码', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                ActionDesc: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ]
+            },
+            EditFormData: {
+                Id: "",
+                MenuName: "",
+                MenuType: "",
+                MenuUrl: "",
+                ActionCode: "",
+                ActionDesc: "",
+                IconClass: "",
+                ParentId: "",
+                Sort: 0,
+                IsEnabled: true,
+            },
+            EditFormRule: {
+                MenuName: [
+                    { required: true, message: '请输入菜单名称', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                MenuUrl: [
+                    { required: true, message: '请输入菜单路径', trigger: 'change' },
+                    { max: 100, message: '长度不能超过100个字符', trigger: 'change' }
+                ],
+                ActionCode: [
+                    { required: true, message: '请输入动作编码', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                ActionDesc: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ]
+            },
+            Dialog: {
+                iconDialog: false
+            },
+            MenuTypeDisabled: {
+                Group: true,
+                Router: true,
+                Action: true,
+                RadioGroup: true
+            },
+            Iconfont: [],
+            addFormTitle: "新增",
+            Loading: {
+                bodyLoading: false
+            },
+            FormStatus: {
+                addForm: false,
+                editForm: false
+            }
+        },
+        methods: {
+            MenuClick: function (menu) {
+                if (this.SelectedMenu != menu) {
+                    this.FormStatus.addForm = false;
+                    this.FormStatus.editForm = false;
+                }
+                this.SelectedMenu = menu;
+            },
+            addRoot: function () {
+                this.AddFormData.MenuName = "";
+                this.AddFormData.MenuType = "Root";
+                this.AddFormData.MenuUrl = "";
+                this.AddFormData.ActionCode = "";
+                this.AddFormData.IconClass = "";
+                this.AddFormData.ParentId = "";
+                this.AddFormData.Sort = 0;
+                this.AddFormData.IsEnabled = true;
+                this.MenuTypeDisabled.Group = true;
+                this.MenuTypeDisabled.Router = true;
+                this.MenuTypeDisabled.Action = true;
+                this.FormStatus.editForm = false;
+                this.FormStatus.addForm = true;
+                this.MenuTypeDisabled.RadioGroup = false;
+                this.addFormTitle = "新增根节点";
+                setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 0);
+            },
+            addMenu: function () {
+                if (this.SelectedMenu == null) {
+                    this.$message({
+                        showClose: true,
+                        message: "请选择父菜单！",
+                        type: "info"
+                    })
+                    return;
+                }
+                if (this.SelectedMenu.MenuType == "Action") {
+                    this.$message({
+                        showClose: true,
+                        message: "动作菜单下无法新增子菜单！",
+                        type: "info"
+                    })
+                    return;
+                }
+                setIocnDialog();
+                this.AddFormData.MenuName = "";
+                this.AddFormData.MenuUrl = "";
+                this.AddFormData.ActionCode = "";
+                this.AddFormData.ActionDesc = "";
+                this.AddFormData.IconClass = "";
+                this.AddFormData.ParentId = this.SelectedMenu.Id;
+                this.AddFormData.Sort = 0;
+                this.AddFormData.IsEnabled = true;
+                if (this.SelectedMenu.MenuType == "Root" || this.SelectedMenu.MenuType == "Group") {
+                    this.MenuTypeDisabled.Action = true;
+                    this.MenuTypeDisabled.Group = false;
+                    this.MenuTypeDisabled.Router = false;
+                    this.AddFormData.MenuType = "Group";
+                }
+                if (this.SelectedMenu.MenuType == "Router") {
+                    this.MenuTypeDisabled.Action = false;
+                    this.MenuTypeDisabled.Group = true;
+                    this.MenuTypeDisabled.Router = true;
+                    this.AddFormData.MenuType = "Action";
+                }
+                this.addFormTitle = "新增子菜单";
+                this.FormStatus.editForm = false;
+                this.MenuTypeDisabled.RadioGroup = true;
+                this.FormStatus.addForm = true;
+                setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 0);
+            },
+            editMenu: function () {
+                if (this.SelectedMenu == null) {
+                    this.$message({
+                        showClose: true,
+                        message: "请选择菜单！",
+                        type: "info"
+                    })
+                    return;
+                }
+                if (this.SelectedMenu.Sort == -1 && this.SelectedMenu.MenuName == "浏览" && this.SelectedMenu.ActionCode == "View") {
+                    this.$message({
+                        showClose: true,
+                        message: "默认动作无法编辑！",
+                        type: "info"
+                    })
+                    return;
+                }
+                this.Loading.bodyLoading = true;
+                axios.post("GetMenu", { menuId: this.SelectedMenu.Id }).then(function (request) {
+                    $vue.EditFormData = request.data;
+                    $vue.FormStatus.addForm = false;
+                    $vue.FormStatus.editForm = true;
+                    setTimeout(function () { $vue.$refs.EditForm.clearValidate(); }, 0);
+                    $vue.Loading.bodyLoading = false;
+                }).catch(function () {
+                    $vue.$message({
+                        showClose: true,
+                        message: "服务器出错！",
+                        type: "error"
+                    })
+                });
+            },
+            deleteMenu: function () {
+                if (this.SelectedMenu == null) {
+                    this.$message({
+                        showClose: true,
+                        message: "请选择需要删除的菜单！",
+                        type: "info"
+                    })
+                    return;
+                }
+                if (this.SelectedMenu.Sort == -1 && this.SelectedMenu.MenuName == "浏览" && this.SelectedMenu.ActionCode == "View") {
+                    this.$message({
+                        showClose: true,
+                        message: "默认动作无法删除！",
+                        type: "info"
+                    })
+                    return;
+                }
+                this.$confirm('是否确认删除“' + this.SelectedMenu.MenuName + '”', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(function () {
+                    $vue.Loading.bodyLoading = true;
+                    axios.post("DeleteMenu", $vue.SelectedMenu).then(function (response) {
+                        $vue.Loading.bodyLoading = false;
+                        if (response.data.success) {
+                            $vue.$message({
+                                type: 'success',
+                                message: '删除成功!'
+                            });
+                            $vue.$refs.MenuTree.remove($vue.SelectedMenu.Id);
+                        } else {
+                            $vue.$message({
+                                type: 'info',
+                                message: '删除失败!'
+                            });
+                        }
+                    }).catch(function (error) {
+                        $vue.Loading.bodyLoading = false;
+                        $vue.$message({
+                            type: 'error',
+                            message: '服务器出错!'
+                        });
+                        console.log(error);
+                    });
+
+                }).catch(function () {
+                    $vue.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+            addFormSubmit: function () {
+                this.$refs.AddForm.validate(function (result, obj) {
+                    if (result) {
+                        $vue.Loading.bodyLoading = true;
+                        axios.post("AddMenu", $vue.AddFormData).then(function (response) {
+                            $vue.Loading.bodyLoading = false;
+                            if (response.data.success) {
+                                $vue.$message({
+                                    showClose: true,
+                                    message: '新增成功！',
+                                    type: 'success'
+                                });
+                               
+                                if ($vue.AddFormData.MenuType == "Root") {
+                                    axios.post("GetMenu", { menuId: response.data.msg }).then(function (res) {
+                                        $vue.MenuData.push(res.data);
+                                        menuSort($vue.MenuData);
+                                    });
+                                }
+                                else {
+                                    if ($vue.SelectedMenu.Children == null) {
+                                        $vue.SelectedMenu.Children = [];
+                                    }
+                                    axios.post("GetMenu", { menuId: response.data.msg }).then(function (res) {
+                                        $vue.SelectedMenu.Children.push(res.data);
+                                        menuSort($vue.MenuData);
+                                    });
+                                }
+                            }
+                            else {
+                                $vue.$message({
+                                    showClose: true,
+                                    message: '新增失败！',
+                                    type: 'info'
+                                });
+                            }
+                        }).catch(function () {
+                            $vue.Loading.bodyLoading = false;
+                            $vue.$message({
+                                showClose: true,
+                                message: '服务器出错！',
+                                type: 'error'
+                            });
+                        });
+                        $vue.FormStatus.addForm = false;
+                    }
+                });
+            },
+            editFormSubmit: function () {
+                this.$refs.EditForm.validate(function (result, obj) {
+                    if (result) {
+                        $vue.Loading.bodyLoading = true;
+                        axios.post("EditMenu", $vue.EditFormData).then(function (response) {
+                            $vue.Loading.bodyLoading = false;
+                            if (response.data.success) {
+                                $vue.$message({
+                                    showClose: true,
+                                    message: '修改成功！',
+                                    type: 'success'
+                                });
+                                $vue.SelectedMenu.Sort = $vue.EditFormData.Sort;
+                                $vue.SelectedMenu.MenuName = $vue.EditFormData.MenuName;
+                                $vue.SelectedMenu.MenuUrl = $vue.EditFormData.MenuUrl;
+                                $vue.SelectedMenu.ActionCode = $vue.EditFormData.ActionCode;
+                                $vue.SelectedMenu.ActionDesc = $vue.EditFormData.ActionDesc;
+                                $vue.SelectedMenu.IconClass = $vue.EditFormData.IconClass;
+                                $vue.SelectedMenu.IsEnabled = $vue.EditFormData.IsEnabled;
+                            }
+                            else {
+                                $vue.$message({
+                                    showClose: true,
+                                    message: '修改失败！',
+                                    type: 'info'
+                                });
+                            }
+                        }).catch(function () {
+                            $vue.Loading.bodyLoading = false;
+                            $vue.$message({
+                                showClose: true,
+                                message: '服务器出错！',
+                                type: 'error'
+                            });
+                        });
+                        $vue.FormStatus.editForm = false;
+
+                    }
+                });
+            },
+            IconDialogSure: function () {
+                var selectIcon = this.Iconfont.filter(function (v, i) {
+                    return v.IconColor == "red";
+                });
+                if (selectIcon.length != 1) {
+                    return;
+                }
+                if (this.FormStatus.addForm) {
+                    this.AddFormData.IconClass = selectIcon[0].ClassName;
+                }
+                if (this.FormStatus.editForm) {
+                    this.EditFormData.IconClass = selectIcon[0].ClassName;
+                }
+                this.Dialog.iconDialog = false;
+            },
+            iconClick: function (icon, iconList) {
+                setIocnDialog(icon.ClassName);
+            },
+            addMenuTypeChange: function (val) {
+                this.AddFormData.MenuName = "";
+                this.AddFormData.MenuUrl = "";
+                this.AddFormData.ActionCode = "";
+                this.AddFormData.ActionDesc = "";
+                this.AddFormData.IconClass = "";
+                this.AddFormData.Sort = 0;
+                setTimeout(function () {
+                    $vue.$refs.AddForm.clearValidate();
+                    setIocnDialog();
+                }, 0);
+
+            },
+            openIconDialog: function (className) {
+                setIocnDialog(className);
+                this.Dialog.iconDialog = true;
+            }
+        }
+
+    });
+    axios.get("/fonts/Iconfont.json", {}).then(function (response) {
+        $vue.Iconfont = response.data;
+    })
+    function getTree() {
+        axios.post("GetAllMenu").then(function (response) {
+            $vue.MenuData = response.data;
+
+        });
+    }
+    getTree();
+
+    function setIocnDialog(className) {
+        $vue.Iconfont.filter(function (v, i) {
+            return v.IconColor == "red";
+        }).forEach(function (v, i) {
+            Vue.set(v, "IconColor", null);
+        });
+        if (className != null && className != "") {
+            $vue.Iconfont.filter(function (v, i) {
+                return v.ClassName == className;
+            }).forEach(function (v, i) {
+                Vue.set(v, "IconColor", "red");
+            });
+        }
+
+    }
+    function menuSort(menu) {
+        if (menu != null && menu.length > 0) {
+            menu.sort(function (a, b) {
+                return a.Sort - b.Sort;
+            });
+            menu.forEach(function (v) {
+                menuSort(v.Children);
+            });
+        }
+    }
+
+</script>

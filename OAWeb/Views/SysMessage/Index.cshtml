@@ -1,0 +1,236 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>系统消息</title>
+    @Html.Partial("~/Views/Shared/_Head.cshtml")
+</head>
+<body>
+    <div id="App" ref="App" v-loading="Loading.bodyLoading">
+        <template>
+            <div ref="QueryFormDiv">
+                <el-form :model="QueryFormData" label-width="70px" label-position="left" :inline="true" class="Query_Form" ref="QueryForm" @@submit.native.prevent>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="操作名称"  prop="MsgTitle">
+                                <el-input v-model="QueryFormData.MsgTitle"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="消息类型" prop="MsgType">
+                                <el-select v-model="QueryFormData.MsgType" :clearable="true">
+                                    <el-option v-for="item in SelectOption.MessageType"
+                                               :key="item.Value"
+                                               :label="item.Text"
+                                               :value="item.Value">
+                                    </el-option>
+                                </el-select>
+
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="阅读状态" prop="IsRead">
+                                <el-select v-model="QueryFormData.IsRead" :clearable="true">
+                                    <el-option v-for="item in SelectOption.IsRead"
+                                               :key="item.Value"
+                                               :label="item.Text"
+                                               :value="item.Value">
+                                    </el-option>
+                                </el-select>
+
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="开始时间" prop="BeginTime">
+                                <el-date-picker v-model="QueryFormData.BeginTime"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="结束时间" prop="EndTime">
+                                <el-date-picker v-model="QueryFormData.EndTime"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item>
+                                <el-button type="primary" @@click="onQuery">查询</el-button>
+                                <el-button type="primary" @@click="resetQueryForm">重置</el-button>
+                            </el-form-item>
+                        </el-col>
+                </el-form>
+            </div>
+            <el-table ref="dataTable"
+                      :data="tableData"
+                      :border="true"
+                      :height="tableHeight"
+                      style="width: 100%;margin-top:20px;"
+                      element-loading-text="拼命加载中"
+                      element-loading-spinner="el-icon-loading"
+                      element-loading-background="rgba(200, 200,200, 0.5)"
+                      v-loading="Loading.tableLoading">
+                <el-table-column type="index"
+                                 :index="showIdex"
+                                 label=" ">
+                </el-table-column>
+                <el-table-column prop="MsgTitle"
+                                 label="消息标题"
+                                 width="200">
+                </el-table-column>
+                <el-table-column prop="MsgContent"
+                                 label="消息内容">
+                </el-table-column>
+                <el-table-column prop="MsgType"
+                                 label="消息类型"
+                                 width="80">
+                    <template slot-scope="scope">
+                        {{ Dic.MessageType[scope.row.MsgType]  }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="IsRead"
+                                 label="阅读状态"
+                                 width="80">
+                    <template slot-scope="scope">
+                        {{ scope.row.IsRead?"已读":"未读" }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="CreateTime"
+                                 label="发送时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        {{ DateFormat(scope.row.CreateTime,'yyyy-MM-dd HH:mm:ss') }}
+                    </template>
+
+                </el-table-column>
+
+
+
+            </el-table>
+            <div ref="Pagination">
+                <el-pagination @@size-change="handleSizeChange"
+                               @@current-change="handleCurrentChange"
+                               :current-page.sync="QueryFormData.Page"
+                               :page-size.sync="QueryFormData.PageSize"
+                               :page-sizes="PaginationData.pageSizes"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="PaginationData.total"
+                               style="width:100%;padding-left:20px;box-sizing:border-box">
+                </el-pagination>
+            </div>
+        </template>
+    </div>
+</body>
+</html>
+<script>
+    $vue = new Vue({
+        el: "#App",
+        data: {
+            QueryFormData: {
+                MsgTitle: "",
+                MsgType: "",
+                IsRead: null,
+                BeginTime: "",
+                EndTime: "",
+                Page: 1,
+                PageSize: 10
+            },
+            tableData: [],
+            tableHeight: 500,
+            Loading: {
+                bodyLoading: false,
+                tableLoading: false
+            },
+            SelectOption: {
+                MessageType: [
+                    { Value: "Message", Text: "短消息" },
+                    { Value: "Audit", Text: "审核消息" }
+                ],
+                IsRead: [
+                    { Value: true, Text: "已读" },
+                    { Value: false, Text: "未读" }
+                ]
+            },
+            PaginationData: {
+                pageSizes: [10, 20, 50, 100],
+                total: 0
+            },
+            PaginationFilter: {
+            },
+            Dic: {
+                MessageType: {
+                    Message: "短消息",
+                    Audit: "审核消息"
+                }
+            }
+        },
+        methods: {
+            onQuery: function () {
+                this.QueryFormData.Page = 1;
+                this.PaginationFilter = JSON.parse(JSON.stringify(this.QueryFormData));
+                getList();
+            },
+            showIdex: function (index) {
+                return (this.QueryFormData.Page - 1) * this.QueryFormData.PageSize + 1 + index;
+            },
+            resetQueryForm: function () {
+                this.$refs.QueryForm.resetFields();
+            },
+            handleSizeChange: function (val) {
+                if (this.QueryFormData.Page > (this.PaginationData.total / val + 1)) {
+                    return;
+                }
+                this.PaginationFilter.Page = this.QueryFormData.Page;
+                this.PaginationFilter.PageSize = val;
+                getList(this.PaginationFilter);
+            },
+            handleCurrentChange: function (val) {
+                this.PaginationFilter.Page = val;
+                this.PaginationFilter.PageSize = this.QueryFormData.PageSize;
+                getList(this.PaginationFilter);
+            },
+            DateFormat: DateFormat
+        }
+
+    });
+
+    function getList(filter) {
+        if (filter == null) {
+            filter = $vue.QueryFormData;
+        }
+        $vue.Loading.tableLoading = true;
+        axios.post("GetMsgList", filter).then(function (response) {
+            $vue.Loading.tableLoading = false;
+            $vue.tableData = response.data.List;
+            $vue.PaginationData.total = response.data.Total;
+        }).catch(function (error) {
+            $vue.Loading.tableLoading = false;
+            $vue.tableData = [];
+            $vue.PaginationData.total = 0;
+            $vue.$message({
+                type: 'error',
+                message: '服务器出错'
+            });
+        });
+    }
+    window.onresize = function () {
+        $vue.tableHeight = $vue.$refs.App.getBoundingClientRect().height -
+            $vue.$refs.QueryFormDiv.getBoundingClientRect().height -
+            $vue.$refs.Pagination.getBoundingClientRect().height - 20;
+    }
+    getList();
+    GetActionAuthorize($vue);
+</script>

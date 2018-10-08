@@ -1,0 +1,17 @@
+.vs/
+Business/bin/
+Business/obj/
+Common/bin/
+Common/obj/
+Data/bin/
+Data/obj/
+Entity/bin/
+Entity/obj/
+OAWeb/bin/
+OAWeb/obj/
+Model/bin/
+Model/obj/
+packages/
+*.user
+*.pubxml
+OAWeb/OAWeb.csproj.user

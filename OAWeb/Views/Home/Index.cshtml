@@ -1,0 +1,552 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @Html.Partial("~/Views/Shared/_Head.cshtml")
+    <title></title>
+
+    <style>
+
+
+        #App {
+            height: 100%;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .HeadDiv {
+            height: 50px;
+            background-color: #393C3C;
+            box-sizing: border-box;
+            border-bottom: 2px solid #66B1FF;
+        }
+
+        .SignOutDiv {
+            float: right;
+            height: 50px;
+            line-height: 50px;
+            padding-right: 50px;
+        }
+
+            .SignOutDiv .textButton span{
+                font-size: 18px;
+                margin-left: 2px;
+            }
+
+                .SignOutDiv .textButton i {
+                    font-size: 21px;
+                    vertical-align: text-bottom;
+                }
+
+            .SignOutDiv .el-badge__content,.is-fixed {
+                top: 12px;
+                right: 30px;
+            }
+        .msgButton {
+            font-size: 28px;
+            color: white;
+            margin-right: 20px;
+            cursor: pointer
+        }
+        .msgButton:hover {
+            color: #409EFF;
+        }
+        .box-card {
+            position:absolute;
+            width:200px;
+            z-index:1499;
+            top:38px;
+            left:-175px;
+        }
+        .msgContent {
+            line-height: 25px;
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            cursor: pointer;
+        }
+        .msgContent i {
+            vertical-align: middle;
+        }
+        .msgContent:hover {
+            background-color: lightgray;
+        }
+        .el-card__body {
+            padding:0;
+        }
+        .MainDiv {
+            height: calc(100% - 50px);
+        }
+
+        .MainLeft {
+            height: 100%;
+            width: 200px;
+            float: left;
+            background-color: #393C3C;
+            overflow: auto;
+        }
+
+        .MainRight {
+            height: 100%;
+            width: calc(100% - 200px);
+            float: left;
+            background-color: #EFEFEF;
+            padding-left: 10px;
+            padding-top: 10px;
+            box-sizing: border-box;
+        }
+
+        .MianContent {
+            height: 100%;
+            width: 100%;
+            background-color: white;
+        }
+
+        .Mainfoot {
+            clear: both;
+        }
+
+        .el-tabs--card > .el-tabs__header .el-tabs__nav {
+            border-radius: 0;
+        }
+
+        .el-tabs {
+            height: calc(100% - 41px);
+        }
+
+        .el-tabs__content {
+            height: 100%;
+        }
+
+        .el-tabs__item {
+            box-sizing: border-box;
+        }
+
+        .el-tabs__header {
+            margin: 0;
+        }
+
+        .tabIcon {
+            font-size: 15px;
+        }
+
+        .TabMenu {
+            position: absolute;
+            z-index: 9999;
+            background-color: #fff;
+            border: 1px solid #ebeef5;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
+        }
+
+            .TabMenu div {
+                box-sizing: border-box;
+                padding: 4px 10px 7px 10px;
+                cursor: pointer;
+                font-size: 14px;
+            }
+
+                .TabMenu div i {
+                    position: relative;
+                    top: 2px;
+                }
+
+                .TabMenu div:hover {
+                    background-color: #ecf5ff;
+                    color: #66b1ff;
+                }
+    </style>
+
+    <script type="text/x-template" id="NavMenu">
+        <div>
+            <template v-for="(v,i) in model">
+                <el-menu-item v-if="v.Children==null||v.Children.length==0" :index="v.Id">
+                    <span><i v-if="v.IconClass!=''&&v.IconClass!=null" :class="v.IconClass"></i>{{v.MenuName}}</span>
+                </el-menu-item>
+                <el-submenu v-else :index="v.Id">
+                    <template slot="title">
+                        <i v-if="v.IconClass!=''&&v.IconClass!=null" :class="v.IconClass"></i>
+                        <span>{{v.MenuName}}</span>
+                    </template>
+                    <cbb :model="v.Children"></cbb>
+                </el-submenu>
+            </template>
+        </div>
+    </script>
+</head>
+<body>
+    <div id="App" v-loading="Loading.bodyLoading">
+        <template>
+            <div class="TabMenu" @@click.stop="tabMenuClick" v-show="TabMenuPosition.visible" ref="TabMenu" :style="{top:TabMenuPosition.top+'px',left:TabMenuPosition.left+'px'}">
+                <div v-show="TabMenuPosition.isSetMenu" @@click="refreshTab" style="color:#67C23A"><i class="icon iconfont icon-reload"></i>刷新</div>
+                <div v-show="TabMenuPosition.closeThis" @@click="closeThisTab" style="color:#909399"><i class="icon iconfont icon-close"></i>关闭此标签</div>
+                <div v-show="TabMenuPosition.isSetMenu" @@click="closeExcept" style="color:#E6A23C"><i class="icon iconfont icon-close-circle"></i>关闭除此之外</div>
+                <div @@click="closeAll" style="color:#F56C6C"><i class="icon iconfont icon-close-circle-fill"></i>关闭所有标签</div>
+            </div>
+            <div class="HeadDiv">
+                <div class="SignOutDiv">
+                    <el-badge :value="MessageDiv.messageNum" :max="99" :hidden="MessageDiv.messageNum==0" class="item">
+                        <i class="icon iconfont icon-mail msgButton" @@click.stop="MessageDiv.visible=!MessageDiv.visible"></i>
+                        <el-card class="box-card" v-show="MessageDiv.visible" shadow="always">
+                            <template v-for="item in MessageData">
+                                <el-tooltip  effect="dark" :content="item.MsgContent" placement="left">
+                                    <div :style="{color:item.IsRead?'#909399':'#E6A23C'}" class="msgContent">
+                                        <i :class="getMessageIcon(item.MsgType)"></i>
+                                        {{getMessageShortTitle(item.MsgTitle)}}
+                                    </div>
+                                </el-tooltip>
+                            </template>
+                            <div style="text-align:center;padding:0;line-height:30px;" >
+                                <el-button type="text" @@click="addTab('C61BA937-ACF9-48D0-8957-BC021B9605F7')">查看更多</el-button>
+                            </div>
+
+                        </el-card>
+                    </el-badge>
+                    <el-button type="text" @@click="openPwdDialog" icon="icon iconfont icon-interation" class="textButton">修改密码</el-button>
+                    <el-button type="text" @@click="signout" icon="icon iconfont icon-poweroff" class="textButton">登出</el-button>
+                </div>
+            </div>
+            <div class="MainDiv">
+                <div class="MainLeft">
+                    <el-menu default-active="1"
+                             ref="Menu"
+                             @@open="handleOpen"
+                             @@close="handleClose"
+                             @@select="addTab"
+                             background-color="#393C3C"
+                             text-color="#fff"
+                             active-text-color="#ffd04b"
+                             style="border-right:0">
+                        <cbb :model="MenuList"></cbb>
+                    </el-menu>
+                </div>
+                <div class="MainRight">
+                    <div class="MianContent" id="MianContent" @@contextmenu.prevent.stop="tabContextmenu()">
+                        <el-tabs v-model="editableTabsValue" type="card" @@tab-remove="removeTab">
+                            <el-tab-pane style="height:100%" v-for="(item, index) in editableTabs"
+                                         :key="item.name"
+                                         :name="item.name"
+                                         @*:label="item.title"*@
+                                         :closable="item.closable==null?true:item.closable">
+                                <span slot="label" @@contextmenu.prevent.stop="tabContextmenu(item.name)"><i v-if="item.IconClass!=null&&item.IconClass!=''" :class="'tabIcon ' + item.IconClass"></i> {{item.title}}</span>
+                                <iframe style="border:0;width:100%;height:100%;overflow:auto;" :src="item.content"></iframe>
+                            </el-tab-pane>
+                        </el-tabs>
+                    </div>
+                </div>
+
+            </div>
+            <div class="Mainfoot"></div>
+
+            <el-dialog title="修改密码"
+                       :visible.sync="Dialog.changePwd"
+                       width="500px">
+                <el-form :model="ChangePwdData" :rules="ChangePwdRule" label-width="80px" ref="ChangePwdForm" @@submit.native.prevent>
+                    <el-form-item label="旧密码" prop="CurrentPwd">
+                        <el-input v-model="ChangePwdData.CurrentPwd" type="password" placeholder="请输入旧密码"></el-input>
+                    </el-form-item>
+                    <el-form-item label="新密码" prop="NewPwd">
+                        <el-input v-model="ChangePwdData.NewPwd" type="password" placeholder="请输入新密码"></el-input>
+                    </el-form-item>
+                    <el-form-item label="确认密码" prop="ConfirmPwd">
+                        <el-input v-model="ChangePwdData.ConfirmPwd" type="password" placeholder="请输入确认密码"></el-input>
+                    </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @@click="changePassword">保 存</el-button>
+                    <el-button @@click="Dialog.changePwd=false">取 消</el-button>
+                </span>
+            </el-dialog>
+        </template>
+    </div>
+
+</body>
+
+</html>
+<script>
+    Vue.component('cbb', {
+        props: ['model'],
+        template: '#NavMenu'
+    })
+    var $app = new Vue({
+        el: "#App",
+        data: {
+            MenuList: [],
+            editableTabsValue: '1',
+            editableTabs: [],
+            tabIndex: 1,
+            TabMenuPosition: {
+                top: 20,
+                left: 20,
+                visible: false,
+                isSetMenu: false,
+                closeThis: false,
+                navName: null
+            },
+            ChangePwdData: {
+                CurrentPwd: "",
+                NewPwd: "",
+                ConfirmPwd: ""
+            },
+            ChangePwdRule: {
+                CurrentPwd: [
+                    { required: true, message: '请输入旧密码', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' },
+                    { validator: checkCurrentPwd, trigger: 'blur' }
+                ],
+                NewPwd: [
+                    { required: true, message: '请输入新密码', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                ConfirmPwd: [
+                    { required: true, message: '请输入确认密码', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' },
+                    { validator: checkConfirmPwd, trigger: 'change' }
+                ]
+            },
+            Dialog: {
+                changePwd: false
+            },
+            Loading: {
+                bodyLoading:false
+            },
+            MessageDiv: {
+                visible: false,
+                messageNum:0
+            },
+            MessageData: [ ]
+        },
+        methods: {
+            signout: function () {
+                this.$confirm('您是否确认登出系统', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(function () {
+                    window.location.href = "/Login/SignOut";
+                });
+            },
+            changePassword: function () {
+                this.$refs.ChangePwdForm.validate(function (success, validateobj) {
+                    if (success) {
+                        $app.Loading.bodyLoading = true;
+                        axios.post("/Home/ChangePassword", $app.ChangePwdData).then(function (response) {
+                            ActionCommonHandle(response.data, $app, "修改成功", "修改失败");
+                        }).catch(function (error) {
+                            ErrorCommonHandle($app);
+                        }).finally(function () {
+                            $app.$refs.ChangePwdForm.resetFields();
+                            $app.Loading.bodyLoading = false;
+                            $app.Dialog.changePwd = false;
+                        });
+                    }
+                });
+            },
+            openPwdDialog: function () {
+                this.Dialog.changePwd = true;
+                setTimeout(function () {
+                    $app.$refs.ChangePwdForm.resetFields();
+                }, 0)
+               
+            },
+            handleOpen: function () {
+
+            },
+            handleClose: function () {
+
+            },
+            //选择菜单项触发
+            addTab: function (index, indexPath) {
+                axios.get("/Home/Test").then(function (response) {
+                    if (response.request.responseURL.indexOf("Login/Index") != -1) {
+                        return;
+                    }
+                    let item = getMenu($app.MenuList, index);
+                    let temp;
+                    $app.editableTabs.forEach(function (tab, index) {
+                        if (item.Id == tab.name) {
+                            temp = tab;
+                        }
+                    })
+                    if (temp != null) {
+                        $app.editableTabsValue = temp.name;
+                        return;
+                    }
+
+                    $app.editableTabs.push({
+                        title: item.MenuName,
+                        name: item.Id,
+                        IconClass: item.IconClass,
+                        content: item.MenuUrl + "?MenuId=" + item.Id,
+                        url: item.MenuUrl
+                    });
+                    $app.editableTabsValue = item.Id;
+                })
+
+            },
+            //移除标签触发
+            removeTab: function (targetName) {
+                let tabs = this.editableTabs;
+                let activeName = this.editableTabsValue;
+                if (activeName === targetName) {
+                    tabs.forEach(function (tab, index) {
+                        if (tab.name === targetName) {
+                            let nextTab = tabs[index + 1] || tabs[index - 1];
+                            if (nextTab) {
+                                activeName = nextTab.name;
+                            }
+                        }
+                    });
+                }
+                this.editableTabsValue = activeName;
+                this.editableTabs = tabs.filter(function (tab) { return tab.name !== targetName; });
+            },
+            //标签右键事件
+            tabContextmenu: function (tabName) {
+                console.log(tabName);
+                $app.TabMenuPosition.visible = false;
+                if (tabName == null) {
+                    $app.TabMenuPosition.isSetMenu = false;
+                    $app.TabMenuPosition.closeThis = false;
+                }
+                else if (tabName == "1") {
+                    $app.TabMenuPosition.isSetMenu = true;
+                    $app.TabMenuPosition.closeThis = false;
+                    $app.TabMenuPosition.navName = "1";
+                }
+                else {
+                    $app.TabMenuPosition.isSetMenu = true;
+                    $app.TabMenuPosition.closeThis = true;
+                    $app.TabMenuPosition.navName = tabName;
+                }
+                this.TabMenuPosition.visible = false;
+                var cx = event.clientX;
+                var cy = event.clientY;
+                if (cx + 100 + 100 >= window.screen.width) {
+                    $app.TabMenuPosition.left = cx - 100;
+                }
+                else {
+                    $app.TabMenuPosition.left = cx;
+                }
+                $app.TabMenuPosition.top = cy;
+                $app.TabMenuPosition.visible = true;
+            },
+            tabMenuClick: function () {
+            },
+            closeThisTab: function () {
+                this.$options.methods.removeTab.bind(this)(this.TabMenuPosition.navName);
+                this.TabMenuPosition.visible = false;
+            },
+            refreshTab: function () {
+                for (var i = 0; i < this.editableTabs.length; i++) {
+                    if (this.editableTabs[i].name == this.TabMenuPosition.navName) {
+                        this.editableTabs[i].content = this.editableTabs[i].url + "?MenuId=" + this.editableTabs[i].name + "&r=" + Math.random();
+                    }
+                }
+                this.TabMenuPosition.visible = false;
+            },
+            closeExcept: function () {
+                for (var i = this.editableTabs.length - 1; i > 0; i--) {
+                    if (this.editableTabs[i].name != this.TabMenuPosition.navName) {
+                        this.$options.methods.removeTab.bind(this)(this.editableTabs[i].name);
+                    }
+                }
+                this.TabMenuPosition.visible = false;
+            },
+            closeAll: function () {
+                for (var i = this.editableTabs.length - 1; i > 0; i--) {
+
+                    this.$options.methods.removeTab.bind(this)(this.editableTabs[i].name);
+                }
+                this.TabMenuPosition.visible = false;
+            },
+            getMessageIcon: function (msgType) {
+                if (msgType == "Message") {
+                    return "icon iconfont icon-message";
+                }
+                if (msgType == "Audit") {
+                    return "icon iconfont icon-audit";
+                }
+            },
+            getMessageShortTitle: function (title) {
+                if (title.length > 9) {
+                    return title.substr(0, 8) + "...";
+                }
+                else {
+                    return title;
+                }
+             
+            }
+        }
+    });
+
+      
+    axios.post("/Home/GetMenu").then(function (response) {
+        if (response.request.responseURL.indexOf("Login/Index") != -1) {
+            return;
+        }
+        $app.MenuList = response.data;
+        $app.editableTabs.push({
+            title: '欢迎',
+            name: '1',
+            content: '/Welcome/Index',
+            closable: false,
+            url: '/Welcome/Index'
+        });
+    });
+
+    axios.post("/SysMessage/GetNotReadCount").then(function (response) {
+        $app.MessageDiv.messageNum = response.data;
+    });
+
+    axios.post("/SysMessage/GetMsgList", {  Page: 1, PageSize: 5}).then(function (response) {
+        $app.MessageData = response.data.List;
+    });
+
+    function getMenu(menuList, navId) {
+        var menu;
+        for (var i = 0; i < menuList.length; i++) {
+            var m = menuList[i];
+            if (menu != null) {
+                break;
+            }
+            if (m.Id.toUpperCase() == navId.toUpperCase()) {
+                menu = m;
+            }
+            if (menu == null && m.Children != null && m.Children.length > 0) {
+                menu = getMenu(m.Children, navId);
+            }
+        }
+        return menu;
+    }
+
+    function checkCurrentPwd(rule, value, callback) {
+        axios.post("/Home/CheckCurrentPwd", { password: value }).then(function (response) {
+            if (!response.data.success) {
+                callback(new Error("旧密码错误！"));
+            }
+            else {
+                callback();
+            }
+        });
+    }
+
+    function checkConfirmPwd(rule, value, callback) {
+        if ($app.ChangePwdData.NewPwd != $app.ChangePwdData.ConfirmPwd) {
+            callback(new Error("与新密码不一致！"));
+        }
+        else {
+            callback();
+        }
+    }
+
+</script>
