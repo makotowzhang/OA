@@ -20,15 +20,15 @@
                         <el-input v-model="QueryFormData.RoleName" placeholder="请输入角色名称"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @@click="onQuery">查询</el-button>
-                        <el-button type="primary" @@click="resetQueryForm">重置</el-button>
+                        <el-button type="primary" @@click="onQuery" icon="el-icon-search">查询</el-button>
+                        <el-button type="primary" @@click="resetQueryForm" icon="el-icon-refresh">重置</el-button>
                     </el-form-item>
                 </el-form>
                 <el-row class="Table_Button_Row">
                     <el-col :span="24">
-                        <el-button type="primary" v-if="ActionPermission.Add" ref="btnAdd" @@click="openAddDialog">新增</el-button>
-                        <el-button type="primary" v-if="ActionPermission.Edit" :disabled="ButtonState.btnEdit" ref="btnEdit" @@click="openEditDialog">编辑</el-button>
-                        <el-button type="danger" v-if="ActionPermission.Delete" :disabled="ButtonState.btnDelete" ref="btnDelete" @@click="deleteClick">删除</el-button>
+                        <el-button icon="icon iconfont icon-file-add" type="primary" v-if="ActionPermission.Add" ref="btnAdd" @@click="openAddDialog">新增</el-button>
+                        <el-button icon="icon iconfont icon-edit" type="primary" v-if="ActionPermission.Edit" :disabled="ButtonState.btnEdit" ref="btnEdit" @@click="openEditDialog">编辑</el-button>
+                        <el-button icon="icon iconfont icon-delete" type="danger" v-if="ActionPermission.Delete" :disabled="ButtonState.btnDelete" ref="btnDelete" @@click="deleteClick">删除</el-button>
                     </el-col>
                 </el-row>
             </div>

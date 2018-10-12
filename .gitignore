@@ -15,3 +15,5 @@ packages/
 *.user
 *.pubxml
 OAWeb/OAWeb.csproj.user
+OAWeb/Upload/
+OAWeb/Preview/

@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
-
 namespace OAWeb
 {
     public class MvcApplication : System.Web.HttpApplication
@@ -18,6 +17,7 @@ namespace OAWeb
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             Business.SystemBusiness.AutoMapperConfig.Initialize();
+            LicenseHelper.ModifyInMemory.ActivateMemoryPatching();
         }
     }
 }

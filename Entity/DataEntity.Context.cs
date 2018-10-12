@@ -32,5 +32,6 @@ namespace Entity
         public virtual DbSet<System_Authorize> System_Authorize { get; set; }
         public virtual DbSet<System_Log> System_Log { get; set; }
         public virtual DbSet<System_Message> System_Message { get; set; }
+        public virtual DbSet<PM_DataLibrary> PM_DataLibrary { get; set; }
     }
 }

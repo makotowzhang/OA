@@ -15,6 +15,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+button .icon.iconfont {
+    font-size: 14px;
+    font-weight:400;
+}
+
 .icon-check-circle:before { content: "\e77d"; }
 
 .icon-CI:before { content: "\e77e"; }
