@@ -32,6 +32,32 @@
           <Property Name="CreateUser" Type="uniqueidentifier" />
           <Property Name="CreateTime" Type="datetime" />
         </EntityType>
+        <EntityType Name="System_DicGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="GroupCode" Type="varchar" MaxLength="50" />
+          <Property Name="GroupDesc" Type="varchar" MaxLength="50" />
+          <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+          <Property Name="UpdateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="System_DicItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ItemDesc" Type="varchar" MaxLength="50" />
+          <Property Name="GroupId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+          <Property Name="UpdateTime" Type="datetime" />
+        </EntityType>
         <EntityType Name="System_Log">
           <Key>
             <PropertyRef Name="Id" />
@@ -125,6 +151,8 @@
         <EntityContainer Name="FrameworkModelStoreContainer">
           <EntitySet Name="PM_DataLibrary" EntityType="Self.PM_DataLibrary" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_Authorize" EntityType="Self.System_Authorize" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="System_DicGroup" EntityType="Self.System_DicGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="System_DicItem" EntityType="Self.System_DicItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_Log" EntityType="Self.System_Log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_Menu" EntityType="Self.System_Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_Message" EntityType="Self.System_Message" Schema="dbo" store:Type="Tables" />
@@ -145,6 +173,8 @@
           <EntitySet Name="System_Log" EntityType="Entity.System_Log" />
           <EntitySet Name="System_Message" EntityType="Entity.System_Message" />
           <EntitySet Name="PM_DataLibrary" EntityType="Entity.PM_DataLibrary" />
+          <EntitySet Name="System_DicItem" EntityType="Entity.System_DicItem" />
+          <EntitySet Name="System_DicGroup" EntityType="Entity.System_DicGroup" />
         </EntityContainer>
         <EntityType Name="System_User">
           <Key>
@@ -262,6 +292,32 @@
           <Property Name="UpdateUser" Type="Guid" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
           <Property Name="PreviewPath" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="System_DicItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="ItemDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="GroupId" Type="Guid" Nullable="false" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="System_DicGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="GroupDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="GroupCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -390,6 +446,34 @@
                 <ScalarProperty Name="FileType" ColumnName="FileType" />
                 <ScalarProperty Name="FileExtension" ColumnName="FileExtension" />
                 <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="System_DicItem">
+            <EntityTypeMapping TypeName="Entity.System_DicItem">
+              <MappingFragment StoreEntitySet="System_DicItem">
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="ItemDesc" ColumnName="ItemDesc" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="System_DicGroup">
+            <EntityTypeMapping TypeName="Entity.System_DicGroup">
+              <MappingFragment StoreEntitySet="System_DicGroup">
+                <ScalarProperty Name="GroupCode" ColumnName="GroupCode" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="GroupDesc" ColumnName="GroupDesc" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

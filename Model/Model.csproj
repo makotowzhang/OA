@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumModel\DicGroupCode.cs" />
     <Compile Include="EnumModel\FileType.cs" />
     <Compile Include="EnumModel\LogActionType.cs" />
     <Compile Include="EnumModel\MenuType.cs" />
@@ -48,6 +49,8 @@
     <Compile Include="PMModel\DataLibraryModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemModel\AuthorizeModel.cs" />
+    <Compile Include="SystemModel\DicGroupModel.cs" />
+    <Compile Include="SystemModel\DicItemModel.cs" />
     <Compile Include="SystemModel\JsonMessage.cs" />
     <Compile Include="SystemModel\LoginModel.cs" />
     <Compile Include="SystemModel\LogModel.cs" />

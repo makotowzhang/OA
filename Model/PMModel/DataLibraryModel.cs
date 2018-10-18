@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model.SystemModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace Model.PMModel
         public int Id { get; set; }
         public string FileName { get; set; }
         public string FileExtension { get; set; }
-        public string FileType { get; set; }
+        public EnumModel.FileType FileType { get; set; }
         public string FilePath { get; set; }
         public bool CanPreview { get; set; }
         public string PreviewPath { get; set; }
@@ -20,5 +21,10 @@ namespace Model.PMModel
         public DateTime CreateTime { get; set; }
         public Guid? UpdateUser { get; set; }
         public DateTime? UpdateTime { get; set; }
+    }
+
+    public class DataLibraryFilter:PageModel
+    {
+        public string FileName { get; set; }
     }
 }

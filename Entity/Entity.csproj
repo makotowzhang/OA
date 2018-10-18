@@ -72,6 +72,12 @@
     <Compile Include="System_Authorize.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
+    <Compile Include="System_DicGroup.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="System_DicItem.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="System_Log.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
