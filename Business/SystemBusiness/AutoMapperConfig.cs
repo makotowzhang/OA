@@ -25,6 +25,11 @@ namespace Business.SystemBusiness
                 m.CreateMap<LogModel, System_Log>();
                 m.CreateMap<System_Message, SysMessageModel>();
                 m.CreateMap<SysMessageModel, System_Message>();
+                m.CreateMap<DicGroupModel, System_DicGroup>();
+                m.CreateMap<System_DicGroup,DicGroupModel>();
+
+                m.CreateMap<DicItemModel, System_DicItem>();
+                m.CreateMap<System_DicItem, DicItemModel>();
             });
         }
     }

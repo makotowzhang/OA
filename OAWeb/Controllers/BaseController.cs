@@ -5,13 +5,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Business.SystemBusiness;
+using Newtonsoft.Json;
 
 namespace OAWeb.Controllers
 {
     public class BaseController : Controller
     {
         // GET: Base
-       public UserModel CurrentUser
+        public UserModel CurrentUser
         {
             get
             {
@@ -25,7 +26,32 @@ namespace OAWeb.Controllers
 
         public ActionResult GetPageAuthorize(Guid menuId)
         {
-            return Json(new AuthorizeBusiness().GetAuthorizeAction(menuId,CurrentUser.UserRole).Select(m=>m.ActionCode ));
+            return Json(new AuthorizeBusiness().GetAuthorizeAction(menuId, CurrentUser.UserRole).Select(m => m.ActionCode));
+        }
+
+        public EnumJsonResult EnumJson(object data)
+        {
+            EnumJsonResult result = new EnumJsonResult();
+            result.Data = data;
+            return result;
+        }
+    }
+
+    public class EnumJsonResult : ActionResult
+    {
+        public object Data
+        {
+            get;
+            set;
+        }
+        public override void ExecuteResult(ControllerContext context)
+        {
+            HttpResponseBase response = context.HttpContext.Response;
+            response.ContentType = "application/json";
+            if (this.Data != null)
+            {
+                response.Write(JsonConvert.SerializeObject(Data));
+            }
         }
     }
 }

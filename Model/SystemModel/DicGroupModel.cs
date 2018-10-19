@@ -4,13 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Model.EnumModel;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Model.SystemModel
 {
     public class DicGroupModel
     {
         public Guid Id { get; set; }
-        public DicGroupCode GroupCode { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public DicGroupCode? GroupCode { get; set; }
         public string GroupDesc { get; set; }
         public bool IsDel { get; set; }
         public List<DicItemModel> Items { get; set; }

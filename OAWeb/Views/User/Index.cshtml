@@ -263,6 +263,7 @@
             submitAddForm: function () {
                 this.$refs.AddForm.validate(function (success, validateobj) {
                     if (success) {
+                        $vue.Loading.bodyLoading = true;
                         axios.post("AddUser", $vue.AddFormData).then(function (response) {
                             ActionCommonHandle(response.data, $vue, "新增成功", "新增失败", getList());
                         }).catch(function (error) {

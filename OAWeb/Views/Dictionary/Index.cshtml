@@ -1,0 +1,154 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>字典管理</title>
+    @Html.Partial("~/Views/Shared/_Head.cshtml")
+    <style>
+        #DivLeft {
+            width:20%;
+            height:100%;
+        }
+        #LeftButtonBar {
+            height:60px;
+            box-sizing:border-box;
+            padding:5px;
+        }
+        #TreeBar {
+            height:calc(100% - 60px);
+        }
+    </style>
+</head>
+<body>
+    <div id="App" v-loading="Loading.bodyLoading">
+        <template>
+            <div id="DivLeft">
+                <div id="LeftButtonBar">
+                    <el-button type="primary" icon="icon iconfont icon-file-add" @@click="openAddGroupDialog">新增组</el-button>
+                    <el-button type="primary" icon="icon iconfont icon-edit">编辑组</el-button>
+                </div>
+                <div id="TreeBar" v-loading="Loading.treeLoading">
+                    <el-tree :data="GroupData"
+                             :highlight-current="true"
+                             :props="DefaultProps"
+                             node-key="Id"
+                             @@node-click="MenuClick"
+                             ref="GroupTree">
+                        <span class="custom-tree-node" slot-scope="scope" >
+                            <template v-if="scope.data.GroupId==null">
+                                <i class="icon iconfont icon-folder"></i>
+                                <span>{{ scope.data.GroupDesc }}</span>
+                            </template>
+                            <template v-else>
+                                <i class="icon iconfont icon-file"></i>
+                                <span>{{ scope.data.ItemDesc }}</span>
+                            </template>
+                        </span>
+                    </el-tree>
+                </div>
+            </div>
+            <div id="DivRight">
+
+            </div>
+        </template>
+        <template>
+            <el-dialog title="新增组"
+                       :visible.sync="Dialog.addGroupDialog"
+                       width="50%">
+                <el-form :model="AddGroupData" :rules="AddGroupRule" label-width="80px" ref="AddGroupForm" @@submit.native.prevent>
+                    <el-form-item label="组编码" prop="GroupCode">
+                        <el-input v-model="AddGroupData.GroupCode" placeholder="请输入组编码"></el-input>
+                    </el-form-item>
+                    <el-form-item label="组描述" prop="GroupDesc">
+                        <el-input v-model="AddGroupData.GroupDesc" placeholder="请输入组描述"></el-input>
+                    </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @@click="submitAddGroup">保 存</el-button>
+                    <el-button @@click="Dialog.addGroupDialog=false">取 消</el-button>
+                </span>
+            </el-dialog>
+        </template>
+    </div>
+</body>
+</html>
+<script>
+    $vue = new Vue({
+        el: "#App",
+        data: {
+            GroupData: [],
+            DefaultProps: {
+                children: 'Items',
+                label: 'GroupDesc'
+            },
+            AddGroupData: {
+                GroupCode: "",
+                GroupDesc:""
+            },
+            AddGroupRule: {
+                GroupCode: [
+                    { required: true, message: '请输入组编码', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                GroupDesc: [
+                    { required: true, message: '请输入组描述', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ]
+            },
+            Dialog: {
+                addGroupDialog:false
+            },
+            Loading: {
+                bodyLoading: false,
+                treeLoading: false
+            }
+        },
+        methods: {
+            MenuClick: function () {
+            },
+            openAddGroupDialog: function () {
+                this.Dialog.addGroupDialog = true;
+                this.$refs.AddGroupForm.resetFields();
+            },
+            submitAddGroup: function () {
+                this.$refs.AddGroupForm.validate(function (success, validateobj) {
+                    if (success) {
+                        $vue.Loading.bodyLoading = true;
+                        axios.post("AddGorup", $vue.AddGroupData).then(function (response) {
+                            ActionCommonHandle(response.data, $vue, "新增成功", "新增失败", getTree);
+                        }).catch(function (error) {
+                            ErrorCommonHandle($vue);
+                        }).finally(function () {
+                            $vue.Loading.bodyLoading = false;
+                            $vue.Dialog.addGroupDialog = false;
+                        });
+                    }
+                });
+            }
+        }
+    });
+    function getTree() {
+        $vue.Loading.bodyLoading = true;
+        axios.post("GetDicList").then(function (response) {
+            $vue.GroupData = response.data;
+        }).catch(function (error) {
+            $vue.GroupData = [];
+            $vue.$message({
+                type: 'error',
+                message: '服务器出错'
+            });
+        }).finally(function () {
+            $vue.Loading.bodyLoading = false;
+        });
+    }
+    getTree();
+</script>
+<script>
+   
+</script>

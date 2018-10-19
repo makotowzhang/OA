@@ -160,6 +160,7 @@
     <Compile Include="Controllers\AuthorizeController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DataLibraryController.cs" />
+    <Compile Include="Controllers\DictionaryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
@@ -626,6 +627,7 @@
     <Content Include="Scripts\PDFJS\web\locale\zh-TW\viewer.properties" />
     <Content Include="Scripts\PDFJS\web\locale\zu\viewer.properties" />
     <Content Include="Scripts\PDFJS\web\viewer.js.map" />
+    <Content Include="Views\Dictionary\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">
