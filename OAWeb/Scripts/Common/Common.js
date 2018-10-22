@@ -1,4 +1,12 @@
-﻿function GetUrlParameter(key) {
+﻿var $globalVue = new Vue();
+
+var $Msg = {
+    info: function (str) {
+
+    }
+};
+
+function GetUrlParameter(key) {
     var para = location.search;
     var theRequest = new Object();
     if (para.indexOf("?") != -1) {

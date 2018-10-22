@@ -15,7 +15,7 @@
             width:20%;
             height:100%;
         }
-        #LeftButtonBar {
+        .ButtonBar {
             height:60px;
             box-sizing:border-box;
             padding:5px;
@@ -23,15 +23,18 @@
         #TreeBar {
             height:calc(100% - 60px);
         }
+        #GridBox {
+            height: calc(100% - 60px);
+        }
     </style>
 </head>
 <body>
     <div id="App" v-loading="Loading.bodyLoading">
         <template>
             <div id="DivLeft">
-                <div id="LeftButtonBar">
+                <div class="ButtonBar">
                     <el-button type="primary" icon="icon iconfont icon-file-add" @@click="openAddGroupDialog">新增组</el-button>
-                    <el-button type="primary" icon="icon iconfont icon-edit">编辑组</el-button>
+                    <el-button type="primary" icon="icon iconfont icon-edit" @@click="editAddGroupDialog">编辑组</el-button>
                 </div>
                 <div id="TreeBar" v-loading="Loading.treeLoading">
                     <el-tree :data="GroupData"
@@ -54,7 +57,52 @@
                 </div>
             </div>
             <div id="DivRight">
+                <div class="ButtonBar">
+                    <el-button type="primary" icon="icon iconfont icon-file-add" @@click="openAddGroupDialog">新增项</el-button>
+                    <el-button type="primary" icon="icon iconfont icon-edit">编辑项</el-button>
+                </div>
+                <div id="GridBox">
+                    <el-table ref="dataTable"
+                              :data="tableData"
+                              :border="true"
+                              @@selection-change="selectChange"
+                              @@row-click="rowClick"
+                              style="width: 100%;height:100%"
+                              element-loading-text="拼命加载中"
+                              element-loading-spinner="el-icon-loading"
+                              element-loading-background="rgba(200, 200,200, 0.5)"
+                              v-loading="Loading.tableLoading">
+                        <el-table-column type="index"
+                                         :index="showIdex"
+                                         label=" ">
+                        </el-table-column>
+                        <el-table-column type="selection"
+                                         width="50">
+                        </el-table-column>
+                        <el-table-column prop="UserName"
+                                         label="用户名"
+                                         width="180">
+                        </el-table-column>
+                        <el-table-column prop="TrueName"
+                                         label="姓名"
+                                         width="180">
+                        </el-table-column>
+                        <el-table-column prop="IsEnabled"
+                                         label="是否启用"
+                                         width="100">
+                            <template slot-scope="scope">
+                                {{ scope.row.IsEnabled?"是":"否" }}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="UserRole"
+                                         label="拥有角色">
+                            <template slot-scope="scope">
+                                <el-tag style="margin-left:10px;" v-for="role in scope.row.UserRole" :key="role.Id">{{role.RoleName}}</el-tag>
+                            </template>
+                        </el-table-column>
 
+                    </el-table>
+                </div>
             </div>
         </template>
         <template>
@@ -83,6 +131,7 @@
         el: "#App",
         data: {
             GroupData: [],
+            tableData:[],
             DefaultProps: {
                 children: 'Items',
                 label: 'GroupDesc'
@@ -106,15 +155,20 @@
             },
             Loading: {
                 bodyLoading: false,
-                treeLoading: false
+                treeLoading: false,
+                tableLoading: false
             }
         },
         methods: {
-            MenuClick: function () {
+            MenuClick: function (obj, node, tree) {
             },
             openAddGroupDialog: function () {
                 this.Dialog.addGroupDialog = true;
                 this.$refs.AddGroupForm.resetFields();
+            },
+            editAddGroupDialog: function () {
+                var checkNode = this.$refs.TreeBar.getCurrentNode();
+                if()
             },
             submitAddGroup: function () {
                 this.$refs.AddGroupForm.validate(function (success, validateobj) {
@@ -130,7 +184,21 @@
                         });
                     }
                 });
-            }
+            },
+            selectChange: function (selectValue) {
+                if (this.$refs.dataTable.selection.length == 0) {
+                    this.ButtonState.btnEdit = true;
+                    this.ButtonState.btnDelete = true;
+                }
+                else if (this.$refs.dataTable.selection.length == 1) {
+                    this.ButtonState.btnEdit = false;
+                    this.ButtonState.btnDelete = false;
+                }
+                else {
+                    this.ButtonState.btnEdit = true;
+                    this.ButtonState.btnDelete = false;
+                }
+            },
         }
     });
     function getTree() {
