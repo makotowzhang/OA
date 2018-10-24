@@ -1,8 +1,55 @@
 ﻿var $globalVue = new Vue();
 
 var $Msg = {
-    info: function (str) {
-
+    info: function (str, showClose) {
+        if (showClose == undefined) {
+            showClose = true;
+        }
+        $globalVue.$message({
+            message: str,
+            showClose: showClose,
+            type: 'info'
+        })
+    },
+    success: function (str, showClose) {
+        if (showClose == undefined) {
+            showClose = true;
+        }
+        $globalVue.$message({
+            message: str,
+            showClose: showClose,
+            type: 'success'
+        })
+    },
+    warning: function (str, showClose) {
+        if (showClose == undefined) {
+            showClose = true;
+        }
+        $globalVue.$message({
+            message: str,
+            showClose: showClose,
+            type: 'warning'
+        })
+    },
+    error: function (str, showClose) {
+        if (showClose == undefined) {
+            showClose = true;
+        }
+        $globalVue.$message({
+            message: str,
+            showClose: showClose,
+            type: 'error'
+        })
+    },
+    iconMsg: function (str, iconClass, showClose) {
+        if (showClose == undefined) {
+            showClose = true;
+        }
+        $globalVue.$message({
+            message: str,
+            showClose: showClose,
+            iconClass: iconClass
+        })
     }
 };
 

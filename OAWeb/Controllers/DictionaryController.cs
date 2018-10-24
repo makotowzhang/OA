@@ -25,6 +25,11 @@ namespace OAWeb.Controllers
         }
 
 
+        public ActionResult GetGroupItem(Guid groupId)
+        {
+            return Json(business)
+        }
+
         [LogFilter("新增组", "字典管理", LogActionType.Operation)]
         public ActionResult AddGorup(DicGroupModel model)
         {
