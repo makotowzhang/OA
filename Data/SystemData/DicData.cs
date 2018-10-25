@@ -26,9 +26,8 @@ namespace Data.SystemData
             var list = dp.System_DicItem.Where(m => !m.IsDel);
             if (code != null)
             {
-                string temp = code.ToString();
-                Guid groupId = dp.System_DicGroup.FirstOrDefault(m => m.GroupCode == temp).Id;
-                list = list.Where(m => m.GroupId == groupId);
+                string groupCode = code.ToString();
+                list = list.Where(m => m.GroupCode == groupCode);
             }
             return list.ToList();
         }

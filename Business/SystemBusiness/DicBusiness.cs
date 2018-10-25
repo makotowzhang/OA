@@ -144,13 +144,20 @@ namespace Business.SystemBusiness
                 List<DicItemModel> itemList = Mapper.Map<List<DicItemModel>>(data.GetDicItemList(dp, code));
                 groupList.ForEach(m=>
                 {
-                    m.Items = itemList.Where(x => x.GroupId == m.Id).ToList();
+                    m.Items = itemList.Where(x => x.GroupCode == m.GroupCode).ToList();
                 });
                 return groupList;
             }
         }
 
-        public List
+        public List<DicItemModel> GetDicItem(DicGroupCode? code)
+        {
+            using (DataProvider dp = new DataProvider())
+            {
+                List<DicItemModel> itemList = Mapper.Map<List<DicItemModel>>(data.GetDicItemList(dp, code));
+                return itemList;
+            }
+        }
 
     }
 }

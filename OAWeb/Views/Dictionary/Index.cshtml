@@ -14,6 +14,12 @@
         #DivLeft {
             width:20%;
             height:100%;
+            float:left;
+        }
+        #DivRight {
+            width: 80%;
+            height: 100%;
+            float: left;
         }
         .ButtonBar {
             height:60px;
@@ -58,8 +64,9 @@
             </div>
             <div id="DivRight">
                 <div class="ButtonBar">
-                    <el-button type="primary" icon="icon iconfont icon-file-add" @@click="openAddGroupDialog">新增项</el-button>
+                    <el-button type="primary" icon="icon iconfont icon-file-add" @@click="openAddItemDialog">新增项</el-button>
                     <el-button type="primary" icon="icon iconfont icon-edit">编辑项</el-button>
+                    <el-button type="danger" icon="icon iconfont icon-delete">删除项</el-button>
                 </div>
                 <div id="GridBox">
                     <el-table ref="dataTable"
@@ -79,27 +86,22 @@
                         <el-table-column type="selection"
                                          width="50">
                         </el-table-column>
-                        <el-table-column prop="UserName"
-                                         label="用户名"
+                        <el-table-column prop="ItemDesc"
+                                         label="名称"
                                          width="180">
                         </el-table-column>
-                        <el-table-column prop="TrueName"
-                                         label="姓名"
-                                         width="180">
+                        <el-table-column prop="Sort"
+                                         label="排序"
+                                         width="50">
                         </el-table-column>
                         <el-table-column prop="IsEnabled"
                                          label="是否启用"
-                                         width="100">
+                                         width="150">
                             <template slot-scope="scope">
                                 {{ scope.row.IsEnabled?"是":"否" }}
                             </template>
                         </el-table-column>
-                        <el-table-column prop="UserRole"
-                                         label="拥有角色">
-                            <template slot-scope="scope">
-                                <el-tag style="margin-left:10px;" v-for="role in scope.row.UserRole" :key="role.Id">{{role.RoleName}}</el-tag>
-                            </template>
-                        </el-table-column>
+                      
 
                     </el-table>
                 </div>
@@ -122,6 +124,35 @@
                     <el-button @@click="Dialog.addGroupDialog=false">取 消</el-button>
                 </span>
             </el-dialog>
+
+            <el-dialog title="新增项"
+                       :visible.sync="Dialog.addItemDialog"
+                       width="50%">
+                <el-form :model="AddItemData" :rules="AddItemRule" label-width="120px" ref="AddItemForm" @@submit.native.prevent>
+                    <el-form-item label="所属组编码" prop="GroupCode">
+                        <el-input v-model="AddItemData.GroupCode" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="所属组描述" prop="GroupDesc">
+                        <el-input v-model="AddItemData.GroupDesc" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="项描述" prop="ItemDesc">
+                        <el-input v-model="AddItemData.ItemDesc" placeholder="请输入组描述"></el-input>
+                    </el-form-item>
+                    <el-form-item label="排序" prop="Sort">
+                        <el-input-number v-model="AddItemData.Sort"></el-input-number>
+                    </el-form-item>
+                    <el-form-item label="是否启用" prop="IsEnabled">
+                        <el-switch v-model="AddItemData.IsEnabled"
+                                   active-color="#13ce66"
+                                   inactive-color="#ff4949">
+                        </el-switch>
+                    </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @@click="submitAddItemDialog">保 存</el-button>
+                    <el-button @@click="Dialog.addItemDialog=false">取 消</el-button>
+                </span>
+            </el-dialog>
         </template>
     </div>
 </body>
@@ -131,7 +162,6 @@
         el: "#App",
         data: {
             GroupData: [],
-            tableData:[],
             DefaultProps: {
                 children: 'Items',
                 label: 'GroupDesc'
@@ -150,20 +180,41 @@
                     { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
                 ]
             },
+            AddItemData: {
+                Id: null,
+                ItemDesc: "",
+                GroupCode: "",
+                GroupDesc:"",
+                Sort: 0,
+                IsEnabled: true  
+            },
+            AddItemRule: {
+                ItemDesc: [{ required: true, message: '请输入项描述', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }],
+            },
             Dialog: {
-                addGroupDialog:false
+                addGroupDialog: false,
+                addItemDialog: false
             },
             Loading: {
                 bodyLoading: false,
                 treeLoading: false,
                 tableLoading: false
-            }
+            },
+            tableData: [],
+            selectGroup: null
         },
         methods: {
             MenuClick: function (obj, node, tree) {
                 if (obj.GroupId == null) {
-
+                    axios.post("GetGroupItemList", { groupCode: obj.GroupCode }).then(function (res) {
+                        this.tableData = res.data;
+                    });
+                    this.selectGroup = obj;
                 }
+            },
+            showIdex: function (index) {
+                return (this.QueryFormData.Page - 1) * this.QueryFormData.PageSize + 1 + index;
             },
             openAddGroupDialog: function () {
                 this.Dialog.addGroupDialog = true;
@@ -171,7 +222,44 @@
             },
             editAddGroupDialog: function () {
                 var checkNode = this.$refs.TreeBar.getCurrentNode();
-                if()
+            },
+            openAddItemDialog: function () {
+                if (this.selectGroup == null) {
+                    $Msg.info("请选择字典组");
+                    return;
+                }
+                this.Dialog.addItemDialog = true;
+                this.AddItemData.Id = null;
+                this.AddItemData.ItemDesc = "";
+                this.AddItemData.Sort = 0;
+                this.AddItemData.IsEnabled = true;
+                this.AddItemData.GroupCode = this.selectGroup.GroupCode;
+                this.AddItemData.GroupDesc = this.selectGroup.GroupDesc;
+            },
+            submitAddItemDialog: function () {
+                this.$refs.AddItemForm.validate(function (success, validateobj) {
+                    if (success) {
+                        $vue.Loading.bodyLoading = true;
+                        axios.post("AddItem", $vue.AddFormData).then(function (response) {
+                            ActionCommonHandle(response.data, $vue, "新增成功", "新增失败", function () {
+                                $vue.Loading.tableLoading = true;
+                                axios.post("GetGroupItemList", { groupCode: $vue.selectGroup.GroupCode }).then(function (res) {
+                                    $vue.tableData = res.data;
+                                }).finally(function () {
+                                    $vue.Loading.tableLoading = false;
+                                });
+                            });
+                        }).catch(function (error) {
+                            ErrorCommonHandle($vue);
+                        }).finally(function () {
+                            $vue.Loading.bodyLoading = false;
+                            $vue.Dialog.addItemDialog = false;
+                        });
+                    }
+                });
+            },
+            rowClick: function (row, event, column) {
+                this.$refs.dataTable.toggleRowSelection(row);
             },
             submitAddGroup: function () {
                 this.$refs.AddGroupForm.validate(function (success, validateobj) {
@@ -189,23 +277,23 @@
                 });
             },
             selectChange: function (selectValue) {
-                if (this.$refs.dataTable.selection.length == 0) {
-                    this.ButtonState.btnEdit = true;
-                    this.ButtonState.btnDelete = true;
-                }
-                else if (this.$refs.dataTable.selection.length == 1) {
-                    this.ButtonState.btnEdit = false;
-                    this.ButtonState.btnDelete = false;
-                }
-                else {
-                    this.ButtonState.btnEdit = true;
-                    this.ButtonState.btnDelete = false;
-                }
+                //if (this.$refs.dataTable.selection.length == 0) {
+                //    this.ButtonState.btnEdit = true;
+                //    this.ButtonState.btnDelete = true;
+                //}
+                //else if (this.$refs.dataTable.selection.length == 1) {
+                //    this.ButtonState.btnEdit = false;
+                //    this.ButtonState.btnDelete = false;
+                //}
+                //else {
+                //    this.ButtonState.btnEdit = true;
+                //    this.ButtonState.btnDelete = false;
+                //}
             },
         }
     });
     function getTree() {
-        $vue.Loading.bodyLoading = true;
+        $vue.Loading.treeLoading = true;
         axios.post("GetDicList").then(function (response) {
             $vue.GroupData = response.data;
         }).catch(function (error) {
@@ -215,7 +303,7 @@
                 message: '服务器出错'
             });
         }).finally(function () {
-            $vue.Loading.bodyLoading = false;
+            $vue.Loading.treeLoading = false;
         });
     }
     getTree();

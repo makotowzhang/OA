@@ -25,9 +25,9 @@ namespace OAWeb.Controllers
         }
 
 
-        public ActionResult GetGroupItem(Guid groupId)
+        public ActionResult GetGroupItemList(DicGroupCode groupCode)
         {
-            return Json(business)
+            return Json(business.GetDicItem(groupCode));
         }
 
         [LogFilter("新增组", "字典管理", LogActionType.Operation)]
@@ -46,6 +46,30 @@ namespace OAWeb.Controllers
             catch(Exception ex)
             {
                 return Json(new JsonMessage(false,ex.Message));
+            }
+        }
+
+        [LogFilter("新增项", "字典管理", LogActionType.Operation)]
+        public ActionResult AddItem(DicItemModel model)
+        {
+            try
+            {
+                bool success;
+                if (model.Id == null)
+                {
+                    model.CreateUser = CurrentUser.Id;
+                    success = business.AddDicItem(model);
+                }
+                else
+                {
+                    model.UpdateUser = CurrentUser.Id;
+                    success = business.EditDicItem(model);
+                }
+                return Json(new JsonMessage(success));
+            }
+            catch (Exception ex)
+            {
+                return Json(new JsonMessage(false, ex.Message));
             }
         }
     }

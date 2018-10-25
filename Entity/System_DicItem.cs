@@ -16,7 +16,9 @@ namespace Entity
     {
         public System.Guid Id { get; set; }
         public string ItemDesc { get; set; }
-        public System.Guid GroupId { get; set; }
+        public string GroupCode { get; set; }
+        public Nullable<int> Sort { get; set; }
+        public bool IsEnabled { get; set; }
         public bool IsDel { get; set; }
         public System.Guid CreateUser { get; set; }
         public System.DateTime CreateTime { get; set; }
