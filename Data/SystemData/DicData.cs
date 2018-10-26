@@ -29,7 +29,7 @@ namespace Data.SystemData
                 string groupCode = code.ToString();
                 list = list.Where(m => m.GroupCode == groupCode);
             }
-            return list.ToList();
+            return list.OrderBy(m=>m.Sort).ThenBy(m=>m.ItemDesc).ToList();
         }
     }
 }

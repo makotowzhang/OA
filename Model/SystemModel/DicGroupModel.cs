@@ -11,7 +11,7 @@ namespace Model.SystemModel
 {
     public class DicGroupModel
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
         public DicGroupCode? GroupCode { get; set; }
         public string GroupDesc { get; set; }

@@ -39,8 +39,17 @@ namespace OAWeb.Controllers
                 {
                     return Json(new JsonMessage(false, "字典类型不存在"));
                 }
-                model.CreateUser = CurrentUser.Id;
-                bool success = business.AddDicGroup(model);
+                bool success;
+                if (model.Id == null)
+                {
+                    model.CreateUser = CurrentUser.Id;
+                    success = business.AddDicGroup(model);
+                }
+                else
+                {
+                    model.UpdateUser = CurrentUser.Id;
+                    success = business.EditDicGroup(model);
+                }
                 return Json(new JsonMessage(success));
             }
             catch(Exception ex)
