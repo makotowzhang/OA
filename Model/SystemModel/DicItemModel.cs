@@ -18,6 +18,8 @@ namespace Model.SystemModel
         [JsonConverter(typeof(StringEnumConverter))]
         public DicGroupCode GroupCode { get; set; }
 
+        public string GroupDesc { get; set; }
+
         public int Sort { get; set; }
 
         public bool IsEnabled { get; set; }

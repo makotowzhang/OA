@@ -95,6 +95,8 @@ namespace Business.SystemBusiness
                     return false;
                 }
                 entity.ItemDesc = model.ItemDesc;
+                entity.Sort = model.Sort;
+                entity.IsEnabled = model.IsEnabled;
                 entity.UpdateTime = DateTime.Now;
                 entity.UpdateUser = model.UpdateUser;
                 try
@@ -109,32 +111,6 @@ namespace Business.SystemBusiness
             }
         }
 
-        public bool DeleteDicItem(List<System_DicItem> model)
-        {
-            if (model == null || model.Count == 0)
-            {
-                return false;
-            }
-            using (DataProvider dp = new DataProvider())
-            {
-                foreach (var item in model)
-                {
-                    var entity = dp.System_DicItem.FirstOrDefault(m => m.Id == item.Id);
-                    entity.IsDel = true;
-                    entity.UpdateTime = DateTime.Now;
-                    entity.UpdateUser = item.UpdateUser;
-                }
-                try
-                {
-                    dp.SaveChanges();
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-        }
 
         public List<DicGroupModel> GetDicGroup(DicGroupCode? code)
         {
@@ -156,6 +132,29 @@ namespace Business.SystemBusiness
             {
                 List<DicItemModel> itemList = Mapper.Map<List<DicItemModel>>(data.GetDicItemList(dp, code));
                 return itemList;
+            }
+        }
+
+        public bool DeleteItems(List<DicItemModel> dicItems)
+        {
+            if (dicItems == null || dicItems.Count == 0)
+            {
+                return false;
+            }
+            using (DataProvider dp = new DataProvider())
+            {
+                foreach (var m in dicItems)
+                {
+                    var entity = dp.System_DicItem.FirstOrDefault(x => x.Id == m.Id);
+                    if (entity != null)
+                    {
+                        entity.IsDel = true;
+                        entity.UpdateTime = DateTime.Now;
+                        entity.UpdateUser = m.UpdateUser;
+                    }
+                }
+                dp.SaveChanges();
+                return true;
             }
         }
 

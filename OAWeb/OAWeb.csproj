@@ -306,7 +306,9 @@
     <Content Include="Scripts\Vue\vue.runtime.esm.js" />
     <Content Include="Scripts\Vue\vue.runtime.js" />
     <Content Include="Scripts\Vue\vue.runtime.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -322,7 +324,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\DataLibrary\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\iconfont\iconfont.eot" />
@@ -628,6 +629,7 @@
     <Content Include="Scripts\PDFJS\web\locale\zu\viewer.properties" />
     <Content Include="Scripts\PDFJS\web\viewer.js.map" />
     <Content Include="Views\Dictionary\Index.cshtml" />
+    <Content Include="Views\DataLibrary\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">

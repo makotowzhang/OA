@@ -48,9 +48,9 @@ namespace OAWeb.Controllers
                 bool success= business.EditUser(user);
                return Json(new JsonMessage(success));
             }
-            catch
+            catch(Exception ex)
             {
-                return Json(new JsonMessage(false));
+                return Json(new JsonMessage(false,ex.Message));
             }
         }
 

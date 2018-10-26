@@ -27,10 +27,10 @@ namespace OAWeb.Controllers
 
         public ActionResult GetGroupItemList(DicGroupCode groupCode)
         {
-            return Json(business.GetDicItem(groupCode));
+            return EnumJson(business.GetDicItem(groupCode));
         }
 
-        [LogFilter("新增组", "字典管理", LogActionType.Operation)]
+        [LogFilter("编辑组", "字典管理", LogActionType.Operation)]
         public ActionResult AddGorup(DicGroupModel model)
         {
             try
@@ -58,7 +58,7 @@ namespace OAWeb.Controllers
             }
         }
 
-        [LogFilter("新增项", "字典管理", LogActionType.Operation)]
+        [LogFilter("编辑项", "字典管理", LogActionType.Operation)]
         public ActionResult AddItem(DicItemModel model)
         {
             try
@@ -74,6 +74,24 @@ namespace OAWeb.Controllers
                     model.UpdateUser = CurrentUser.Id;
                     success = business.EditDicItem(model);
                 }
+                return Json(new JsonMessage(success));
+            }
+            catch (Exception ex)
+            {
+                return Json(new JsonMessage(false, ex.Message));
+            }
+        }
+
+        [LogFilter("删除项", "字典管理", LogActionType.Operation)]
+        public ActionResult DeleteItem(List<DicItemModel> dicItems)
+        {
+            try
+            {
+                if (dicItems != null)
+                {
+                    dicItems.ForEach(m=>m.UpdateUser=CurrentUser.Id);
+                }
+                bool success = business.DeleteItems(dicItems);
                 return Json(new JsonMessage(success));
             }
             catch (Exception ex)

@@ -67,8 +67,8 @@
             <div id="DivRight">
                 <div class="ButtonBar">
                     <el-button type="primary" icon="icon iconfont icon-file-add" @@click="openAddItemDialog" >新增项</el-button>
-                    <el-button type="primary" icon="icon iconfont icon-edit" :disabled="InputStatus.editItem">编辑项</el-button>
-                    <el-button type="danger" icon="icon iconfont icon-delete" :disabled="InputStatus.deleteItem">删除项</el-button>
+                    <el-button type="primary" icon="icon iconfont icon-edit" @@click="openEditItemDialog" :disabled="InputStatus.editItem">编辑项</el-button>
+                    <el-button type="danger" icon="icon iconfont icon-delete" @@click="deleteItem" :disabled="InputStatus.deleteItem">删除项</el-button>
                 </div>
                 <div id="GridBox">
                     <el-table ref="dataTable"
@@ -165,6 +165,7 @@
         el: "#App",
         data: {
             GroupData: [],
+            tableData: [],
             DefaultProps: {
                 children: 'Items',
                 label: 'GroupDesc'
@@ -212,7 +213,6 @@
                 treeLoading: false,
                 tableLoading: false
             },
-            tableData: [],
             selectGroup: null
         },
         methods: {
@@ -251,18 +251,49 @@
                 this.Dialog.addGroupDialog = true;
                 setTimeout(this.$refs.AddGroupForm.clearValidate, 0);
             },
+            submitAddGroup: function () {
+                this.$refs.AddGroupForm.validate(function (success, validateobj) {
+                    if (success) {
+                        $vue.Loading.bodyLoading = true;
+                        axios.post("AddGorup", $vue.AddGroupData).then(function (response) {
+                            ActionCommonHandle(response.data, $vue, "保存成功", "保存失败", getTree);
+                        }).catch(function (error) {
+                            ErrorCommonHandle($vue);
+                        }).finally(function () {
+                            $vue.Loading.bodyLoading = false;
+                            $vue.Dialog.addGroupDialog = false;
+                        });
+                    }
+                });
+            },
             openAddItemDialog: function () {
                 if (this.selectGroup == null) {
                     $Msg.info("请选择字典组");
                     return;
                 }
-                this.Dialog.addItemDialog = true;
                 this.AddItemData.Id = null;
                 this.AddItemData.ItemDesc = "";
                 this.AddItemData.Sort = 0;
                 this.AddItemData.IsEnabled = true;
                 this.AddItemData.GroupCode = this.selectGroup.GroupCode;
                 this.AddItemData.GroupDesc = this.selectGroup.GroupDesc;
+                this.Dialog.addItemDialog = true;
+                setTimeout(this.$refs.AddItemForm.clearValidate, 0);
+            },
+            openEditItemDialog: function () {
+                if (this.$refs.dataTable.selection.length != 1) {
+                    $Msg.info("请选择你要编辑的一项！");
+                    return;
+                }
+                var editItem = this.$refs.dataTable.selection[0];
+                this.AddItemData.Id = editItem.Id;
+                this.AddItemData.ItemDesc = editItem.ItemDesc;
+                this.AddItemData.Sort = editItem.Sort;
+                this.AddItemData.IsEnabled = editItem.IsEnabled;
+                this.AddItemData.GroupCode = editItem.GroupCode;
+                this.AddItemData.GroupDesc = this.selectGroup.GroupDesc;
+                this.Dialog.addItemDialog = true;
+                setTimeout(this.$refs.AddItemForm.clearValidate, 0);
             },
             submitAddItemDialog: function () {
                 this.$refs.AddItemForm.validate(function (success, validateobj) {
@@ -287,24 +318,40 @@
                     }
                 });
             },
+            deleteItem: function () {
+                this.$confirm('是否确认删除这' + this.$refs.dataTable.selection.length + '行数据', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(function () {
+                    $vue.Loading.bodyLoading = true;
+                    axios.post("DeleteItem", $vue.$refs.dataTable.selection).then(function (response) {
+                        $vue.Loading.bodyLoading = false;
+                        ActionCommonHandle(response.data, $vue, "删除成功", "删除失败", function () {
+                            $vue.Loading.tableLoading = true;
+                            axios.post("GetGroupItemList", { groupCode: $vue.selectGroup.GroupCode }).then(function (res) {
+                                $vue.tableData = res.data;
+                            }).finally(function () {
+                                $vue.Loading.tableLoading = false;
+                            });
+                            getTree();
+                        });
+                    }).catch(function (error) {
+                        ErrorCommonHandle($vue);
+                    }).finally(function () {
+                        $vue.Loading.bodyLoading = false;
+                    });
+                }).catch(function () {
+                    $vue.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
             rowClick: function (row, event, column) {
                 this.$refs.dataTable.toggleRowSelection(row);
             },
-            submitAddGroup: function () {
-                this.$refs.AddGroupForm.validate(function (success, validateobj) {
-                    if (success) {
-                        $vue.Loading.bodyLoading = true;
-                        axios.post("AddGorup", $vue.AddGroupData).then(function (response) {
-                            ActionCommonHandle(response.data, $vue, "新增成功", "新增失败", getTree);
-                        }).catch(function (error) {
-                            ErrorCommonHandle($vue);
-                        }).finally(function () {
-                            $vue.Loading.bodyLoading = false;
-                            $vue.Dialog.addGroupDialog = false;
-                        });
-                    }
-                });
-            },
+           
             selectChange: function (selectValue) {
                 if (this.$refs.dataTable.selection.length == 0) {
                     this.InputStatus.editItem = true;
