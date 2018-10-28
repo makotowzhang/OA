@@ -12,20 +12,18 @@ namespace Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class PM_DataLibrary
+    public partial class PM_Employee
     {
-        public int Id { get; set; }
-        public string FileName { get; set; }
-        public string FileExtension { get; set; }
-        public string FileType { get; set; }
-        public string FilePath { get; set; }
-        public bool CanPreview { get; set; }
-        public bool IsDel { get; set; }
+        public System.Guid Id { get; set; }
+        public string EmpCode { get; set; }
+        public string EmpName { get; set; }
+        public string PhoneNumber { get; set; }
+        public Nullable<System.Guid> RelateUserId { get; set; }
         public System.Guid CreateUser { get; set; }
         public System.DateTime CreateTime { get; set; }
         public Nullable<System.Guid> UpdateUser { get; set; }
         public Nullable<System.DateTime> UpdateTime { get; set; }
-        public string PreviewPath { get; set; }
-        public string FileClassify { get; set; }
+        public bool IsDel { get; set; }
+        public Nullable<System.Guid> DepartmentId { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace Business.PMBusiness
 {
     public class DataLibraryBusiness
     {
-        DataLibrary data = new DataLibrary();
+        DataLibraryData data = new DataLibraryData();
 
         public void TypeChange(DataLibraryModel model,string rootPath)
         {

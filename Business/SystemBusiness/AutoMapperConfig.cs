@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Entity;
 using Model.SystemModel;
+using Model.PMModel;
 
 namespace Business.SystemBusiness
 {
@@ -30,6 +31,12 @@ namespace Business.SystemBusiness
 
                 m.CreateMap<DicItemModel, System_DicItem>();
                 m.CreateMap<System_DicItem, DicItemModel>();
+
+                m.CreateMap<DepartmentModel, PM_Department>();
+                m.CreateMap<PM_Department, DepartmentModel>();
+
+                m.CreateMap<EmployeeModel, PM_Employee>();
+                m.CreateMap<PM_Employee, EmployeeModel>();
             });
         }
     }

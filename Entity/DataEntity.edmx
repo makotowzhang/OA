@@ -21,6 +21,36 @@
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
           <Property Name="UpdateUser" Type="uniqueidentifier" />
           <Property Name="UpdateTime" Type="datetime" />
+          <Property Name="FileClassify" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PM_Department">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DepName" Type="varchar" MaxLength="50" />
+          <Property Name="ParentId" Type="uniqueidentifier" />
+          <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" />
+          <Property Name="CreateTime" Type="datetime" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+          <Property Name="UpdateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="PM_Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EmpCode" Type="varchar" MaxLength="50" />
+          <Property Name="EmpName" Type="varchar" MaxLength="50" />
+          <Property Name="PhoneNumber" Type="varchar" MaxLength="50" />
+          <Property Name="DepartmentId" Type="uniqueidentifier" />
+          <Property Name="RelateUserId" Type="uniqueidentifier" />
+          <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+          <Property Name="UpdateTime" Type="datetime" />
         </EntityType>
         <EntityType Name="System_Authorize">
           <Key>
@@ -152,6 +182,8 @@
         </EntityType>
         <EntityContainer Name="FrameworkModelStoreContainer">
           <EntitySet Name="PM_DataLibrary" EntityType="Self.PM_DataLibrary" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PM_Department" EntityType="Self.PM_Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PM_Employee" EntityType="Self.PM_Employee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_Authorize" EntityType="Self.System_Authorize" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_DicGroup" EntityType="Self.System_DicGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_DicItem" EntityType="Self.System_DicItem" Schema="dbo" store:Type="Tables" />
@@ -177,6 +209,8 @@
           <EntitySet Name="PM_DataLibrary" EntityType="Entity.PM_DataLibrary" />
           <EntitySet Name="System_DicGroup" EntityType="Entity.System_DicGroup" />
           <EntitySet Name="System_DicItem" EntityType="Entity.System_DicItem" />
+          <EntitySet Name="PM_Employee" EntityType="Entity.PM_Employee" />
+          <EntitySet Name="PM_Department" EntityType="Entity.PM_Department" />
         </EntityContainer>
         <EntityType Name="System_User">
           <Key>
@@ -294,6 +328,7 @@
           <Property Name="UpdateUser" Type="Guid" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
           <Property Name="PreviewPath" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="FileClassify" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="System_DicGroup">
           <Key>
@@ -322,6 +357,35 @@
           <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUser" Type="Guid" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="PM_Employee">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="EmpCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EmpName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RelateUserId" Type="Guid" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
+          <Property Name="DepartmentId" Type="Guid" />
+        </EntityType>
+        <EntityType Name="PM_Department">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="DepName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ParentId" Type="Guid" />
+          <Property Name="CreateUser" Type="Guid" />
+          <Property Name="CreateTime" Type="DateTime" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -439,6 +503,7 @@
           <EntitySetMapping Name="PM_DataLibrary">
             <EntityTypeMapping TypeName="Entity.PM_DataLibrary">
               <MappingFragment StoreEntitySet="PM_DataLibrary">
+                <ScalarProperty Name="FileClassify" ColumnName="FileClassify" />
                 <ScalarProperty Name="PreviewPath" ColumnName="PreviewPath" />
                 <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
                 <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
@@ -480,6 +545,37 @@
                 <ScalarProperty Name="Sort" ColumnName="Sort" />
                 <ScalarProperty Name="GroupCode" ColumnName="GroupCode" />
                 <ScalarProperty Name="ItemDesc" ColumnName="ItemDesc" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PM_Employee">
+            <EntityTypeMapping TypeName="Entity.PM_Employee">
+              <MappingFragment StoreEntitySet="PM_Employee">
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="RelateUserId" ColumnName="RelateUserId" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="EmpName" ColumnName="EmpName" />
+                <ScalarProperty Name="EmpCode" ColumnName="EmpCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PM_Department">
+            <EntityTypeMapping TypeName="Entity.PM_Department">
+              <MappingFragment StoreEntitySet="PM_Department">
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="DepName" ColumnName="DepName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -56,8 +56,7 @@ namespace OAWeb.Controllers
 
         public ActionResult GetUserList(UserFilter filter)
         {
-            int total = 0;
-            var data= business.GetUserList(filter, out total);
+            var data = business.GetUserList(filter, out int total);
             return Json(new TableDataModel(total,data));
         }
 

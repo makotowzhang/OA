@@ -68,6 +68,12 @@
     <Compile Include="PM_DataLibrary.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
+    <Compile Include="PM_Department.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PM_Employee.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System_Authorize.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
