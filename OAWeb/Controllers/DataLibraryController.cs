@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Business.PMBusiness;
 using Model.PMModel;
 using Model.EnumModel;
+using Model.SystemModel;
 
 namespace OAWeb.Controllers
 {
@@ -13,9 +14,74 @@ namespace OAWeb.Controllers
     {
         DataLibraryBusiness business = new DataLibraryBusiness();
         // GET: DataLibrary
+        [PageAuthorizeFilter]
         public ActionResult Index()
         {
             return View();
+        }
+
+        public ActionResult FileUpload()
+        {
+            var httpFile = Request.Files;
+            if (httpFile == null || httpFile.Count == 0)
+            {
+                return Content("");
+            }
+            string tempFilePath ="\\Upload\\temp\\";
+            if (!System.IO.Directory.Exists(Server.MapPath("~" + tempFilePath)))
+            {
+                System.IO.Directory.CreateDirectory(Server.MapPath("~" + tempFilePath));
+            }
+            tempFilePath += Guid.NewGuid().ToString() + System.IO.Path.GetExtension(httpFile[0].FileName);
+            httpFile[0].SaveAs(Server.MapPath("~" + tempFilePath));
+            return Content(tempFilePath);
+        }
+
+        public ActionResult GetDepFileList(DataLibraryFilter filter)
+        {
+            var data = business.GetFileList(filter, out int total);
+            return Json(new TableDataModel(total, data));
+        }
+
+        public ActionResult GetDepModel(int id)
+        {
+            return Json(business.GetFileById(id));
+        }
+
+        [LogFilter("编辑", "资料库管理", LogActionType.Operation)]
+        public ActionResult Save(DataLibraryModel model)
+        {
+            try
+            {
+                if (!model.Id.HasValue)
+                {
+                    model.CreateUser = CurrentUser.Id;
+                }
+                else
+                {
+                    model.UpdateUser = CurrentUser.Id;
+                }
+                return Json(new JsonMessage(business.Save(model,Server.MapPath("~"))));
+            }
+            catch (Exception e)
+            {
+                return Json(new JsonMessage(false, e.Message));
+            }
+        }
+
+
+        [LogFilter("删除", "资料库管理", LogActionType.Operation)]
+        public ActionResult Delete(List<DataLibraryModel> model)
+        {
+            try
+            {
+                model.ForEach(m => m.UpdateUser = CurrentUser.Id);
+                return Json(new JsonMessage(business.Delete(model)));
+            }
+            catch (Exception e)
+            {
+                return Json(new JsonMessage(false, e.Message));
+            }
         }
     }
 }

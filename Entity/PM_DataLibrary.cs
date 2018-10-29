@@ -20,12 +20,12 @@ namespace Entity
         public string FileType { get; set; }
         public string FilePath { get; set; }
         public bool CanPreview { get; set; }
+        public string PreviewPath { get; set; }
         public bool IsDel { get; set; }
         public System.Guid CreateUser { get; set; }
         public System.DateTime CreateTime { get; set; }
         public Nullable<System.Guid> UpdateUser { get; set; }
         public Nullable<System.DateTime> UpdateTime { get; set; }
-        public string PreviewPath { get; set; }
-        public string FileClassify { get; set; }
+        public Nullable<System.Guid> FileClassify { get; set; }
     }
 }

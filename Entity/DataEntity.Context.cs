@@ -32,10 +32,10 @@ namespace Entity
         public virtual DbSet<System_Authorize> System_Authorize { get; set; }
         public virtual DbSet<System_Log> System_Log { get; set; }
         public virtual DbSet<System_Message> System_Message { get; set; }
-        public virtual DbSet<PM_DataLibrary> PM_DataLibrary { get; set; }
         public virtual DbSet<System_DicGroup> System_DicGroup { get; set; }
         public virtual DbSet<System_DicItem> System_DicItem { get; set; }
         public virtual DbSet<PM_Employee> PM_Employee { get; set; }
         public virtual DbSet<PM_Department> PM_Department { get; set; }
+        public virtual DbSet<PM_DataLibrary> PM_DataLibrary { get; set; }
     }
 }

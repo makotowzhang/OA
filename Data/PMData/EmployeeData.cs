@@ -15,23 +15,23 @@ namespace Data.PMData
             return dp.PM_Employee.FirstOrDefault(m => m.Id == empId);
         }
 
-        public List<PM_Department> GetDepList(DataProvider dp, EmployeeFilter filter, out int total, bool IsPage = true)
-        {
-            var list = dp.PM_Employee.Where(m => !m.IsDel);
-            if (!string.IsNullOrWhiteSpace(filter.EmpName))
-            {
-                list = list.Where(m => m.EmpName.Contains(filter.EmpName));
-            }
-            list = list.OrderByDescending(m => m.CreateTime);
-            total = list.Count();
-            if (IsPage)
-            {
-                return list.Skip(filter.Skip).Take(filter.PageSize).ToList();
-            }
-            else
-            {
-                return list.ToList();
-            }
-        }
+        //public List<PM_Department> GetDepList(DataProvider dp, EmployeeFilter filter, out int total, bool IsPage = true)
+        //{
+        //    var list = dp.PM_Employee.Where(m => !m.IsDel);
+        //    if (!string.IsNullOrWhiteSpace(filter.EmpName))
+        //    {
+        //        list = list.Where(m => m.EmpName.Contains(filter.EmpName));
+        //    }
+        //    list = list.OrderByDescending(m => m.CreateTime);
+        //    total = list.Count();
+        //    if (IsPage)
+        //    {
+        //        return list.Skip(filter.Skip).Take(filter.PageSize).ToList();
+        //    }
+        //    else
+        //    {
+        //        return list.ToList();
+        //    }
+        //}
     }
 }

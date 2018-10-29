@@ -37,6 +37,9 @@ namespace Business.SystemBusiness
 
                 m.CreateMap<EmployeeModel, PM_Employee>();
                 m.CreateMap<PM_Employee, EmployeeModel>();
+
+                m.CreateMap<PM_DataLibrary, DataLibraryModel>();
+                m.CreateMap<DataLibraryModel, PM_DataLibrary>();
             });
         }
     }

@@ -21,7 +21,7 @@
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
           <Property Name="UpdateUser" Type="uniqueidentifier" />
           <Property Name="UpdateTime" Type="datetime" />
-          <Property Name="FileClassify" Type="varchar" MaxLength="50" />
+          <Property Name="FileClassify" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="PM_Department">
           <Key>
@@ -206,11 +206,11 @@
           <EntitySet Name="System_Authorize" EntityType="Entity.System_Authorize" />
           <EntitySet Name="System_Log" EntityType="Entity.System_Log" />
           <EntitySet Name="System_Message" EntityType="Entity.System_Message" />
-          <EntitySet Name="PM_DataLibrary" EntityType="Entity.PM_DataLibrary" />
           <EntitySet Name="System_DicGroup" EntityType="Entity.System_DicGroup" />
           <EntitySet Name="System_DicItem" EntityType="Entity.System_DicItem" />
           <EntitySet Name="PM_Employee" EntityType="Entity.PM_Employee" />
           <EntitySet Name="PM_Department" EntityType="Entity.PM_Department" />
+          <EntitySet Name="PM_DataLibrary" EntityType="Entity.PM_DataLibrary" />
         </EntityContainer>
         <EntityType Name="System_User">
           <Key>
@@ -312,24 +312,6 @@
           <Property Name="IsRead" Type="Boolean" Nullable="false" />
           <Property Name="IsDel" Type="Boolean" Nullable="false" />
         </EntityType>
-        <EntityType Name="PM_DataLibrary">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="FileExtension" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="FileType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="FilePath" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
-          <Property Name="CanPreview" Type="Boolean" Nullable="false" />
-          <Property Name="IsDel" Type="Boolean" Nullable="false" />
-          <Property Name="CreateUser" Type="Guid" Nullable="false" />
-          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdateUser" Type="Guid" />
-          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
-          <Property Name="PreviewPath" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
-          <Property Name="FileClassify" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="System_DicGroup">
           <Key>
             <PropertyRef Name="Id" />
@@ -386,6 +368,24 @@
           <Property Name="UpdateUser" Type="Guid" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
           <Property Name="IsDel" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PM_DataLibrary">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FileExtension" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FileType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FilePath" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="CanPreview" Type="Boolean" Nullable="false" />
+          <Property Name="PreviewPath" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="FileClassify" Type="Guid" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -500,25 +500,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PM_DataLibrary">
-            <EntityTypeMapping TypeName="Entity.PM_DataLibrary">
-              <MappingFragment StoreEntitySet="PM_DataLibrary">
-                <ScalarProperty Name="FileClassify" ColumnName="FileClassify" />
-                <ScalarProperty Name="PreviewPath" ColumnName="PreviewPath" />
-                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
-                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
-                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
-                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
-                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
-                <ScalarProperty Name="CanPreview" ColumnName="CanPreview" />
-                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
-                <ScalarProperty Name="FileType" ColumnName="FileType" />
-                <ScalarProperty Name="FileExtension" ColumnName="FileExtension" />
-                <ScalarProperty Name="FileName" ColumnName="FileName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="System_DicGroup">
             <EntityTypeMapping TypeName="Entity.System_DicGroup">
               <MappingFragment StoreEntitySet="System_DicGroup">
@@ -576,6 +557,25 @@
                 <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
                 <ScalarProperty Name="ParentId" ColumnName="ParentId" />
                 <ScalarProperty Name="DepName" ColumnName="DepName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PM_DataLibrary">
+            <EntityTypeMapping TypeName="Entity.PM_DataLibrary">
+              <MappingFragment StoreEntitySet="PM_DataLibrary">
+                <ScalarProperty Name="FileClassify" ColumnName="FileClassify" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="PreviewPath" ColumnName="PreviewPath" />
+                <ScalarProperty Name="CanPreview" ColumnName="CanPreview" />
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="FileType" ColumnName="FileType" />
+                <ScalarProperty Name="FileExtension" ColumnName="FileExtension" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
