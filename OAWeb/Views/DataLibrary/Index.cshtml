@@ -277,16 +277,15 @@
                 setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 0);
             },
             openEditDialog: function () {
-                axios.post("GetFileModel", { userId: this.$refs.dataTable.selection[0].Id }).then(function (response) {
-                
-                    this.Dialog.addDialog = true;
-                    this.Dialog.addDialogTitle = "编辑";
-                    this.AddFormData.Id = response.data.Id;
-                    this.AddFormData.FileName = response.data.FileName;
-                    this.AddFormData.FileClassify = response.data.FileClassify;
-                    this.AddFormData.FileTempPath = "###";
-                    this.Upload.fileList = [{ name: response.data.FileName }];
-                    setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 0);
+                axios.post("GetFileModel", { id: this.$refs.dataTable.selection[0].Id }).then(function (response) {
+                   $vue.Dialog.addDialog = true;
+                   $vue.Dialog.addDialogTitle = "编辑";
+                   $vue.AddFormData.Id = response.data.Id;
+                   $vue.AddFormData.FileName = response.data.FileName;
+                   $vue.AddFormData.FileClassify = response.data.FileClassify;
+                   $vue.AddFormData.FileTempPath = "###";
+                   $vue.Upload.fileList = [{ name: response.data.FileName }];
+                   setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 0);
                 });
             
             }, 
@@ -372,9 +371,10 @@
                 }
             },
             onRemove: function (file, fileList) {
-                if (file.path == this.AddFormData.FileTempPath) {
-                    this.AddFormData.FileTempPath = "";
-                }
+                //if (file.path == this.AddFormData.FileTempPath) {
+                //    this.AddFormData.FileTempPath = "";
+                //}
+                this.AddFormData.FileTempPath = "";
             },
             onSuccess: function (response, file, fileList) {
                 file.path = response;

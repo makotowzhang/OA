@@ -108,7 +108,7 @@ namespace OAWeb.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"<script>top.$Msg.error('" + e.Message + "')</script>");
+                return Content(@"<script>top.$Msg.error('" + e.Message.Replace("'","\"") + "')</script>");
             }
             finally
             {

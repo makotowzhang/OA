@@ -129,7 +129,7 @@ namespace Business.PMBusiness
                         entity.FileClassify = model.FileClassify;
                         entity.UpdateUser = model.UpdateUser;
                         entity.UpdateTime = DateTime.Now;
-                        if (!string.IsNullOrWhiteSpace(model.FileTempPath))
+                        if (!string.IsNullOrWhiteSpace(model.FileTempPath) && model.FileTempPath != "###")
                         {
                             entity.FileType = model.FileType;
                             entity.FileExtension = model.FileExtension;
@@ -196,6 +196,13 @@ namespace Business.PMBusiness
             if (list == null || list.Count == 0)
             {
                 return null;
+            }
+            foreach (var file in list)
+            {
+                if (!File.Exists(rootPath.TrimEnd('\\') + "\\" + file.FilePath.TrimStart('\\')))
+                {
+                    throw new Exception("服务器文件丢失,请联系管理员");
+                }
             }
             if (list.Count == 1)
             { 
