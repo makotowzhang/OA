@@ -74,6 +74,7 @@
                         <el-button type="primary" v-if="ActionPermission.Add" ref="btnAdd" @@click="openAddDialog" icon="icon iconfont icon-file-add">新增</el-button>
                         <el-button type="primary" v-if="ActionPermission.Edit" :disabled="ButtonState.btnEdit" ref="btnEdit" @@click="openEditDialog" icon="icon iconfont icon-edit">编辑</el-button>
                         <el-button type="danger" v-if="ActionPermission.Delete" :disabled="ButtonState.btnDelete" ref="btnDelete" @@click="deleteClick" icon="icon iconfont icon-delete">删除</el-button>
+                        <el-button type="primary" v-if="ActionPermission.Download" :disabled="ButtonState.btnDownload" ref="btnDownload" @@click="downloadFiles" icon="icon iconfont icon-download">下载</el-button>
                     </el-col>
                 </el-row>
             </div>
@@ -98,6 +99,13 @@
                 <el-table-column prop="FileName"
                                  label="文件名"
                                  width="300">
+                    <template slot-scope="scope">
+                       
+                        <svg class="icon" style="font-size:26px;width:1em;height:1em;position:relative;top:7px;"  aria-hidden="true">
+                            <use :xlink:href="getFileIcon(scope.row)" ></use>
+                        </svg>
+                        {{scope.row.FileName}}
+                    </template>
                 </el-table-column>
                 <el-table-column prop="FileClassifyName"
                                  label="文件分类"
@@ -157,7 +165,11 @@
                                    :file-list.sync="Upload.fileList"
                                    :before-upload="beforeUpload"
                                    :on-remove="onRemove"
-                                   :on-success="onSuccess">
+                                   :on-success="onSuccess"
+                                   @*accept="application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,
+                                                   application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,
+                                                   application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation,         
+                                                   application/pdf"*@>
                             <i class="el-icon-upload"></i>
                             <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                         </el-upload>
@@ -168,6 +180,12 @@
                     <el-button @@click="cancelAddForm">取 消</el-button>
                 </span>
             </el-dialog>
+            <iframe id="downloadFrame" name="downloadFrame" style="display:none">
+
+            </iframe>
+            <form action="Download" method="post" target="downloadFrame" ref="DownloadForm">
+                <input type="hidden" name="list" ref="listHidden"/>
+            </form>
         </template>
     </div>
 </body>
@@ -188,7 +206,8 @@
             tableHeight: 500,
             ButtonState: {
                 btnEdit: true,
-                btnDelete: true
+                btnDelete: true,
+                btnDownload: true
             },
             Dialog: {
                 addDialog: false,
@@ -229,7 +248,8 @@
             ActionPermission: {
                 Add: false,
                 Edit: false,
-                Delete: false
+                Delete: false,
+                Download: false
             },
             Upload: {
                 fileList:[]
@@ -256,7 +276,20 @@
                 this.Upload.fileList = [];
                 setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 0);
             },
-            openEditDialog: function () { }, 
+            openEditDialog: function () {
+                axios.post("GetFileModel", { userId: this.$refs.dataTable.selection[0].Id }).then(function (response) {
+                
+                    this.Dialog.addDialog = true;
+                    this.Dialog.addDialogTitle = "编辑";
+                    this.AddFormData.Id = response.data.Id;
+                    this.AddFormData.FileName = response.data.FileName;
+                    this.AddFormData.FileClassify = response.data.FileClassify;
+                    this.AddFormData.FileTempPath = "###";
+                    this.Upload.fileList = [{ name: response.data.FileName }];
+                    setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 0);
+                });
+            
+            }, 
             submitAddForm: function () {
                 this.$refs.AddForm.validate(function (success, validateobj) {
                     if (success) {
@@ -282,7 +315,7 @@
                     type: 'warning'
                 }).then(function () {
                     $vue.Loading.bodyLoading = true;
-                    axios.post("DeleteUser", $vue.$refs.dataTable.selection).then(function (response) {
+                    axios.post("Delete", $vue.$refs.dataTable.selection).then(function (response) {
                         $vue.Loading.bodyLoading = false;
                         ActionCommonHandle(response.data, $vue, "删除成功", "删除失败", getList());
                     }).catch(function (error) {
@@ -301,20 +334,35 @@
                 if (this.$refs.dataTable.selection.length == 0) {
                     this.ButtonState.btnEdit = true;
                     this.ButtonState.btnDelete = true;
+                    this.ButtonState.btnDownload = true;
                 }
                 else if (this.$refs.dataTable.selection.length == 1) {
                     this.ButtonState.btnEdit = false;
                     this.ButtonState.btnDelete = false;
+                    this.ButtonState.btnDownload = false;
                 }
                 else {
                     this.ButtonState.btnEdit = true;
                     this.ButtonState.btnDelete = false;
+                    this.ButtonState.btnDownload = false;
                 }
             },
             rowClick: function (row, event, column) {
                 this.$refs.dataTable.toggleRowSelection(row);
             },
             beforeUpload: function (file) {
+                var typeArr = ["doc", "docx", "xls", "xlsx", "ppt", "pptx", "pdf"];
+                var flag = true;
+                for (var i = 0; i < typeArr.length; i++) {
+                    if (typeArr[i] == file.name.split(".")[1].toLowerCase()) {
+                        flag = false;
+                    }
+                   
+                }
+                if (flag) {
+                    $Msg.info("请上传doc, docx, xls, xlsx, ppt, pptx, pdf类型的文件");
+                    return false;
+                }
                 if (this.AddFormData.FileTempPath != null && this.AddFormData.FileTempPath != "") {
                     return this.$confirm('是否替换已上传的文件?', '提示', {
                         confirmButtonText: '确定',
@@ -356,6 +404,31 @@
             closeAddDialog: function (done) {
                 done();
             },
+            downloadFiles: function () {
+                this.Loading.bodyLoading = true;
+                this.$refs.listHidden.value = JSON.stringify(this.$refs.dataTable.selection);
+                this.$refs.DownloadForm.submit();
+                setTimeout(function () {
+                    axios.get("GetDownloadStatus").then(function () {
+                        $vue.Loading.bodyLoading = false;
+                    });
+                }, 500);
+            },
+            getFileIcon: function (row) {
+                if (row.FileType == "Word") {
+                    return "#icon-word";
+                }
+                if (row.FileType == "Excel") {
+                    return "#icon-excel";
+                }
+                if (row.FileType == "PowerPoint") {
+                    return "#icon-ppt";
+                }
+                if (row.FileType == "PDF") {
+                    return "#icon-pdf";
+                }
+
+            },
             DateFormat: DateFormat
         }
 
@@ -369,7 +442,7 @@
         $vue.ButtonState.btnEdit = true;
         $vue.ButtonState.btnDelete = true;
         $vue.Loading.tableLoading = true;
-        axios.post("GetDepFileList", filter).then(function (response) {
+        axios.post("GetFileList", filter).then(function (response) {
             $vue.Loading.tableLoading = false;
             $vue.tableData = response.data.List;
             $vue.PaginationData.total = response.data.Total;

@@ -37,13 +37,13 @@ namespace OAWeb.Controllers
             return Content(tempFilePath);
         }
 
-        public ActionResult GetDepFileList(DataLibraryFilter filter)
+        public ActionResult GetFileList(DataLibraryFilter filter)
         {
             var data = business.GetFileList(filter, out int total);
             return Json(new TableDataModel(total, data));
         }
 
-        public ActionResult GetDepModel(int id)
+        public ActionResult GetFileModel(int id)
         {
             return Json(business.GetFileById(id));
         }
@@ -82,6 +82,48 @@ namespace OAWeb.Controllers
             {
                 return Json(new JsonMessage(false, e.Message));
             }
+        }
+
+        public ActionResult Download(string list)
+        {
+            Session["DownloadFlag"] = false;
+            try
+            {
+                List<DataLibraryModel> model = Newtonsoft.Json.JsonConvert.DeserializeObject<List<DataLibraryModel>>(list);
+                string fileName = "";
+                if (model == null || model.Count == 0)
+                {
+                    throw new Exception("未选择下载的文件！");
+                }
+                fileName = model[0].FileName;
+                if (model.Count() == 1)
+                {
+                    fileName += model[0].FileExtension;
+                }
+                else
+                {
+                    fileName = $"_{ fileName}_等文件.zip";
+                }
+                return File(business.DownloadFile(model, Server.MapPath("~")), "application/octet-stream", fileName);
+            }
+            catch (Exception e)
+            {
+                return Content(@"<script>top.$Msg.error('" + e.Message + "')</script>");
+            }
+            finally
+            {
+                Session["DownloadFlag"] = true;
+            }
+        }
+
+        public ActionResult GetDownloadStatus()
+        {
+            while (Session["DownloadFlag"]==null||!(bool)Session["DownloadFlag"])
+            {
+                System.Threading.Thread.Sleep(200);
+            }
+            Session["DownloadFlag"] = null;
+            return Content("");
         }
     }
 }

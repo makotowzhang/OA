@@ -12,6 +12,7 @@ using Aspose.Words;
 using Aspose.Cells;
 using Aspose.Slides;
 using System.IO;
+using Ionic.Zip;
 
 
 namespace Business.PMBusiness
@@ -75,7 +76,7 @@ namespace Business.PMBusiness
         {
             try
             {
-                if (!string.IsNullOrWhiteSpace(model.FileTempPath))
+                if (!string.IsNullOrWhiteSpace(model.FileTempPath)&&model.FileTempPath!= "###")
                 {
                     model.FileExtension = Path.GetExtension(model.FileTempPath);
                     string ext = model.FileExtension.ToUpper();
@@ -189,6 +190,39 @@ namespace Business.PMBusiness
             }
         }
 
-        
+
+        public byte[] DownloadFile(List<DataLibraryModel> list, string rootPath)
+        {
+            if (list == null || list.Count == 0)
+            {
+                return null;
+            }
+            if (list.Count == 1)
+            { 
+                return File.ReadAllBytes(rootPath.TrimEnd('\\') + "\\" + list[0].FilePath.TrimStart('\\'));
+            }
+            else
+            {
+                using (ZipFile zips = new ZipFile(Encoding.UTF8))
+                {
+                    foreach (DataLibraryModel data in list)
+                    {
+                        ZipEntry entry = zips.AddFile(rootPath.TrimEnd('\\') + "\\" + data.FilePath.TrimStart('\\'));
+                        entry.FileName = data.FileClassifyName + "\\" + data.FileName + data.FileExtension;
+                    }
+                    using (MemoryStream stream = new MemoryStream())
+                    {
+                       
+                        zips.Save(stream);
+                        byte[] vs = new byte[stream.Length];
+                        stream.Seek(0, SeekOrigin.Begin);
+                        stream.Read(vs, 0, vs.Length);
+                        return vs;
+                    }
+                }
+            }
+        }
+
+
     }
 }
