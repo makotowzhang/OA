@@ -8,9 +8,28 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
+    @Html.Partial("~/Views/Shared/_Head.cshtml")
+    @Html.Partial("~/Views/Shared/QuillEditor.cshtml")
 </head>
 <body>
-    <div>
+    <div id="App">
+        <quilleditor style="height:500px;width:500px">
+
+        </quilleditor>
     </div>
 </body>
 </html>
+<script>
+    $vue = new Vue({
+        el: "#App"
+    });
+    var quill = new Quill('#editor-container', {
+        modules: {
+            formula: true,
+            syntax: true,
+            toolbar: '#toolbar-container'
+        },
+        placeholder: 'Compose an epic...',
+        theme: 'snow'
+    });
+</script>

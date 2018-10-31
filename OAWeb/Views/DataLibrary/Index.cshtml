@@ -74,6 +74,7 @@
                         <el-button type="primary" v-if="ActionPermission.Add" ref="btnAdd" @@click="openAddDialog" icon="icon iconfont icon-file-add">新增</el-button>
                         <el-button type="primary" v-if="ActionPermission.Edit" :disabled="ButtonState.btnEdit" ref="btnEdit" @@click="openEditDialog" icon="icon iconfont icon-edit">编辑</el-button>
                         <el-button type="danger" v-if="ActionPermission.Delete" :disabled="ButtonState.btnDelete" ref="btnDelete" @@click="deleteClick" icon="icon iconfont icon-delete">删除</el-button>
+                        <el-button type="primary" v-if="ActionPermission.Preview" :disabled="ButtonState.btnPreview" ref="btnPreview" @@click="previewFiles" icon="icon iconfont icon-eye">预览</el-button>
                         <el-button type="primary" v-if="ActionPermission.Download" :disabled="ButtonState.btnDownload" ref="btnDownload" @@click="downloadFiles" icon="icon iconfont icon-download">下载</el-button>
                     </el-col>
                 </el-row>
@@ -207,7 +208,8 @@
             ButtonState: {
                 btnEdit: true,
                 btnDelete: true,
-                btnDownload: true
+                btnDownload: true,
+                btnPreview:true
             },
             Dialog: {
                 addDialog: false,
@@ -249,7 +251,8 @@
                 Add: false,
                 Edit: false,
                 Delete: false,
-                Download: false
+                Download: false,
+                Preview: false
             },
             Upload: {
                 fileList:[]
@@ -270,6 +273,7 @@
             openAddDialog: function () {
                 this.Dialog.addDialog = true;
                 this.Dialog.addDialogTitle = "新增";
+                this.AddFormData.Id = null;
                 this.AddFormData.FileName = "";
                 this.AddFormData.FileClassify = "";
                 this.AddFormData.FileTempPath = "";
@@ -332,16 +336,19 @@
             selectChange: function (selectValue) {
                 if (this.$refs.dataTable.selection.length == 0) {
                     this.ButtonState.btnEdit = true;
+                    this.ButtonState.btnPreview = true;
                     this.ButtonState.btnDelete = true;
                     this.ButtonState.btnDownload = true;
                 }
                 else if (this.$refs.dataTable.selection.length == 1) {
                     this.ButtonState.btnEdit = false;
+                    this.ButtonState.btnPreview = false;
                     this.ButtonState.btnDelete = false;
                     this.ButtonState.btnDownload = false;
                 }
                 else {
                     this.ButtonState.btnEdit = true;
+                    this.ButtonState.btnPreview = true;
                     this.ButtonState.btnDelete = false;
                     this.ButtonState.btnDownload = false;
                 }
@@ -403,6 +410,26 @@
             },
             closeAddDialog: function (done) {
                 done();
+            },
+            previewFiles: function () {
+                axios.post("GetFileModel", { id: this.$refs.dataTable.selection[0].Id }).then(function (response) {
+                    if (response.data.CanPreview) {
+                        var url = "/Scripts/PDFJS/web/viewer.html?file=" + encodeURI(response.data.PreviewPath);
+                        var tabName = Math.random().toString();
+                        top.$app.editableTabs.push({
+                            title: '文件预览-' + response.data.FileName,
+                            name: tabName,
+                            content: url,
+                            closable: true,
+                            url: url,
+                            IconClass:"icon iconfont icon-eye"
+                        });
+                        top.$app.editableTabsValue = tabName;
+                    }
+                    else {
+                        $Msg.info("服务器正在对文件进行处理请稍后再预览！");
+                    }
+                });
             },
             downloadFiles: function () {
                 this.Loading.bodyLoading = true;

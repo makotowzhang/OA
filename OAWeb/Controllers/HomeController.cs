@@ -27,7 +27,7 @@ namespace OAWeb.Controllers
 
         public ActionResult Test()
         {
-            return Json(CurrentUser,JsonRequestBehavior.AllowGet);
+            return View();
         }
 
         public ActionResult CheckCurrentPwd(string password)

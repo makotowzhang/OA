@@ -298,6 +298,15 @@
     <Content Include="Scripts\PDFJS\web\viewer.js" />
     <Content Include="Scripts\Polyfill\polyfill.js" />
     <Content Include="Scripts\Polyfill\polyfill.min.js" />
+    <Content Include="Scripts\Quill\examples\bubble.html" />
+    <Content Include="Scripts\Quill\examples\full.html" />
+    <Content Include="Scripts\Quill\examples\snow.html" />
+    <Content Include="Scripts\Quill\quill.bubble.css" />
+    <Content Include="Scripts\Quill\quill.core.css" />
+    <Content Include="Scripts\Quill\quill.core.js" />
+    <Content Include="Scripts\Quill\quill.js" />
+    <Content Include="Scripts\Quill\quill.min.js" />
+    <Content Include="Scripts\Quill\quill.snow.css" />
     <Content Include="Scripts\Vue\vue.common.js" />
     <Content Include="Scripts\Vue\vue.esm.browser.js" />
     <Content Include="Scripts\Vue\vue.esm.js" />
@@ -632,6 +641,8 @@
     <Content Include="Views\Dictionary\Index.cshtml" />
     <Content Include="Views\DataLibrary\Index.cshtml" />
     <Content Include="Views\Department\Index.cshtml" />
+    <Content Include="Views\Shared\QuillEditor.cshtml" />
+    <Content Include="Scripts\Quill\quill.min.js.map" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">
