@@ -301,6 +301,9 @@
     <Content Include="Scripts\Quill\examples\bubble.html" />
     <Content Include="Scripts\Quill\examples\full.html" />
     <Content Include="Scripts\Quill\examples\snow.html" />
+    <Content Include="Scripts\Quill\extensions.css" />
+    <Content Include="Scripts\Quill\highlight.min.js" />
+    <Content Include="Scripts\Quill\katex.min.js" />
     <Content Include="Scripts\Quill\quill.bubble.css" />
     <Content Include="Scripts\Quill\quill.core.css" />
     <Content Include="Scripts\Quill\quill.core.js" />

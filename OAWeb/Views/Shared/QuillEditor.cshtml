@@ -1,12 +1,32 @@
 ﻿<link href="~/Scripts/Quill/quill.snow.css" rel="stylesheet" />
+<script src="~/Scripts/Quill/katex.min.js"></script>
+<script src="~/Scripts/Quill/highlight.min.js"></script>
 <script src="~/Scripts/Quill/quill.min.js"></script>
+<link href="~/Scripts/Quill/extensions.css" rel="stylesheet" />
 <script type="text/x-template" id="QuillEditorComponent">
     <div>
         <template>
-            <div id="toolbar-container">
+            <div :id="toolbarId">
                 <span class="ql-formats">
-                    <select class="ql-font"></select>
-                    <select class="ql-size"></select>
+                    <select class="ql-font">
+                        <option value="SimSun"></option>
+                        <option value="SimHei"></option>
+                        <option value="Microsoft-YaHei"></option>
+                        <option value="KaiTi"></option>
+                        <option value="FangSong"></option>
+                        <option value="Arial"></option>
+                        <option value="Times-New-Roman"></option>
+                        <option value="sans-serif"></option>
+                    </select>
+                    <select class="ql-size">
+                        <option value="10px"></option>
+                        <option value="12px"></option>
+                        <option value="14px"></option>
+                        <option value="16px"></option>
+                        <option value="18px"></option>
+                        <option value="20px"></option>
+
+                    </select>
                 </span>
                 <span class="ql-formats">
                     <button class="ql-bold"></button>
@@ -18,15 +38,15 @@
                     <select class="ql-color"></select>
                     <select class="ql-background"></select>
                 </span>
-                <span class="ql-formats">
+                <span class="ql-formats" v-if="toolbar=='full'">
                     <button class="ql-script" value="sub"></button>
                     <button class="ql-script" value="super"></button>
                 </span>
                 <span class="ql-formats">
                     <button class="ql-header" value="1"></button>
                     <button class="ql-header" value="2"></button>
-                    <button class="ql-blockquote"></button>
-                    <button class="ql-code-block"></button>
+                    <button class="ql-blockquote" v-if="toolbar=='full'"></button>
+                    <button class="ql-code-block" v-if="toolbar=='full'"></button>
                 </span>
                 <span class="ql-formats">
                     <button class="ql-list" value="ordered"></button>
@@ -41,20 +61,92 @@
                 <span class="ql-formats">
                     <button class="ql-link"></button>
                     <button class="ql-image"></button>
-                    <button class="ql-video"></button>
-                    <button class="ql-formula"></button>
+                    <button class="ql-video"  v-if="toolbar=='full'"></button>
+                    <button class="ql-formula"  v-if="toolbar=='full'"></button>
                 </span>
-                <span class="ql-formats">
+                <span class="ql-formats"  v-if="toolbar=='full'">
                     <button class="ql-clean"></button>
                 </span>
             </div>
-            <div id="editor-container"></div>
+            <div :id="containerId"></div>
+           
         </template>
     </div>
 </script>
 <script>
-    Vue.component('quilleditor', {
-        props: ['model'],
+  
+    Vue.component('quill-editor', {
+        props: { 
+            placeholder: {
+                type: String,
+                default: '请输入内容'
+            },
+            toolbar: {
+                type: String,
+                default:"common"
+            }
+        },
+        data: function () {
+            return {
+                toolbarId: "t" + Math.random().toString().replace("0.", ""),
+                containerId: "c" + Math.random().toString().replace("0.", ""),
+                editor: null,
+            };
+        },
+        mounted: function () {
+            //注册大小
+            var Size = Quill.import('attributors/style/size');
+            Size.whitelist = ['10px', '12px', '14px', '16px', '18px', '20px'];
+            Quill.register(Size, true);
+            //注册字体
+            var fonts = ['SimSun', 'SimHei', 'Microsoft-YaHei', 'KaiTi', 'FangSong', 'Arial', 'Times-New-Roman', 'sans-serif'];
+            var Font = Quill.import('formats/font');
+            Font.whitelist = fonts; 
+            Quill.register(Font, true);
+            editor = new Quill("#" + this.containerId, {
+                modules: {
+                    formula: true,
+                    syntax: true,
+                    toolbar: {
+                        container: '#' + this.toolbarId,
+                        handlers: {
+                            'image': function (value) {
+                                var position = editor.getSelection();
+                                var fileInput = document.createElement('input');
+                                fileInput.id = "fileInput";
+                                fileInput.setAttribute('type', 'file');
+                                fileInput.setAttribute('accept', 'image/png, image/gif, image/jpeg, image/bmp, image/x-icon');
+                                fileInput.addEventListener('change', function () {
+                                    if (fileInput.files != null && fileInput.files[0] != null) {
+                                        var param = new FormData();
+                                        param.append('file', fileInput.files[0]);
+                                        param.append("path", "temp/photo");
+                                        var config = {
+                                            headers: {
+                                                'Content-Type': 'multipart/form-data'
+                                            }
+                                        };
+                                        axios.post('CommonUploadFile', param, config)
+                                            .then(function (response) {
+                                                editor.insertEmbed(position.index, 'image', response.data.msg);
+                                                editor.setSelection(position.index + 1, 0);
+                                                fileInput.remove();
+                                            })
+                                    }
+                                });
+                                fileInput.click();
+                            }
+                        },
+                        options: { size: [false,'10px', '14px', '20px'] }
+                    }
+                },
+                placeholder: this.placeholder,
+                theme: 'snow'
+            });
+        },
+        method: {
+
+        },
         template: '#QuillEditorComponent'
     })
 </script>
