@@ -4,9 +4,9 @@
 <script src="~/Scripts/Quill/quill.min.js"></script>
 <link href="~/Scripts/Quill/extensions.css" rel="stylesheet" />
 <script type="text/x-template" id="QuillEditorComponent">
-    <div>
+    <div ref="editParent">
         <template>
-            <div :id="toolbarId">
+            <div :id="toolbarId" ref="toolBar">
                 <span class="ql-formats">
                     <select class="ql-font">
                         <option value="SimSun"></option>
@@ -64,11 +64,11 @@
                     <button class="ql-video"  v-if="toolbar=='full'"></button>
                     <button class="ql-formula"  v-if="toolbar=='full'"></button>
                 </span>
-                <span class="ql-formats"  v-if="toolbar=='full'">
+                <span class="ql-formats">
                     <button class="ql-clean"></button>
                 </span>
             </div>
-            <div :id="containerId"></div>
+            <div :id="containerId" ref="editContainer" style="height:auto"></div>
            
         </template>
     </div>
@@ -84,6 +84,18 @@
             toolbar: {
                 type: String,
                 default:"common"
+            },
+            content: {
+                type: String,
+                default:""
+            },
+            width: {
+                type: String,
+                Default:"100%"
+            },
+            height: {
+                type: String,
+                Default: "100%"
             }
         },
         data: function () {
@@ -91,6 +103,7 @@
                 toolbarId: "t" + Math.random().toString().replace("0.", ""),
                 containerId: "c" + Math.random().toString().replace("0.", ""),
                 editor: null,
+                editorContent:""
             };
         },
         mounted: function () {
@@ -103,7 +116,7 @@
             var Font = Quill.import('formats/font');
             Font.whitelist = fonts; 
             Quill.register(Font, true);
-            editor = new Quill("#" + this.containerId, {
+            var editor= this.editor = new Quill("#" + this.containerId, {
                 modules: {
                     formula: true,
                     syntax: true,
@@ -143,9 +156,18 @@
                 placeholder: this.placeholder,
                 theme: 'snow'
             });
+            var h1 = this.$refs.editParent.offsetHeight;
+            var h2 = this.$refs.toolBar.offsetHeight;
+            this.$refs.editContainer.style.height = (h1-h2)+"px";
+            var temp = this;
+            this.editor.on('text-change', function (delta, oldDelta, source) {
+                temp.editorContent = temp.editor.getContents();
+            });
         },
-        method: {
-
+        methods: {
+            getText: function () {
+                return document.getElementsByClassName("ql-editor").item(0).innerHTML;
+            },
         },
         template: '#QuillEditorComponent'
     })

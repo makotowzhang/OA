@@ -13,15 +13,25 @@
 </head>
 <body>
     <div id="App" >
-        <quill-editor style="height:500px;width:500px" >
+        <quill-editor ref="editor" style="height:300px;width:500px" :content.sync="content">
 
         </quill-editor>
+        <div style="clear:both"></div>
+        <button type="button" style="height:300px" @@click="ck">aaaasdas</button>
     </div>
 </body>
 </html>
 <script>
     $vue = new Vue({
-        el: "#App"
+        el: "#App",
+        data: {
+            content:""
+        },
+        methods: {
+            ck: function () {
+                alert(this.$refs.editor.getText());
+            }
+        }
     });
   
 </script>
