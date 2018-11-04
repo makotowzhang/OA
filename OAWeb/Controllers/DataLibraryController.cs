@@ -48,7 +48,7 @@ namespace OAWeb.Controllers
             return Json(business.GetFileById(id));
         }
 
-        [LogFilter("编辑", "资料库管理", LogActionType.Operation)]
+        [LogFilter("编辑", "资料库", LogActionType.Operation)]
         public ActionResult Save(DataLibraryModel model)
         {
             try
@@ -70,7 +70,7 @@ namespace OAWeb.Controllers
         }
 
 
-        [LogFilter("删除", "资料库管理", LogActionType.Operation)]
+        [LogFilter("删除", "资料库", LogActionType.Operation)]
         public ActionResult Delete(List<DataLibraryModel> model)
         {
             try
@@ -84,6 +84,7 @@ namespace OAWeb.Controllers
             }
         }
 
+        [LogFilter("下载", "资料库", LogActionType.Operation)]
         public ActionResult Download(string list)
         {
             Session["DownloadFlag"] = false;
