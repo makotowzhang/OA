@@ -162,6 +162,7 @@
     <Compile Include="Controllers\DataLibraryController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\DictionaryController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
@@ -646,6 +647,7 @@
     <Content Include="Views\Department\Index.cshtml" />
     <Content Include="Views\Shared\QuillEditor.cshtml" />
     <Content Include="Scripts\Quill\quill.min.js.map" />
+    <Content Include="Views\Employee\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">

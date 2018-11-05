@@ -152,6 +152,12 @@ function DateFormat(date, format) {
     return format;
 }
 
+function AutoMapper(source, data) {
+    for (var m in source) {
+        source[m] = data[m];
+    }
+}
+
 //页面左击右击事件监听，去除Tab的菜单
 window.addEventListener("load", function () {
     document.body.addEventListener("click", function () {

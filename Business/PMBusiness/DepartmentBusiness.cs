@@ -26,7 +26,7 @@ namespace Business.PMBusiness
         {
             using (DataProvider dp = new DataProvider())
             {
-                var entity = data.GetDepById(dp,model.Id);
+                var entity = data.GetDepById(dp,model.Id.Value);
                 if (entity == null)
                 {
                     model.Id = Guid.NewGuid();
@@ -61,6 +61,14 @@ namespace Business.PMBusiness
             }
         }
 
+        public List<DepartmentModel> GetAllDep()
+        {
+            using (DataProvider dp = new DataProvider())
+            {
+                return Mapper.Map<List<DepartmentModel>>(dp.PM_Department.Where(m => !m.IsDel).ToList());
+            }
+        }
+
         public bool Delete(List<DepartmentModel> list)
         {
             if (list == null || list.Count == 0)
@@ -71,7 +79,11 @@ namespace Business.PMBusiness
             {
                 foreach (var dep in list)
                 {
-                    var entity = data.GetDepById(dp,dep.Id);
+                    if (!dep.Id.HasValue)
+                    {
+                        continue;
+                    }
+                    var entity = data.GetDepById(dp,dep.Id.Value);
                     if (entity == null)
                     {
                         continue;
@@ -91,5 +103,6 @@ namespace Business.PMBusiness
                 }
             }
         }
+
     }
 }

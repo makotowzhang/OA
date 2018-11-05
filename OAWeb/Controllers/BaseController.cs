@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Business.SystemBusiness;
+using Business.PMBusiness;
 using Newtonsoft.Json;
 using System.IO;
 
@@ -28,6 +29,11 @@ namespace OAWeb.Controllers
         public ActionResult GetPageAuthorize(Guid menuId)
         {
             return Json(new AuthorizeBusiness().GetAuthorizeAction(menuId, CurrentUser.UserRole).Select(m => m.ActionCode));
+        }
+
+        public ActionResult GetDepListForSelect()
+        {
+            return Json(new DepartmentBusiness().GetAllDep());
         }
 
         public ActionResult CommonUploadFile(string path)

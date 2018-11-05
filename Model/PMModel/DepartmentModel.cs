@@ -9,7 +9,7 @@ namespace Model.PMModel
 {
     public class DepartmentModel : CommonModel
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string DepName { get; set; }
         public Guid? ParentId { get; set; }
         public bool IsDel { get; set; }
