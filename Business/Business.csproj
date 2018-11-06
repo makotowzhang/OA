@@ -70,6 +70,7 @@
     <Compile Include="PMBusiness\DataLibraryBusiness.cs" />
     <Compile Include="PMBusiness\DepartmentBusiness.cs" />
     <Compile Include="PMBusiness\EmployeeBusiness.cs" />
+    <Compile Include="PMBusiness\MaterielBusiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemBusiness\AuthorizeBusiness.cs" />
     <Compile Include="SystemBusiness\AutoMapperConfig.cs" />

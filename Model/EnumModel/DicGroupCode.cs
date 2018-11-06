@@ -11,6 +11,11 @@ namespace Model.EnumModel
         /// <summary>
         /// 资料库类别
         /// </summary>
-        DataLibraryType=1
+        DataLibraryType=1,
+
+        /// <summary>
+        /// 物料类型
+        /// </summary>
+        MaterielType=2
     }
 }

@@ -40,6 +40,9 @@ namespace Business.SystemBusiness
 
                 m.CreateMap<PM_DataLibrary, DataLibraryModel>();
                 m.CreateMap<DataLibraryModel, PM_DataLibrary>();
+
+                m.CreateMap<PM_Materiel, MaterielModel>();
+                m.CreateMap<MaterielModel, PM_Materiel>();
             });
         }
     }

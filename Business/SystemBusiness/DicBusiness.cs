@@ -130,7 +130,7 @@ namespace Business.SystemBusiness
         {
             using (DataProvider dp = new DataProvider())
             {
-                List<DicItemModel> itemList = Mapper.Map<List<DicItemModel>>(data.GetDicItemList(dp, code));
+                List<DicItemModel> itemList = Mapper.Map<List<DicItemModel>>(data.GetDicItemList(dp, code,false));
                 return itemList;
             }
         }

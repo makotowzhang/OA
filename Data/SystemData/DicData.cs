@@ -21,9 +21,13 @@ namespace Data.SystemData
             return list.ToList();
         }
 
-        public List<System_DicItem> GetDicItemList(DataProvider dp, DicGroupCode? code)
+        public List<System_DicItem> GetDicItemList(DataProvider dp, DicGroupCode? code,bool all=false)
         {
             var list = dp.System_DicItem.Where(m => !m.IsDel);
+            if (!all)
+            {
+                list = list.Where(m => m.IsEnabled);
+            }
             if (code != null)
             {
                 string groupCode = code.ToString();
