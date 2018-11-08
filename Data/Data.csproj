@@ -51,6 +51,7 @@
     <Compile Include="PMData\DataLibraryData.cs" />
     <Compile Include="PMData\DepartmentData.cs" />
     <Compile Include="PMData\EmployeeData.cs" />
+    <Compile Include="PMData\MaterielApplyData.cs" />
     <Compile Include="PMData\MaterielData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemData\AuthorizeData.cs" />

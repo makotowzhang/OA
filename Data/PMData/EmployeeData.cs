@@ -30,7 +30,8 @@ namespace Data.PMData
                            PhoneNumber = a.PhoneNumber,
                            RelateUserId = a.RelateUserId,
                            RelateUserName = b.UserName,
-                           DepName=dep.DepName
+                           DepName=dep.DepName,
+                           DepartmentId=dep.Id
                        };
             if (!string.IsNullOrWhiteSpace(filter.EmpCode))
             {

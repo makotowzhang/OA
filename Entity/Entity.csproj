@@ -65,6 +65,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataEntity.edmx</DependentUpon>
     </Compile>
+    <Compile Include="PM_AuidtUser.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="PM_DataLibrary.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
@@ -75,6 +78,9 @@
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="PM_Materiel.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PM_MaterielApply.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

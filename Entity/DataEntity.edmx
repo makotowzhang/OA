@@ -5,6 +5,14 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="FrameworkModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="PM_AuidtUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ApplyId" Type="uniqueidentifier" />
+          <Property Name="AuditId" Type="uniqueidentifier" />
+        </EntityType>
         <EntityType Name="PM_DataLibrary">
           <Key>
             <PropertyRef Name="Id" />
@@ -64,6 +72,23 @@
           <Property Name="Sort" Type="int" Nullable="false" />
           <Property Name="IsEnabled" Type="bit" Nullable="false" />
           <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+          <Property Name="UpdateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="PM_MaterielApply">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="MaterielId" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="AuditStatus" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApplyReason" Type="varchar" MaxLength="400" />
+          <Property Name="AuditUser" Type="uniqueidentifier" />
+          <Property Name="AuditReason" Type="varchar" MaxLength="400" />
+          <Property Name="AuditTime" Type="datetime" />
           <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
           <Property Name="UpdateUser" Type="uniqueidentifier" />
@@ -198,10 +223,12 @@
           <Property Name="UpdateTime" Type="datetime" />
         </EntityType>
         <EntityContainer Name="FrameworkModelStoreContainer">
+          <EntitySet Name="PM_AuidtUser" EntityType="Self.PM_AuidtUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_DataLibrary" EntityType="Self.PM_DataLibrary" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_Department" EntityType="Self.PM_Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_Employee" EntityType="Self.PM_Employee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_Materiel" EntityType="Self.PM_Materiel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PM_MaterielApply" EntityType="Self.PM_MaterielApply" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_Authorize" EntityType="Self.System_Authorize" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_DicGroup" EntityType="Self.System_DicGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_DicItem" EntityType="Self.System_DicItem" Schema="dbo" store:Type="Tables" />
@@ -230,6 +257,8 @@
           <EntitySet Name="PM_Department" EntityType="Entity.PM_Department" />
           <EntitySet Name="PM_DataLibrary" EntityType="Entity.PM_DataLibrary" />
           <EntitySet Name="PM_Materiel" EntityType="Entity.PM_Materiel" />
+          <EntitySet Name="PM_AuidtUser" EntityType="Entity.PM_AuidtUser" />
+          <EntitySet Name="PM_MaterielApply" EntityType="Entity.PM_MaterielApply" />
         </EntityContainer>
         <EntityType Name="System_User">
           <Key>
@@ -418,6 +447,31 @@
           <Property Name="Sort" Type="Int32" Nullable="false" />
           <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
           <Property Name="IsDel" Type="Boolean" Nullable="false" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="PM_AuidtUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplyId" Type="Guid" />
+          <Property Name="AuditId" Type="Guid" />
+        </EntityType>
+        <EntityType Name="PM_MaterielApply">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="MaterielId" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="AuditStatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ApplyReason" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="AuditUser" Type="Guid" />
+          <Property Name="AuditReason" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="AuditTime" Type="DateTime" Precision="3" />
           <Property Name="CreateUser" Type="Guid" Nullable="false" />
           <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUser" Type="Guid" />
@@ -630,6 +684,33 @@
                 <ScalarProperty Name="MaterielType" ColumnName="MaterielType" />
                 <ScalarProperty Name="MaterielName" ColumnName="MaterielName" />
                 <ScalarProperty Name="MaterielCode" ColumnName="MaterielCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PM_AuidtUser">
+            <EntityTypeMapping TypeName="Entity.PM_AuidtUser">
+              <MappingFragment StoreEntitySet="PM_AuidtUser">
+                <ScalarProperty Name="AuditId" ColumnName="AuditId" />
+                <ScalarProperty Name="ApplyId" ColumnName="ApplyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PM_MaterielApply">
+            <EntityTypeMapping TypeName="Entity.PM_MaterielApply">
+              <MappingFragment StoreEntitySet="PM_MaterielApply">
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="AuditTime" ColumnName="AuditTime" />
+                <ScalarProperty Name="AuditReason" ColumnName="AuditReason" />
+                <ScalarProperty Name="AuditUser" ColumnName="AuditUser" />
+                <ScalarProperty Name="ApplyReason" ColumnName="ApplyReason" />
+                <ScalarProperty Name="AuditStatus" ColumnName="AuditStatus" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="MaterielId" ColumnName="MaterielId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

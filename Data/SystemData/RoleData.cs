@@ -22,7 +22,7 @@ namespace Data.SystemData
 
         public List<System_Role> GetUserRole(DataProvider dp,Guid userId)
         {
-            return dp.System_Role.Where(m => dp.System_UserRole.Where(x => x.UserId == userId).Select(x =>(Guid)x.RoleId).Contains(m.Id)).ToList();
+            return dp.System_Role.Where(m => dp.System_UserRole.Where(x => x.UserId == userId).Select(x =>(Guid)x.RoleId).Contains(m.Id)&&m.IsDel==false).ToList();
         }
 
         public List<System_Role> GetRoleList(DataProvider dp, RoleFilter filter, out int total, bool IsPage = true)
