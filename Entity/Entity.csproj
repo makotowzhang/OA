@@ -65,7 +65,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataEntity.edmx</DependentUpon>
     </Compile>
-    <Compile Include="PM_AuidtUser.cs">
+    <Compile Include="PM_AuditUser.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="PM_DataLibrary.cs">

@@ -13,7 +13,7 @@ namespace Model.PMModel
         public Guid? Id { get; set; }
         public int MaterielId { get; set; }
         public int Quantity { get; set; }
-        public  AuditStatus AuditStatus { get; set; }
+        public  string AuditStatus { get; set; }
         public string ApplyReason { get; set; }
         public Guid? AuditUser { get; set; }
         public string AuditReason { get; set; }
@@ -30,7 +30,7 @@ namespace Model.PMModel
 
     public class MaterielApplyFilter : PageModel
     {
-        public string AuditStatus { get; set; }
+        public List<string> AuditStatus { get; set; }
 
         public string CreateUserName { get; set; }
 
@@ -38,7 +38,7 @@ namespace Model.PMModel
 
         public Guid? CreateUserId { get; set; }
 
-        public bool IsForAudit { get; set; }
+        public Guid? AuditUserId { get; set; }
 
         public DateTime? CreateBeginTime { get; set; }
 

@@ -38,7 +38,7 @@ namespace Entity
         public virtual DbSet<PM_Department> PM_Department { get; set; }
         public virtual DbSet<PM_DataLibrary> PM_DataLibrary { get; set; }
         public virtual DbSet<PM_Materiel> PM_Materiel { get; set; }
-        public virtual DbSet<PM_AuidtUser> PM_AuidtUser { get; set; }
         public virtual DbSet<PM_MaterielApply> PM_MaterielApply { get; set; }
+        public virtual DbSet<PM_AuditUser> PM_AuditUser { get; set; }
     }
 }

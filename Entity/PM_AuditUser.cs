@@ -12,7 +12,7 @@ namespace Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class PM_AuidtUser
+    public partial class PM_AuditUser
     {
         public int Id { get; set; }
         public Nullable<System.Guid> ApplyId { get; set; }
