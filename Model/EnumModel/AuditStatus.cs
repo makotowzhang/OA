@@ -28,4 +28,20 @@ namespace Model.EnumModel
         /// </summary>
         Revoke=4
     }
+
+    public enum ListType
+    {
+        /// <summary>
+        /// 所有数据
+        /// </summary>
+        AllList=1,
+        /// <summary>
+        /// 个人申请
+        /// </summary>
+        Personal=2,
+        /// <summary>
+        /// 审核人
+        /// </summary>
+        Auditor=3
+    }
 }

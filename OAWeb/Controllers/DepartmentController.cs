@@ -27,6 +27,12 @@ namespace OAWeb.Controllers
             return Json(new TableDataModel(total, data));
         }
 
+        public ActionResult GetAllDep()
+        {
+            var data = business.GetAllDep();
+            return Json(data);
+        }
+
         public ActionResult GetDepModel(Guid id)
         {
             return Json(business.GetModel(id));

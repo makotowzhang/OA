@@ -135,5 +135,13 @@ namespace Business.PMBusiness
                 return dp.PM_Employee.Count(m => m.EmpCode == empCode && !m.IsDel) > 0;
             }
         }
+
+        public List<EmployeeModel> GetUserEmpList()
+        {
+            using (DataProvider dp = new DataProvider())
+            {
+                return data.GetUserEmpList(dp);
+            }
+        }
     }
 }

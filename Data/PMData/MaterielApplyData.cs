@@ -16,7 +16,7 @@ namespace Data.PMData
 
         public List<MaterielApplyModel> GetPMAList(DataProvider dp, MaterielApplyFilter filter, out int total, bool IsPage = true)
         {
-            var list = from pma in dp.PM_MaterielApply
+            var list = from pma in dp.PM_MaterielApply.Where(m=>!m.IsDel)
                        join mat in dp.PM_Materiel.Where(m => !m.IsDel) on pma.MaterielId equals mat.Id
                        join su1 in dp.System_User.Where(m => m.IsDel == false) on pma.CreateUser equals su1.Id
                        join su2 in dp.System_User.Where(m => m.IsDel == false) on pma.AuditUser equals su2.Id into su2c
@@ -39,6 +39,10 @@ namespace Data.PMData
                            UpdateTime=pma.UpdateTime,
                            UpdateUser=pma.UpdateUser
                        };
+            if (filter.MaterielIds.IsNotNullAndCountGtZero())
+            {
+                list = list.Where(m => filter.MaterielIds.Contains(m.MaterielId));
+            }
             if (filter.AuditStatus.IsNotNullAndCountGtZero())
             {
                 list = list.Where(m => filter.AuditStatus.Contains(m.AuditStatus));
@@ -58,10 +62,10 @@ namespace Data.PMData
             if (filter.AuditUserId.HasValue)
             {
 
-                list = list.Where(m => dp.PM_AuditUser.Where(x => x.AuditId == m.Id)
+                list = list.Where(m => dp.PM_AuditUser.Where(x => x.ApplyId == m.Id)
                                                       .Select(x => x.AuditId)
                                                       .Contains(filter.AuditUserId)||
-                                       dp.PM_Employee.Where(x => (dp.PM_AuditUser.Where(y => y.AuditId == m.Id)
+                                       dp.PM_Employee.Where(x => (dp.PM_AuditUser.Where(y => y.ApplyId == m.Id)
                                                                                  .Select(y => y.AuditId)).Contains(x.DepartmentId))
                                                      .Select(x => x.RelateUserId)
                                                      .Contains(filter.AuditUserId));

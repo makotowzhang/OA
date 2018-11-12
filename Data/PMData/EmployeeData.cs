@@ -56,5 +56,17 @@ namespace Data.PMData
                 return list.ToList();
             }
         }
+
+        public List<EmployeeModel> GetUserEmpList(DataProvider dp)
+        {
+            var list = from a in dp.PM_Employee.Where(m => !m.IsDel)
+                       join b in dp.System_User.Where(m => m.IsDel == false) on a.RelateUserId equals b.Id
+                       select new EmployeeModel
+                       {
+                           RelateUserId = a.RelateUserId,
+                           EmpName = a.EmpName
+                       };
+            return list.ToList();
+        }
     }
 }

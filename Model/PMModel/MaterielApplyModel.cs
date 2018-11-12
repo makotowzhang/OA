@@ -21,7 +21,7 @@ namespace Model.PMModel
         public string MaterielName { get; set; }
         public string CreateUserName { get; set; }
         public string AuditUserName { get; set; }
-
+        public bool IsDel { get; set; }
         public List<Guid> AuditDep { get; set; }
 
         public List<Guid> AuditUserIds { get; set; }
@@ -31,6 +31,8 @@ namespace Model.PMModel
     public class MaterielApplyFilter : PageModel
     {
         public List<string> AuditStatus { get; set; }
+
+        public List<int> MaterielIds { get; set; }
 
         public string CreateUserName { get; set; }
 
@@ -47,5 +49,7 @@ namespace Model.PMModel
         public DateTime? AuditBeginTime { get; set; }
 
         public DateTime? AuditEndTime { get; set; }
+
+        public ListType ListType { get; set; }
     }
 }

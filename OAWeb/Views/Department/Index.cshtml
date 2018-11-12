@@ -18,7 +18,7 @@
         <template>
             <div ref="QueryFormDiv">
                 <el-form :model="QueryFormData" :inline="true" class="Query_Form" ref="QueryForm" @@submit.native.prevent>
-                    <el-form-item label="部门名称" prop="">
+                    <el-form-item label="部门名称" prop="DepName">
                         <el-input v-model="QueryFormData.DepName" placeholder="请输入部门名称"></el-input>
                     </el-form-item>
                     <el-form-item>

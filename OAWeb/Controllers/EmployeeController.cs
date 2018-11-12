@@ -72,5 +72,10 @@ namespace OAWeb.Controllers
         {
             return Json(new JsonMessage(business.CheckEmpCode(empCode)));
         }
+
+        public ActionResult GetUserEmp()
+        {
+            return Json(business.GetUserEmpList());
+        }
     }
 }

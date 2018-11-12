@@ -89,6 +89,7 @@
           <Property Name="AuditUser" Type="uniqueidentifier" />
           <Property Name="AuditReason" Type="varchar" MaxLength="400" />
           <Property Name="AuditTime" Type="datetime" />
+          <Property Name="IsDel" Type="bit" Nullable="false" />
           <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
           <Property Name="UpdateUser" Type="uniqueidentifier" />
@@ -257,8 +258,8 @@
           <EntitySet Name="PM_Department" EntityType="Entity.PM_Department" />
           <EntitySet Name="PM_DataLibrary" EntityType="Entity.PM_DataLibrary" />
           <EntitySet Name="PM_Materiel" EntityType="Entity.PM_Materiel" />
-          <EntitySet Name="PM_MaterielApply" EntityType="Entity.PM_MaterielApply" />
           <EntitySet Name="PM_AuditUser" EntityType="Entity.PM_AuditUser" />
+          <EntitySet Name="PM_MaterielApply" EntityType="Entity.PM_MaterielApply" />
         </EntityContainer>
         <EntityType Name="System_User">
           <Key>
@@ -452,6 +453,14 @@
           <Property Name="UpdateUser" Type="Guid" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="PM_AuditUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApplyId" Type="Guid" />
+          <Property Name="AuditId" Type="Guid" />
+        </EntityType>
         <EntityType Name="PM_MaterielApply">
           <Key>
             <PropertyRef Name="Id" />
@@ -464,18 +473,11 @@
           <Property Name="AuditUser" Type="Guid" />
           <Property Name="AuditReason" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
           <Property Name="AuditTime" Type="DateTime" Precision="3" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
           <Property Name="CreateUser" Type="Guid" Nullable="false" />
           <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUser" Type="Guid" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="PM_AuditUser">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ApplyId" Type="Guid" />
-          <Property Name="AuditId" Type="Guid" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -688,6 +690,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PM_AuditUser">
+            <EntityTypeMapping TypeName="Entity.PM_AuditUser">
+              <MappingFragment StoreEntitySet="PM_AuditUser">
+                <ScalarProperty Name="AuditId" ColumnName="AuditId" />
+                <ScalarProperty Name="ApplyId" ColumnName="ApplyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="PM_MaterielApply">
             <EntityTypeMapping TypeName="Entity.PM_MaterielApply">
               <MappingFragment StoreEntitySet="PM_MaterielApply">
@@ -695,6 +706,7 @@
                 <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
                 <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
                 <ScalarProperty Name="AuditTime" ColumnName="AuditTime" />
                 <ScalarProperty Name="AuditReason" ColumnName="AuditReason" />
                 <ScalarProperty Name="AuditUser" ColumnName="AuditUser" />
@@ -702,15 +714,6 @@
                 <ScalarProperty Name="AuditStatus" ColumnName="AuditStatus" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="MaterielId" ColumnName="MaterielId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PM_AuditUser">
-            <EntityTypeMapping TypeName="Entity.PM_AuditUser">
-              <MappingFragment StoreEntitySet="PM_AuditUser">
-                <ScalarProperty Name="AuditId" ColumnName="AuditId" />
-                <ScalarProperty Name="ApplyId" ColumnName="ApplyId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -33,6 +33,11 @@ namespace Model.EnumModel
         /// 修改参数
         /// </summary>
         [Description("修改参数")]
-        ModifyPara=5
+        ModifyPara=5,
+        /// <summary>
+        /// 申请
+        /// </summary>
+        [Description("申请")]
+        Apply
     }
 }

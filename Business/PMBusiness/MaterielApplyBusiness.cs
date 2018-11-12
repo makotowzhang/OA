@@ -8,6 +8,7 @@ using Model.PMModel;
 using Model.EnumModel;
 using AutoMapper;
 using Entity;
+using Common;
 
 
 namespace Business.PMBusiness
@@ -24,10 +25,10 @@ namespace Business.PMBusiness
                 if (model != null)
                 {
                     model.AuditDep = dp.PM_Department.Where(m => !m.IsDel &&
-                                                            dp.PM_AuditUser.Where(x => x.AuditId == model.Id).Select(x => x.AuditId).Contains(m.Id))
+                                                            dp.PM_AuditUser.Where(x => x.AuditId == m.Id).Select(x => x.AuditId).Contains(m.Id))
                                                           .Select(m => m.Id).ToList();
-                    model.AuditUserIds = dp.System_User.Where(m => m.IsDel==false &&
-                                                             dp.PM_AuditUser.Where(x => x.AuditId == model.Id).Select(x => x.AuditId).Contains(m.Id))
+                    model.AuditUserIds = dp.System_User.Where(m => m.IsDel == false &&
+                                                             dp.PM_AuditUser.Where(x => x.AuditId == m.Id).Select(x => x.AuditId).Contains(m.Id))
                                                           .Select(m => m.Id).ToList();
                 }
                 return model;
@@ -41,11 +42,28 @@ namespace Business.PMBusiness
                 var entity = data.GetPMAModel(dp, model.Id);
                 if (entity == null)
                 {
-                    
+
                     model.Id = Guid.NewGuid();
                     model.AuditStatus = AuditStatus.WaitAudit.ToString();
+                    model.IsDel = false;
                     model.CreateTime = DateTime.Now;
-                    dp.PM_Employee.Add(Mapper.Map<PM_Employee>(model));
+                    dp.PM_MaterielApply.Add(Mapper.Map<PM_MaterielApply>(model));
+                    if (model.AuditDep.IsNotNullAndCountGtZero())
+                    {
+                        model.AuditDep.ForEach(m => dp.PM_AuditUser.Add(new PM_AuditUser()
+                        {
+                            ApplyId=model.Id,
+                            AuditId=m
+                        }));
+                    }
+                    if (model.AuditUserIds.IsNotNullAndCountGtZero())
+                    {
+                        model.AuditUserIds.ForEach(m => dp.PM_AuditUser.Add(new PM_AuditUser()
+                        {
+                            ApplyId = model.Id,
+                            AuditId = m
+                        }));
+                    }
                 }
                 else
                 {
@@ -54,6 +72,23 @@ namespace Business.PMBusiness
                     entity.ApplyReason = model.ApplyReason;
                     entity.UpdateUser = model.UpdateUser;
                     entity.UpdateTime = DateTime.Now;
+                    dp.PM_AuditUser.RemoveRange(dp.PM_AuditUser.Where(m=>m.ApplyId==entity.Id));
+                    if (model.AuditDep.IsNotNullAndCountGtZero())
+                    {
+                        model.AuditDep.ForEach(m => dp.PM_AuditUser.Add(new PM_AuditUser()
+                        {
+                            ApplyId = model.Id,
+                            AuditId = m
+                        }));
+                    }
+                    if (model.AuditUserIds.IsNotNullAndCountGtZero())
+                    {
+                        model.AuditUserIds.ForEach(m => dp.PM_AuditUser.Add(new PM_AuditUser()
+                        {
+                            ApplyId = model.Id,
+                            AuditId = m
+                        }));
+                    }
                 }
                 try
                 {
@@ -67,16 +102,16 @@ namespace Business.PMBusiness
             }
         }
 
-        public List<EmployeeModel> GetEmpList(EmployeeFilter filter, out int total)
+        public List<MaterielApplyModel> GetPMAList(MaterielApplyFilter filter, out int total, bool isPage = true)
         {
             using (DataProvider dp = new DataProvider())
             {
-                var list = data.GetEmpList(dp, filter, out total);
-                return Mapper.Map<List<EmployeeModel>>(list);
+                var list = data.GetPMAList(dp, filter, out total, isPage);
+                return list;
             }
         }
 
-        public bool Delete(List<EmployeeModel> list)
+        public bool Delete(List<MaterielApplyModel> list)
         {
             if (list == null || list.Count == 0)
             {
@@ -90,7 +125,7 @@ namespace Business.PMBusiness
                     {
                         continue;
                     }
-                    var entity = data.GetEmpById(dp, dep.Id.Value);
+                    var entity = data.GetPMAModel(dp, dep.Id.Value);
                     if (entity == null)
                     {
                         continue;
@@ -111,11 +146,28 @@ namespace Business.PMBusiness
             }
         }
 
-        public bool CheckEmpCode(string empCode)
+        public bool Audit(MaterielApplyModel model)
         {
+            if (model == null || !model.Id.HasValue)
+            {
+                return false;
+            }
             using (DataProvider dp = new DataProvider())
             {
-                return dp.PM_Employee.Count(m => m.EmpCode == empCode && !m.IsDel) > 0;
+                var entity = data.GetPMAModel(dp, model.Id);
+                entity.AuditStatus = model.AuditStatus;
+                entity.AuditReason = model.AuditReason;
+                entity.AuditTime = DateTime.Now;
+                entity.AuditUser = model.AuditUser;
+                try
+                {
+                    dp.SaveChanges();
+                    return true;
+                }
+                catch
+                {
+                    throw;
+                }
             }
         }
     }

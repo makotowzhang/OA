@@ -22,6 +22,7 @@ namespace Entity
         public Nullable<System.Guid> AuditUser { get; set; }
         public string AuditReason { get; set; }
         public Nullable<System.DateTime> AuditTime { get; set; }
+        public bool IsDel { get; set; }
         public System.Guid CreateUser { get; set; }
         public System.DateTime CreateTime { get; set; }
         public Nullable<System.Guid> UpdateUser { get; set; }
