@@ -56,6 +56,7 @@
     <Compile Include="PMModel\DataLibraryModel.cs" />
     <Compile Include="PMModel\DepartmentModel.cs" />
     <Compile Include="PMModel\EmployeeModel.cs" />
+    <Compile Include="PMModel\MoneyApplyModel.cs" />
     <Compile Include="PMModel\MaterielApplyModel.cs" />
     <Compile Include="PMModel\MaterielModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

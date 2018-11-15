@@ -40,5 +40,6 @@ namespace Entity
         public virtual DbSet<PM_Materiel> PM_Materiel { get; set; }
         public virtual DbSet<PM_AuditUser> PM_AuditUser { get; set; }
         public virtual DbSet<PM_MaterielApply> PM_MaterielApply { get; set; }
+        public virtual DbSet<PM_MoneyApply> PM_MoneyApply { get; set; }
     }
 }

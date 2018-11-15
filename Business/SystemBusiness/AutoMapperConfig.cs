@@ -46,6 +46,9 @@ namespace Business.SystemBusiness
 
                 m.CreateMap<PM_MaterielApply, MaterielApplyModel>();
                 m.CreateMap<MaterielApplyModel, PM_MaterielApply>();
+
+                m.CreateMap<PM_MoneyApply, MoneyApplyModel>();
+                m.CreateMap<MoneyApplyModel, PM_MoneyApply>();
             });
         }
     }

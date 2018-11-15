@@ -1,0 +1,405 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>费用审批</title>
+    @Html.Partial("~/Views/Shared/_Head.cshtml")
+    <style>
+    </style>
+</head>
+<body>
+    <div id="App" ref="App" v-loading="Loading.bodyLoading">
+        <template>
+            <div ref="QueryFormDiv">
+                <el-form :model="QueryFormData" :inline="true" class="Query_Form" ref="QueryForm" @@submit.native.prevent label-width="80px">
+                    <el-row>
+                        <el-col :span="6">
+                            <el-form-item label="申请人" prop="CreateUserName">
+                                <el-input v-model="QueryFormData.CreateUserName" placeholder="请输入申请人"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="审核状态" prop="AuditStatus">
+                                <el-select v-model="QueryFormData.AuditStatus"
+                                           placeholder="请选择审核状态"
+                                           :clearable="true"
+                                           multiple
+                                           collapse-tags>
+                                    <el-option v-for="item in SelectOption.AuditStatus"
+                                               :key="item.Value"
+                                               :label="item.Text"
+                                               :value="item.Value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="申请开始" prop="CreateBeginTime">
+                                <el-date-picker v-model="QueryFormData.CreateBeginTime"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="申请结束" prop="CreateEndTime">
+                                <el-date-picker v-model="QueryFormData.CreateEndTime"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="6">
+                            <el-form-item label="审核开始" prop="AuditBeginTime">
+                                <el-date-picker v-model="QueryFormData.AuditBeginTime"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="审核结束" prop="AuditEndTime">
+                                <el-date-picker v-model="QueryFormData.AuditEndTime"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+             
+                        </el-col>
+                        <el-col :span="6">
+                            <el-button type="primary" @@click="onQuery" icon="el-icon-search">查询</el-button>
+                            <el-button type="primary" @@click="resetQueryForm" icon="el-icon-refresh">重置</el-button>
+                        </el-col>
+
+                    </el-row>
+                </el-form>
+                <el-row class="Table_Button_Row">
+                    <el-col :span="24">
+                        <el-button type="primary" v-if="ActionPermission.Audit" :disabled="ButtonState.btnAudit" ref="btnAudit" @@click="openAuditDialog" icon="icon iconfont icon-audit">审核</el-button>
+                    </el-col>
+                </el-row>
+            </div>
+            <el-table ref="dataTable"
+                      :data="tableData"
+                      :border="true"
+                      :height="tableHeight"
+                      @@selection-change="selectChange"
+                      @@row-click="rowClick"
+                      style="width: 100%;margin-top:20px;"
+                      element-loading-text="拼命加载中"
+                      element-loading-spinner="el-icon-loading"
+                      element-loading-background="rgba(200, 200,200, 0.5)"
+                      v-loading="Loading.tableLoading">
+                <el-table-column type="index"
+                                 :index="showIdex"
+                                 label=" ">
+                </el-table-column>
+                <el-table-column type="selection"
+                                 width="50">
+                </el-table-column>
+                <el-table-column prop="Amount"
+                                 label="金额"
+                                 width="100">
+                </el-table-column>
+                <el-table-column prop="ApplyReason"
+                                 label="申请原因"
+                                 width="200">
+                </el-table-column>
+                <el-table-column v-if="QueryFormData.ListType!='Personal'"
+                                 prop="CreateUserName"
+                                 label="申请人"
+                                 width="100">
+                </el-table-column>
+                <el-table-column prop="CreateTime"
+                                 label="申请时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        {{ DateFormat(scope.row.CreateTime,'yyyy-MM-dd HH:mm:ss') }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="AuditStatus"
+                                 label="审核状态"
+                                 width="100">
+                    <template slot-scope="scope">
+                        {{ Dic.AuditStatus[scope.row.AuditStatus] }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="AuditUserName"
+                                 label="审核人"
+                                 width="100">
+                </el-table-column>
+                <el-table-column prop="AuditReason"
+                                 label="审核描述"
+                                 width="200">
+                </el-table-column>
+                <el-table-column prop="AuditTime"
+                                 label="审核时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        {{ DateFormat(scope.row.AuditTime,'yyyy-MM-dd HH:mm:ss') }}
+                    </template>
+                </el-table-column>
+
+            </el-table>
+            <div ref="Pagination">
+                <el-pagination @@size-change="handleSizeChange"
+                               @@current-change="handleCurrentChange"
+                               :current-page.sync="QueryFormData.Page"
+                               :page-size.sync="QueryFormData.PageSize"
+                               :page-sizes="PaginationData.pageSizes"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="PaginationData.total"
+                               style="width:100%;padding-left:20px;box-sizing:border-box">
+                </el-pagination>
+            </div>
+            <el-dialog :title="modifyTitle"
+                       :visible.sync="Dialog.addDialog"
+                       width="500px">
+                <el-form :model="AddFormData" :rules="AddFormRule" label-width="80px" ref="AddForm" @@submit.native.prevent>
+                    
+                    <el-form-item label="金额">
+                        <el-input v-model="AddFormData.Amount" :readonly="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="申请原因">
+                        <el-input v-model="AddFormData.ApplyReason" type="textarea" :readonly="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="审核结果" prop="AuditStatus">
+                        <el-radio-group v-model="AddFormData.AuditStatus">
+                            <el-radio label="Passed" border>通过</el-radio>
+                            <el-radio label="Reject" border>驳回</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+
+                    <el-form-item label="审核理由" prop="AuditReason">
+                        <el-input v-model="AddFormData.AuditReason" type="textarea" placeholder="请输入审核理由"></el-input>
+                    </el-form-item>
+
+                </el-form>
+
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @@click="submitAuditForm">保 存</el-button>
+                    <el-button @@click="cancelAddForm">取 消</el-button>
+                </span>
+            </el-dialog>
+        </template>
+    </div>
+</body>
+</html>
+<script>
+    $vue = new Vue({
+        el: "#App",
+        data: {
+            QueryFormData: {
+                AuditStatus: [],
+                CreateUserName: "",
+                CreateBeginTime: "",
+                CreateEndTime: "",
+                AuditBeginTime: "",
+                AuditEndTime: "",
+                ListType: "Auditor",
+                Page: 1,
+                PageSize: 10,
+            },
+            tableData: [],
+            tableHeight: 500,
+            ButtonState: {
+                btnAudit: true
+            },
+            Dialog: {
+                addDialog: false,
+                editDialog: false
+            },
+            AddFormData: {
+                Id: null,
+                AuditReason: "",
+                AuditStatus: "Passed",
+                Amount:0,
+                ApplyReason: "",
+            },
+            AddFormRule: {
+                AuditReason: [
+                    { validator: checkAuditReason, trigger: 'change' }
+                ],
+                AuditStatus: [
+                    { required: true, message: '请选择审核结果', trigger: 'change' }
+                ]
+            },
+            Loading: {
+                bodyLoading: false,
+                tableLoading: false
+            },
+            SelectOption: {
+                AuditStatus: [
+                    { Value: "WaitAudit", Text: "待审核" },
+                    { Value: "Passed", Text: "审核通过" },
+                    { Value: "Reject", Text: "驳回" },
+                    { Value: "Revoke", Text: "撤销" }
+                ],
+                DepList: [],
+                EmpList: []
+            },
+            PaginationData: {
+                pageSizes: [10, 20, 50, 100],
+                total: 0
+            },
+            PaginationFilter: {
+            },
+            ActionPermission: {
+                Audit: false,
+
+            },
+            modifyTitle: "",
+            Dic: {
+                AuditStatus: {
+                    WaitAudit: "待审核",
+                    Passed: "审核通过",
+                    Reject: "驳回",
+                    Revoke: "撤销"
+                }
+            }
+        },
+        methods: {
+            onQuery: function () {
+                this.QueryFormData.Page = 1;
+                this.PaginationFilter = JSON.parse(JSON.stringify(this.QueryFormData));
+                getList();
+            },
+            showIdex: function (index) {
+                return (this.QueryFormData.Page - 1) * this.QueryFormData.PageSize + 1 + index;
+            },
+            resetQueryForm: function () {
+                this.$refs.QueryForm.resetFields();
+            },
+
+            openAuditDialog: function () {
+                this.modifyTitle = "审核";
+                AutoMapper($vue.AddFormData, $vue.$refs.dataTable.selection[0]);
+                $vue.AddFormData.AuditStatus = "Passed";
+                $vue.AddFormData.AuditReason = "";
+                setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 0);
+                $vue.Dialog.addDialog = true;
+            },
+            submitAuditForm: function () {
+                this.$refs.AddForm.validate(function (success, validateobj) {
+                    if (success) {
+                        $vue.Loading.bodyLoading = true;
+                        axios.post("Audit", $vue.AddFormData).then(function (response) {
+                            ActionCommonHandle(response.data, $vue, "审核成功", "审核失败", getList());
+                        }).catch(function (error) {
+                            ErrorCommonHandle($vue);
+                        }).finally(function () {
+                            $vue.Loading.bodyLoading = false;
+                            $vue.Dialog.addDialog = false;
+                        });
+                    }
+                });
+            },
+            cancelAddForm: function () {
+                this.Dialog.addDialog = false;
+            },
+            selectChange: function (selectValue) {
+                if (this.$refs.dataTable.selection.length == 0) {
+                    this.ButtonState.btnAudit = true;
+                }
+                else if (this.$refs.dataTable.selection.length == 1) {
+                    var status = this.$refs.dataTable.selection[0].AuditStatus;
+                    if (status == "WaitAudit") {
+                        this.ButtonState.btnAudit = false;
+                    }
+                    else {
+                        this.ButtonState.btnAudit = true;
+                    }
+
+
+                }
+                else {
+                    this.ButtonState.btnAudit = true;
+                }
+            },
+            rowClick: function (row, event, column) {
+                this.$refs.dataTable.toggleRowSelection(row);
+            },
+            handleSizeChange: function (val) {
+                if (this.QueryFormData.Page > (this.PaginationData.total / val + 1)) {
+                    return;
+                }
+                this.PaginationFilter.Page = this.QueryFormData.Page;
+                this.PaginationFilter.PageSize = val;
+                getList(this.PaginationFilter);
+            },
+            handleCurrentChange: function (val) {
+                this.PaginationFilter.Page = val;
+                this.PaginationFilter.PageSize = this.QueryFormData.PageSize;
+                getList(this.PaginationFilter);
+            },
+            closeAddDialog: function (done) {
+                done();
+            },
+            DateFormat: DateFormat
+        }
+
+    });
+
+    function getList(filter) {
+        if (filter == null) {
+            filter = $vue.QueryFormData;
+        }
+        $vue.$refs.dataTable.clearSelection();
+        $vue.ButtonState.btnEdit = true;
+        $vue.ButtonState.btnDelete = true;
+        $vue.Loading.tableLoading = true;
+        axios.post("GetList", filter).then(function (response) {
+            $vue.Loading.tableLoading = false;
+            $vue.tableData = response.data.List;
+            $vue.PaginationData.total = response.data.Total;
+        }).catch(function (error) {
+            $vue.Loading.tableLoading = false;
+            $vue.tableData = [];
+            $vue.PaginationData.total = 0;
+            $vue.$message({
+                type: 'error',
+                message: '服务器出错'
+            });
+        });
+    }
+
+
+
+    function checkAuditReason(rule, value, callback) {
+        var status = $vue.AddFormData.AuditStatus;
+        var reason = $vue.AddFormData.AuditReason;
+        if (status == "Reject" && (reason == null|| reason == "")) {
+            callback(new Error("请选择填写审核理由！"));
+        }
+        else {
+            callback();
+        }
+
+    }
+
+
+
+
+    window.onresize = function () {
+        $vue.tableHeight = $vue.$refs.App.getBoundingClientRect().height -
+            $vue.$refs.QueryFormDiv.getBoundingClientRect().height -
+            $vue.$refs.Pagination.getBoundingClientRect().height - 20;
+    }
+    getList();
+
+    GetActionAuthorize($vue);
+</script>

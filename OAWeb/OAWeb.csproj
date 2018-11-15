@@ -168,6 +168,7 @@
     <Compile Include="Controllers\MaterielApplyController.cs" />
     <Compile Include="Controllers\MaterielController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\MoneyApplyController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SysMessageController.cs" />
     <Compile Include="Controllers\SystemLogController.cs" />
@@ -654,6 +655,9 @@
     <Content Include="Views\MaterielApply\Index.cshtml" />
     <Content Include="Views\MaterielApply\PersonalIndex.cshtml" />
     <Content Include="Views\MaterielApply\AuditorIndex.cshtml" />
+    <Content Include="Views\MoneyApply\Index.cshtml" />
+    <Content Include="Views\MoneyApply\PersonalIndex.cshtml" />
+    <Content Include="Views\MoneyApply\AuditorIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">

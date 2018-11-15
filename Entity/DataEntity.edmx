@@ -95,6 +95,23 @@
           <Property Name="UpdateUser" Type="uniqueidentifier" />
           <Property Name="UpdateTime" Type="datetime" />
         </EntityType>
+        <EntityType Name="PM_MoneyApply">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="AuditStatus" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApplyReason" Type="varchar" MaxLength="400" />
+          <Property Name="AuditUser" Type="uniqueidentifier" />
+          <Property Name="AuditReason" Type="varchar" MaxLength="400" />
+          <Property Name="AuditTime" Type="datetime" />
+          <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+          <Property Name="UpdateTime" Type="datetime" />
+        </EntityType>
         <EntityType Name="System_Authorize">
           <Key>
             <PropertyRef Name="Id" />
@@ -230,6 +247,7 @@
           <EntitySet Name="PM_Employee" EntityType="Self.PM_Employee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_Materiel" EntityType="Self.PM_Materiel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_MaterielApply" EntityType="Self.PM_MaterielApply" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PM_MoneyApply" EntityType="Self.PM_MoneyApply" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_Authorize" EntityType="Self.System_Authorize" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_DicGroup" EntityType="Self.System_DicGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_DicItem" EntityType="Self.System_DicItem" Schema="dbo" store:Type="Tables" />
@@ -260,6 +278,7 @@
           <EntitySet Name="PM_Materiel" EntityType="Entity.PM_Materiel" />
           <EntitySet Name="PM_AuditUser" EntityType="Entity.PM_AuditUser" />
           <EntitySet Name="PM_MaterielApply" EntityType="Entity.PM_MaterielApply" />
+          <EntitySet Name="PM_MoneyApply" EntityType="Entity.PM_MoneyApply" />
         </EntityContainer>
         <EntityType Name="System_User">
           <Key>
@@ -468,6 +487,23 @@
           <Property Name="Id" Type="Guid" Nullable="false" />
           <Property Name="MaterielId" Type="Int32" Nullable="false" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="AuditStatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ApplyReason" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="AuditUser" Type="Guid" />
+          <Property Name="AuditReason" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="AuditTime" Type="DateTime" Precision="3" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="PM_MoneyApply">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="AuditStatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ApplyReason" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
           <Property Name="AuditUser" Type="Guid" />
@@ -714,6 +750,24 @@
                 <ScalarProperty Name="AuditStatus" ColumnName="AuditStatus" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="MaterielId" ColumnName="MaterielId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PM_MoneyApply">
+            <EntityTypeMapping TypeName="Entity.PM_MoneyApply">
+              <MappingFragment StoreEntitySet="PM_MoneyApply">
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="AuditTime" ColumnName="AuditTime" />
+                <ScalarProperty Name="AuditReason" ColumnName="AuditReason" />
+                <ScalarProperty Name="AuditUser" ColumnName="AuditUser" />
+                <ScalarProperty Name="ApplyReason" ColumnName="ApplyReason" />
+                <ScalarProperty Name="AuditStatus" ColumnName="AuditStatus" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

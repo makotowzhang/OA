@@ -83,6 +83,9 @@
     <Compile Include="PM_MaterielApply.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
+    <Compile Include="PM_MoneyApply.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System_Authorize.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
