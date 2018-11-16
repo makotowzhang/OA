@@ -16,6 +16,11 @@ namespace Model.EnumModel
         /// <summary>
         /// 物料类型
         /// </summary>
-        MaterielType=2
+        MaterielType=2,
+
+        /// <summary>
+        /// 公告类别
+        /// </summary>
+        NoticeType=3
     }
 }

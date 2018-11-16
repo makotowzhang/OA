@@ -59,6 +59,7 @@
     <Compile Include="PMModel\MoneyApplyModel.cs" />
     <Compile Include="PMModel\MaterielApplyModel.cs" />
     <Compile Include="PMModel\MaterielModel.cs" />
+    <Compile Include="PMModel\NoticeModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemModel\AuthorizeModel.cs" />
     <Compile Include="SystemModel\DicGroupModel.cs" />

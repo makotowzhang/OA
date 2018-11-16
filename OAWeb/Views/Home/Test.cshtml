@@ -13,11 +13,11 @@
 </head>
 <body>
     <div id="App" >
-        <quill-editor ref="editor" style="height:300px;width:500px" :content.sync="content">
+        <quill-editor ref="editor" :onlyshow="true" style="height:300px;width:500px" :content.sync="content">
 
         </quill-editor>
         <div style="clear:both"></div>
-        <button type="button" style="height:300px" @@click="ck">aaaasdas</button>
+        <button type="button"  @@click="ck">aaaasdas</button>
     </div>
 </body>
 </html>
@@ -25,10 +25,11 @@
     $vue = new Vue({
         el: "#App",
         data: {
-            content:""
+            content: "<div class='ql-editor' data-gramm='false' contenteditable='true' data-placeholder='请输入内容'><p>asdasd</p></div><div class='ql - clipboard' contenteditable='true' tabindex='-1'></div><div class='ql - tooltip ql-hidden'><a class='ql - preview' target='_blank' href='about: blank'></a><input type='text' data-formula='e=mc ^ 2' data-link='https://quilljs.com' data-video='Embed URL'><a class='ql-action'></a><a class='ql-remove'></a></div>"
         },
         methods: {
             ck: function () {
+                alert(this.content);
                 alert(this.$refs.editor.getText());
             }
         }

@@ -61,17 +61,19 @@
                 <span class="ql-formats">
                     <button class="ql-link"></button>
                     <button class="ql-image"></button>
-                    <button class="ql-video"  v-if="toolbar=='full'"></button>
-                    <button class="ql-formula"  v-if="toolbar=='full'"></button>
+                    <button class="ql-video" v-if="toolbar=='full'"></button>
+                    <button class="ql-formula" v-if="toolbar=='full'"></button>
                 </span>
                 <span class="ql-formats">
                     <button class="ql-clean"></button>
                 </span>
+
+
             </div>
             <div :id="containerId" ref="editContainer" style="height:auto"></div>
-           
         </template>
     </div>
+    
 </script>
 <script>
   
@@ -96,6 +98,10 @@
             height: {
                 type: String,
                 Default: "100%"
+            },
+            onlyshow: {
+                type: Boolean,
+                Default: false
             }
         },
         data: function () {
@@ -107,6 +113,7 @@
             };
         },
         mounted: function () {
+            this.$refs.editContainer.innerHTML = this.content;
             //注册大小
             var Size = Quill.import('attributors/style/size');
             Size.whitelist = ['10px', '12px', '14px', '16px', '18px', '20px'];
@@ -116,6 +123,8 @@
             var Font = Quill.import('formats/font');
             Font.whitelist = fonts; 
             Quill.register(Font, true);
+
+
             var editor= this.editor = new Quill("#" + this.containerId, {
                 modules: {
                     formula: true,
@@ -160,13 +169,15 @@
             var h2 = this.$refs.toolBar.offsetHeight;
             this.$refs.editContainer.style.height = (h1-h2)+"px";
             var temp = this;
-            this.editor.on('text-change', function (delta, oldDelta, source) {
+            this.editor.on('editor-change', function () {
                 temp.editorContent = temp.editor.getContents();
+                temp.$emit('update:content', temp.$refs.editContainer.innerHTML)
             });
         },
         methods: {
             getText: function () {
-                return document.getElementsByClassName("ql-editor").item(0).innerHTML;
+                return this.$refs.editContainer.innerHTML;
+                //return document.getElementsByClassName("ql-editor").item(0).innerHTML;
             },
         },
         template: '#QuillEditorComponent'

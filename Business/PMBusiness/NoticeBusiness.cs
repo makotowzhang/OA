@@ -5,42 +5,46 @@ using System.Text;
 using System.Threading.Tasks;
 using Data.PMData;
 using Model.PMModel;
+using Model.EnumModel;
 using AutoMapper;
 using Entity;
+using Common;
+
 
 namespace Business.PMBusiness
 {
-    public class DepartmentBusiness
+    public class NoticeBusiness
     {
-        private DepartmentData data = new DepartmentData();
+        private NoticeData data = new NoticeData();
 
-        public DepartmentModel GetModel(Guid id)
+        public NoticeModel GetModel(int id)
         {
             using (DataProvider dp = new DataProvider())
             {
-                return Mapper.Map<DepartmentModel>(data.GetDepById(dp, id));
+                NoticeModel model = Mapper.Map<NoticeModel>(data.GetNotById(dp, id));
+                return model;
             }
         }
 
-        public bool Save(DepartmentModel model)
+        public bool Save(NoticeModel model)
         {
             using (DataProvider dp = new DataProvider())
             {
-                PM_Department entity = null;
-                if (model.Id.HasValue)
-                {
-                    entity = data.GetDepById(dp, model.Id.Value);
-                }
+                var entity = data.GetNotById(dp, model.Id);
                 if (entity == null)
                 {
-                    model.Id = Guid.NewGuid();
                     model.IsDel = false;
                     model.CreateTime = DateTime.Now;
-                    dp.PM_Department.Add(Mapper.Map<PM_Department>(model));
+                    dp.PM_Notice.Add(Mapper.Map<PM_Notice>(model));
                 }
                 else
                 {
-                    entity.DepName = model.DepName;
+                    entity.IsEnabled = model.IsEnabled;
+                    entity.NoticeContent = model.NoticeContent;
+                    entity.NoticeType = model.NoticeType;
+                    entity.Priority = model.Priority;
+                    entity.Remarks = model.Remarks;
+                    entity.NoticeTitle = model.NoticeTitle;
                     entity.UpdateUser = model.UpdateUser;
                     entity.UpdateTime = DateTime.Now;
                 }
@@ -56,24 +60,16 @@ namespace Business.PMBusiness
             }
         }
 
-        public List<DepartmentModel> GetDepList(DepartmentFilter filter, out int total)
+        public List<NoticeModel> GetNotList(NoticeFilter filter, out int total, bool isPage = true)
         {
             using (DataProvider dp = new DataProvider())
             {
-                var list = data.GetDepList(dp, filter, out total);
-                return Mapper.Map<List<DepartmentModel>>(list);
+                var list = data.GetNotList(dp, filter, out total, isPage);
+                return list;
             }
         }
 
-        public List<DepartmentModel> GetAllDep()
-        {
-            using (DataProvider dp = new DataProvider())
-            {
-                return Mapper.Map<List<DepartmentModel>>(dp.PM_Department.Where(m => !m.IsDel).ToList());
-            }
-        }
-
-        public bool Delete(List<DepartmentModel> list)
+        public bool Delete(List<NoticeModel> list)
         {
             if (list == null || list.Count == 0)
             {
@@ -81,19 +77,15 @@ namespace Business.PMBusiness
             }
             using (DataProvider dp = new DataProvider())
             {
-                foreach (var dep in list)
+                foreach (var not in list)
                 {
-                    if (!dep.Id.HasValue)
-                    {
-                        continue;
-                    }
-                    var entity = data.GetDepById(dp, dep.Id.Value);
+                    var entity = data.GetNotById(dp, not.Id);
                     if (entity == null)
                     {
                         continue;
                     }
                     entity.IsDel = true;
-                    entity.UpdateUser = dep.UpdateUser;
+                    entity.UpdateUser = not.UpdateUser;
                     entity.UpdateTime = DateTime.Now;
                 }
                 try

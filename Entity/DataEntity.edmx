@@ -112,6 +112,23 @@
           <Property Name="UpdateUser" Type="uniqueidentifier" />
           <Property Name="UpdateTime" Type="datetime" />
         </EntityType>
+        <EntityType Name="PM_Notice">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NoticeType" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="NoticeTitle" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="NoticeContent" Type="varchar(max)" Nullable="false" />
+          <Property Name="Remarks" Type="varchar" MaxLength="500" />
+          <Property Name="Priority" Type="int" Nullable="false" />
+          <Property Name="IsEnabled" Type="bit" Nullable="false" />
+          <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+          <Property Name="UpdateTime" Type="datetime" />
+        </EntityType>
         <EntityType Name="System_Authorize">
           <Key>
             <PropertyRef Name="Id" />
@@ -248,6 +265,7 @@
           <EntitySet Name="PM_Materiel" EntityType="Self.PM_Materiel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_MaterielApply" EntityType="Self.PM_MaterielApply" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_MoneyApply" EntityType="Self.PM_MoneyApply" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PM_Notice" EntityType="Self.PM_Notice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_Authorize" EntityType="Self.System_Authorize" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_DicGroup" EntityType="Self.System_DicGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_DicItem" EntityType="Self.System_DicItem" Schema="dbo" store:Type="Tables" />
@@ -279,6 +297,7 @@
           <EntitySet Name="PM_AuditUser" EntityType="Entity.PM_AuditUser" />
           <EntitySet Name="PM_MaterielApply" EntityType="Entity.PM_MaterielApply" />
           <EntitySet Name="PM_MoneyApply" EntityType="Entity.PM_MoneyApply" />
+          <EntitySet Name="PM_Notice" EntityType="Entity.PM_Notice" />
         </EntityContainer>
         <EntityType Name="System_User">
           <Key>
@@ -509,6 +528,23 @@
           <Property Name="AuditUser" Type="Guid" />
           <Property Name="AuditReason" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
           <Property Name="AuditTime" Type="DateTime" Precision="3" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="PM_Notice">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NoticeType" Type="Guid" Nullable="false" />
+          <Property Name="NoticeTitle" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="NoticeContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Priority" Type="Int32" Nullable="false" />
+          <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
           <Property Name="IsDel" Type="Boolean" Nullable="false" />
           <Property Name="CreateUser" Type="Guid" Nullable="false" />
           <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
@@ -768,6 +804,24 @@
                 <ScalarProperty Name="ApplyReason" ColumnName="ApplyReason" />
                 <ScalarProperty Name="AuditStatus" ColumnName="AuditStatus" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PM_Notice">
+            <EntityTypeMapping TypeName="Entity.PM_Notice">
+              <MappingFragment StoreEntitySet="PM_Notice">
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="NoticeContent" ColumnName="NoticeContent" />
+                <ScalarProperty Name="NoticeTitle" ColumnName="NoticeTitle" />
+                <ScalarProperty Name="NoticeType" ColumnName="NoticeType" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

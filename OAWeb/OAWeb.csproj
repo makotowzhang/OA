@@ -160,6 +160,7 @@
     <Compile Include="Controllers\AuthorizeController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DataLibraryController.cs" />
+    <Compile Include="Controllers\NoticeController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\DictionaryController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
@@ -658,6 +659,7 @@
     <Content Include="Views\MoneyApply\Index.cshtml" />
     <Content Include="Views\MoneyApply\PersonalIndex.cshtml" />
     <Content Include="Views\MoneyApply\AuditorIndex.cshtml" />
+    <Content Include="Views\Notice\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">
