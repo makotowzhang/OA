@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>费用审批</title>
+    <title>借物申请</title>
     @Html.Partial("~/Views/Shared/_Head.cshtml")
     <style>
     </style>
@@ -20,8 +20,8 @@
                 <el-form :model="QueryFormData" :inline="true" class="Query_Form" ref="QueryForm" @@submit.native.prevent label-width="80px">
                     <el-row>
                         <el-col :span="6">
-                            <el-form-item label="申请人" prop="CreateUserName">
-                                <el-input v-model="QueryFormData.CreateUserName" placeholder="请输入申请人"></el-input>
+                            <el-form-item label="审核人" prop="AuditUserName">
+                                <el-input v-model="QueryFormData.AuditUserName" placeholder="请输入审核人"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -78,7 +78,19 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-             
+                            <el-form-item label="租借物品" prop="LeaseIds">
+                                <el-select v-model="QueryFormData.LeaseIds" 
+                                           placeholder="请选择租借物品" 
+                                           :clearable="true"
+                                           multiple
+                                           collapse-tags>
+                                    <el-option v-for="item in SelectOption.LeaseList"
+                                               :key="item.Id"
+                                               :label="item.LeaseName"
+                                               :value="item.Id">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
                         </el-col>
                         <el-col :span="6">
                             <el-button type="primary" @@click="onQuery" icon="el-icon-search">查询</el-button>
@@ -89,7 +101,9 @@
                 </el-form>
                 <el-row class="Table_Button_Row">
                     <el-col :span="24">
-                        <el-button type="primary" v-if="ActionPermission.Audit" :disabled="ButtonState.btnAudit" ref="btnAudit" @@click="openAuditDialog" icon="icon iconfont icon-audit">审核</el-button>
+                        <el-button type="primary" v-if="ActionPermission.Add" ref="btnAdd" @@click="openAddDialog" icon="icon iconfont icon-file-add">新增</el-button>
+                        <el-button type="primary" v-if="ActionPermission.Edit" :disabled="ButtonState.btnEdit" ref="btnEdit" @@click="openEditDialog" icon="icon iconfont icon-edit">编辑</el-button>
+                        <el-button type="danger" v-if="ActionPermission.Delete" :disabled="ButtonState.btnDelete" ref="btnDelete" @@click="deleteClick" icon="icon iconfont icon-delete">删除</el-button>
                     </el-col>
                 </el-row>
             </div>
@@ -111,9 +125,30 @@
                 <el-table-column type="selection"
                                  width="50">
                 </el-table-column>
-                <el-table-column prop="Amount"
-                                 label="金额"
-                                 width="100">
+                <el-table-column prop="LeaseName"
+                                 label="租借物品名称"
+                                 width="250">
+                </el-table-column>
+                <el-table-column prop="LeaseBeginTime"
+                                 label="租借开始时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        {{ DateFormat(scope.row.CreateTime,'yyyy-MM-dd HH:mm:ss') }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="LeaseEndTime"
+                                 label="租借结束时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        {{ DateFormat(scope.row.CreateTime,'yyyy-MM-dd HH:mm:ss') }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="ActualReturnTime"
+                                 label="实际归还时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        {{ DateFormat(scope.row.CreateTime,'yyyy-MM-dd HH:mm:ss') }}
+                    </template>
                 </el-table-column>
                 <el-table-column prop="ApplyReason"
                                  label="申请原因"
@@ -169,32 +204,65 @@
             <el-dialog :title="modifyTitle"
                        :visible.sync="Dialog.addDialog"
                        width="500px">
-                <el-form :model="AddFormData" :rules="AddFormRule" label-width="80px" ref="AddForm" @@submit.native.prevent>
-
-                    <el-form-item label="金额">
-                        <el-input v-model="AddFormData.Amount" :readonly="true"></el-input>
+                <el-form :model="AddFormData" :rules="AddFormRule" label-width="120px" ref="AddForm" @@submit.native.prevent>
+                    <el-form-item label="租借物品" prop="LeaseId">
+                        <el-select v-model="AddFormData.LeaseId"
+                                   placeholder="请选择租借物品"
+                                   :clearable="true">
+                            <el-option v-for="item in SelectOption.LeaseList"
+                                       :key="item.Id"
+                                       :label="item.LeaseName"
+                                       :value="item.Id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="申请人">
-                        <el-input v-model="AddFormData.CreateUserName" :readonly="true"></el-input>
+                    <el-form-item label="租借开始时间" prop="LeaseBeginTime">
+                        <el-date-picker v-model="AddFormData.LeaseBeginTime"
+                                        type="datetime"
+                                        placeholder="选择日期时间"
+                                        :clearable="true">
+                        </el-date-picker>
                     </el-form-item>
-                    <el-form-item label="申请原因">
-                        <el-input v-model="AddFormData.ApplyReason" type="textarea" :readonly="true"></el-input>
+                    <el-form-item label="租借结束时间" prop="LeaseEndTime">
+                        <el-date-picker v-model="AddFormData.LeaseEndTime"
+                                        type="datetime"
+                                        placeholder="选择日期时间"
+                                        :clearable="true">
+                        </el-date-picker>
                     </el-form-item>
-                    <el-form-item label="审核结果" prop="AuditStatus">
-                        <el-radio-group v-model="AddFormData.AuditStatus">
-                            <el-radio label="Passed" border>通过</el-radio>
-                            <el-radio label="Reject" border>驳回</el-radio>
-                        </el-radio-group>
+                    <el-form-item label="申请原因" prop="ApplyReason">
+                        <el-input v-model="AddFormData.ApplyReason" type="textarea" placeholder="请输入申请原因"></el-input>
                     </el-form-item>
-
-                    <el-form-item label="审核理由" prop="AuditReason">
-                        <el-input v-model="AddFormData.AuditReason" type="textarea" placeholder="请输入审核理由"></el-input>
+                    <el-form-item label="审核部门" prop="AuditDep">
+                        <el-select v-model="AddFormData.AuditDep"
+                                   placeholder="请选择审核部门"
+                                   :clearable="true"
+                                   multiple
+                                   collapse-tags>
+                            <el-option v-for="item in SelectOption.DepList"
+                                       :key="item.Id"
+                                       :label="item.DepName"
+                                       :value="item.Id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
-
+                    <el-form-item label="审核人" prop="AuditUserIds">
+                        <el-select v-model="AddFormData.AuditUserIds"
+                                   placeholder="请选择审核人"
+                                   :clearable="true"
+                                   multiple
+                                   collapse-tags>
+                            <el-option v-for="item in SelectOption.EmpList"
+                                       :key="item.RelateUserId"
+                                       :label="item.EmpName"
+                                       :value="item.RelateUserId">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
                 </el-form>
-
+               
                 <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @@click="submitAuditForm">保 存</el-button>
+                    <el-button type="primary" @@click="submitAddForm">保 存</el-button>
                     <el-button @@click="cancelAddForm">取 消</el-button>
                 </span>
             </el-dialog>
@@ -203,24 +271,27 @@
 </body>
 </html>
 <script>
+    var firstTime = true;
     $vue = new Vue({
         el: "#App",
         data: {
             QueryFormData: {
+                LeaseIds:[],
                 AuditStatus: [],
-                CreateUserName: "",
+                AuditUserName: "",
                 CreateBeginTime: "",
                 CreateEndTime: "",
                 AuditBeginTime: "",
-                AuditEndTime: "",
-                ListType: "Auditor",
+                AuditEndTime:"",
+                ListType:"Personal",
                 Page: 1,
                 PageSize: 10,
             },
             tableData: [],
             tableHeight: 500,
             ButtonState: {
-                btnAudit: true
+                btnEdit: true,
+                btnDelete: true
             },
             Dialog: {
                 addDialog: false,
@@ -228,18 +299,33 @@
             },
             AddFormData: {
                 Id: null,
-                AuditReason: "",
-                AuditStatus: "Passed",
-                Amount:0,
+                LeaseId: "",
+                LeaseBeginTime: "",
+                LeaseEndTime:"",
                 ApplyReason: "",
-                CreateUserName:""
+                AuditDep: [],
+                AuditUserIds:[]
             },
             AddFormRule: {
-                AuditReason: [
-                    { validator: checkAuditReason, trigger: 'change' }
+                LeaseId: [
+                    { required: true, message: '请选择租借物品', trigger: 'change' }
                 ],
-                AuditStatus: [
-                    { required: true, message: '请选择审核结果', trigger: 'change' }
+                LeaseBeginTime: [
+                    { required: true, message: '请选择租借开始时间', trigger: 'change' }
+                ],
+                LeaseEndTime: [
+                    { required: true, message: '请选择租借结束时间', trigger: 'change' },
+                    { validator: checkTime, trigger: 'change' }
+                ],
+                ApplyReason: [
+                    { required: true, message: '请填写申请原因', trigger: 'change' },
+                    { max: 200, message: '长度不能超过200个字符', trigger: 'change' }
+                ],
+                AuditDep:[
+                    { validator: checkAuditId, trigger: 'change' }
+                ],
+                AuditUserIds: [
+                    { validator: checkAuditId, trigger: 'change' }
                 ]
             },
             Loading: {
@@ -253,8 +339,9 @@
                     { Value: "Reject", Text: "驳回" },
                     { Value: "Revoke", Text: "撤销" }
                 ],
+                LeaseList: [],
                 DepList: [],
-                EmpList: []
+                EmpList:[]
             },
             PaginationData: {
                 pageSizes: [10, 20, 50, 100],
@@ -263,9 +350,10 @@
             PaginationFilter: {
             },
             ActionPermission: {
-                Audit: false,
-
-            },
+                Add: false,
+                Edit: false,
+                Delete: false
+            } ,
             modifyTitle: "",
             Dic: {
                 AuditStatus: {
@@ -288,21 +376,36 @@
             resetQueryForm: function () {
                 this.$refs.QueryForm.resetFields();
             },
-
-            openAuditDialog: function () {
-                this.modifyTitle = "审核";
-                AutoMapper($vue.AddFormData, $vue.$refs.dataTable.selection[0]);
-                $vue.AddFormData.AuditStatus = "Passed";
-                $vue.AddFormData.AuditReason = "";
+            openAddDialog: function () {
+                this.modifyTitle = "新增申请";
+                $vue.AddFormData.Id = null;
+                $vue.AddFormData.LeaseId = "";
+                $vue.AddFormData.LeaseBeginTime = "";
+                $vue.AddFormData.LeaseEndTime = "";
+                $vue.AddFormData.ApplyReason = "";
+                $vue.AddFormData.AuditDep = [];
+                $vue.AddFormData.AuditUserIds = [];
+                this.Dialog.addDialog = true;
                 setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 0);
-                $vue.Dialog.addDialog = true;
             },
-            submitAuditForm: function () {
+            openEditDialog: function () {
+                this.modifyTitle = "编辑申请";
+                axios.post("GetLEAModel", { id: this.$refs.dataTable.selection[0].Id }).then(function (response) {
+                    AutoMapper($vue.AddFormData, response.data);
+                    $vue.Dialog.addDialog = true;
+                });
+
+            },
+            submitAddForm: function () {
+                var url = "Update";
+                if (this.AddFormData.Id == null) {
+                    url = "Apply";
+                }
                 this.$refs.AddForm.validate(function (success, validateobj) {
                     if (success) {
                         $vue.Loading.bodyLoading = true;
-                        axios.post("Audit", $vue.AddFormData).then(function (response) {
-                            ActionCommonHandle(response.data, $vue, "审核成功", "审核失败", getList());
+                        axios.post(url, $vue.AddFormData).then(function (response) {
+                            ActionCommonHandle(response.data, $vue, "保存成功", "保存失败", getList());
                         }).catch(function (error) {
                             ErrorCommonHandle($vue);
                         }).finally(function () {
@@ -315,23 +418,47 @@
             cancelAddForm: function () {
                 this.Dialog.addDialog = false;
             },
+            deleteClick: function () {
+                this.$confirm('是否确认删除这' + this.$refs.dataTable.selection.length + '行数据', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(function () {
+                    $vue.Loading.bodyLoading = true;
+                    axios.post("Delete", $vue.$refs.dataTable.selection).then(function (response) {
+                        $vue.Loading.bodyLoading = false;
+                        ActionCommonHandle(response.data, $vue, "删除成功", "删除失败", getList());
+                    }).catch(function (error) {
+                        ErrorCommonHandle($vue);
+                    }).finally(function () {
+                        $vue.Loading.bodyLoading = false;
+                    });
+                }).catch(function () {
+                    $vue.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
             selectChange: function (selectValue) {
                 if (this.$refs.dataTable.selection.length == 0) {
-                    this.ButtonState.btnAudit = true;
+                    this.ButtonState.btnEdit = true;
+                    this.ButtonState.btnDelete = true;
                 }
                 else if (this.$refs.dataTable.selection.length == 1) {
                     var status = this.$refs.dataTable.selection[0].AuditStatus;
                     if (status == "WaitAudit") {
-                        this.ButtonState.btnAudit = false;
+                        this.ButtonState.btnEdit = false;
                     }
                     else {
-                        this.ButtonState.btnAudit = true;
+                        this.ButtonState.btnEdit = true;
                     }
-
-
+                    this.ButtonState.btnDelete = false;
+                   
                 }
                 else {
-                    this.ButtonState.btnAudit = true;
+                    this.ButtonState.btnEdit = true;
+                    this.ButtonState.btnDelete = false;
                 }
             },
             rowClick: function (row, event, column) {
@@ -381,22 +508,46 @@
         });
     }
 
+    axios.post("/Lease/GetAllLease", {}).then(function (response) {
+        $vue.SelectOption.LeaseList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
 
 
-    function checkAuditReason(rule, value, callback) {
-        var status = $vue.AddFormData.AuditStatus;
-        var reason = $vue.AddFormData.AuditReason;
-        if (status == "Reject" && (reason == null|| reason == "")) {
-            callback(new Error("请选择填写审核理由！"));
+    axios.post("/Employee/GetUserEmp", {}).then(function (response) {
+        $vue.SelectOption.EmpList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+        });
+
+    axios.post("/Department/GetAllDep", {}).then(function (response) {
+        $vue.SelectOption.DepList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+    function checkAuditId(rule, value, callback) {
+        $vue.$refs.AddForm.clearValidate(["AuditDep", "AuditUserIds"]);
+        if ($vue.AddFormData.AuditDep.length == 0 && $vue.AddFormData.AuditUserIds.length == 0) {
+           
+            callback(new Error("请选择审核人或者审核部门！"));
+        }
+        else {
+            callback();
+        }
+        
+    }
+
+
+    function checkTime(rule, value, callback) {
+        if ($vue.AddFormData.LeaseBeginTime> $vue.AddFormData.LeaseEndTime) {
+            callback(new Error("结束时间不能大于开始时间！"));
         }
         else {
             callback();
         }
 
     }
-
-
-
 
     window.onresize = function () {
         $vue.tableHeight = $vue.$refs.App.getBoundingClientRect().height -

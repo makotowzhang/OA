@@ -50,6 +50,8 @@
   <ItemGroup>
     <Compile Include="PMData\DataLibraryData.cs" />
     <Compile Include="PMData\DepartmentData.cs" />
+    <Compile Include="PMData\LeaseData.cs" />
+    <Compile Include="PMData\LeaseApplyData.cs" />
     <Compile Include="PMData\NoticeData.cs" />
     <Compile Include="PMData\EmployeeData.cs" />
     <Compile Include="PMData\MoneyApplyData.cs" />

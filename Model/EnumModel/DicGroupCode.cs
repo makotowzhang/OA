@@ -21,6 +21,11 @@ namespace Model.EnumModel
         /// <summary>
         /// 公告类别
         /// </summary>
-        NoticeType=3
+        NoticeType=3,
+
+        /// <summary>
+        /// 租借物品类型
+        /// </summary>
+        LeaseType
     }
 }

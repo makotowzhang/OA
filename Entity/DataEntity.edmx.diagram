@@ -21,7 +21,9 @@
         <EntityTypeShape EntityType="Entity.PM_AuditUser" Width="1.5" PointX="8.75" PointY="8.75" />
         <EntityTypeShape EntityType="Entity.PM_MaterielApply" Width="1.5" PointX="10.75" PointY="0.75" />
         <EntityTypeShape EntityType="Entity.PM_MoneyApply" Width="1.5" PointX="10.75" PointY="5.75" />
-        <EntityTypeShape EntityType="Entity.PM_Notice" Width="1.5" PointX="9.375" PointY="11.75" />
+        <EntityTypeShape EntityType="Entity.PM_Notice" Width="1.5" PointX="10.75" PointY="10.75" />
+        <EntityTypeShape EntityType="Entity.PM_Lease" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="Entity.PM_LeaseApply" Width="1.5" PointX="13.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

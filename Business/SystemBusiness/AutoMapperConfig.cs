@@ -52,6 +52,9 @@ namespace Business.SystemBusiness
 
                 m.CreateMap<PM_Notice, NoticeModel>();
                 m.CreateMap<NoticeModel, PM_Notice>();
+
+                m.CreateMap<PM_Lease, LeaseModel>();
+                m.CreateMap<LeaseModel, PM_Lease>();
             });
         }
     }

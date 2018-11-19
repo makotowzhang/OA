@@ -77,6 +77,12 @@
     <Compile Include="PM_Employee.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
+    <Compile Include="PM_Lease.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PM_LeaseApply.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="PM_Materiel.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>

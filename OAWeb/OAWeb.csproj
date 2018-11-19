@@ -160,13 +160,15 @@
     <Compile Include="Controllers\AuthorizeController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DataLibraryController.cs" />
+    <Compile Include="Controllers\MaterielApplyController.cs" />
+    <Compile Include="Controllers\LeaseController.cs" />
     <Compile Include="Controllers\NoticeController.cs" />
     <Compile Include="Controllers\DepartmentController.cs" />
     <Compile Include="Controllers\DictionaryController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
-    <Compile Include="Controllers\MaterielApplyController.cs" />
+    <Compile Include="Controllers\LeaseApplyController.cs" />
     <Compile Include="Controllers\MaterielController.cs" />
     <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="Controllers\MoneyApplyController.cs" />
@@ -660,6 +662,10 @@
     <Content Include="Views\MoneyApply\PersonalIndex.cshtml" />
     <Content Include="Views\MoneyApply\AuditorIndex.cshtml" />
     <Content Include="Views\Notice\Index.cshtml" />
+    <Content Include="Views\Lease\Index.cshtml" />
+    <Content Include="Views\LeaseApply\Index.cshtml" />
+    <Content Include="Views\LeaseApply\AuditorIndex.cshtml" />
+    <Content Include="Views\LeaseApply\PersonalIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">

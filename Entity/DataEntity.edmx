@@ -60,6 +60,41 @@
           <Property Name="UpdateUser" Type="uniqueidentifier" />
           <Property Name="UpdateTime" Type="datetime" />
         </EntityType>
+        <EntityType Name="PM_Lease">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LeaseName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LeaseType" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Sort" Type="int" Nullable="false" />
+          <Property Name="IsEnabled" Type="bit" Nullable="false" />
+          <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+          <Property Name="UpdateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="PM_LeaseApply">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="LeaseId" Type="int" Nullable="false" />
+          <Property Name="LeaseBeginTime" Type="datetime" Nullable="false" />
+          <Property Name="LeaseEndTime" Type="datetime" Nullable="false" />
+          <Property Name="ActualReturnTime" Type="datetime" />
+          <Property Name="AuditStatus" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ApplyReason" Type="varchar" MaxLength="400" />
+          <Property Name="AuditUser" Type="uniqueidentifier" />
+          <Property Name="AuditReason" Type="varchar" MaxLength="400" />
+          <Property Name="AuditTime" Type="datetime" />
+          <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+          <Property Name="UpdateTime" Type="datetime" />
+        </EntityType>
         <EntityType Name="PM_Materiel">
           <Key>
             <PropertyRef Name="Id" />
@@ -262,6 +297,8 @@
           <EntitySet Name="PM_DataLibrary" EntityType="Self.PM_DataLibrary" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_Department" EntityType="Self.PM_Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_Employee" EntityType="Self.PM_Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PM_Lease" EntityType="Self.PM_Lease" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PM_LeaseApply" EntityType="Self.PM_LeaseApply" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_Materiel" EntityType="Self.PM_Materiel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_MaterielApply" EntityType="Self.PM_MaterielApply" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_MoneyApply" EntityType="Self.PM_MoneyApply" Schema="dbo" store:Type="Tables" />
@@ -298,6 +335,8 @@
           <EntitySet Name="PM_MaterielApply" EntityType="Entity.PM_MaterielApply" />
           <EntitySet Name="PM_MoneyApply" EntityType="Entity.PM_MoneyApply" />
           <EntitySet Name="PM_Notice" EntityType="Entity.PM_Notice" />
+          <EntitySet Name="PM_Lease" EntityType="Entity.PM_Lease" />
+          <EntitySet Name="PM_LeaseApply" EntityType="Entity.PM_LeaseApply" />
         </EntityContainer>
         <EntityType Name="System_User">
           <Key>
@@ -545,6 +584,41 @@
           <Property Name="Remarks" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="Priority" Type="Int32" Nullable="false" />
           <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="PM_Lease">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LeaseName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LeaseType" Type="Guid" Nullable="false" />
+          <Property Name="Sort" Type="Int32" Nullable="false" />
+          <Property Name="IsEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="PM_LeaseApply">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="LeaseId" Type="Int32" Nullable="false" />
+          <Property Name="LeaseBeginTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LeaseEndTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ActualReturnTime" Type="DateTime" Precision="3" />
+          <Property Name="AuditStatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ApplyReason" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="AuditUser" Type="Guid" />
+          <Property Name="AuditReason" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="AuditTime" Type="DateTime" Precision="3" />
           <Property Name="IsDel" Type="Boolean" Nullable="false" />
           <Property Name="CreateUser" Type="Guid" Nullable="false" />
           <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
@@ -822,6 +896,43 @@
                 <ScalarProperty Name="NoticeContent" ColumnName="NoticeContent" />
                 <ScalarProperty Name="NoticeTitle" ColumnName="NoticeTitle" />
                 <ScalarProperty Name="NoticeType" ColumnName="NoticeType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PM_Lease">
+            <EntityTypeMapping TypeName="Entity.PM_Lease">
+              <MappingFragment StoreEntitySet="PM_Lease">
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="IsEnabled" ColumnName="IsEnabled" />
+                <ScalarProperty Name="Sort" ColumnName="Sort" />
+                <ScalarProperty Name="LeaseType" ColumnName="LeaseType" />
+                <ScalarProperty Name="LeaseName" ColumnName="LeaseName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PM_LeaseApply">
+            <EntityTypeMapping TypeName="Entity.PM_LeaseApply">
+              <MappingFragment StoreEntitySet="PM_LeaseApply">
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="AuditTime" ColumnName="AuditTime" />
+                <ScalarProperty Name="AuditReason" ColumnName="AuditReason" />
+                <ScalarProperty Name="AuditUser" ColumnName="AuditUser" />
+                <ScalarProperty Name="ApplyReason" ColumnName="ApplyReason" />
+                <ScalarProperty Name="AuditStatus" ColumnName="AuditStatus" />
+                <ScalarProperty Name="ActualReturnTime" ColumnName="ActualReturnTime" />
+                <ScalarProperty Name="LeaseEndTime" ColumnName="LeaseEndTime" />
+                <ScalarProperty Name="LeaseBeginTime" ColumnName="LeaseBeginTime" />
+                <ScalarProperty Name="LeaseId" ColumnName="LeaseId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

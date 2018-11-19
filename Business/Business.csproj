@@ -70,6 +70,8 @@
     <Compile Include="PMBusiness\DataLibraryBusiness.cs" />
     <Compile Include="PMBusiness\DepartmentBusiness.cs" />
     <Compile Include="PMBusiness\EmployeeBusiness.cs" />
+    <Compile Include="PMBusiness\LeaseBusiness.cs" />
+    <Compile Include="PMBusiness\LeaseApplyBusiness.cs" />
     <Compile Include="PMBusiness\NoticeBusiness.cs" />
     <Compile Include="PMBusiness\MoneyApplyBusiness.cs" />
     <Compile Include="PMBusiness\MaterielApplyBusiness.cs" />

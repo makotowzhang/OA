@@ -187,15 +187,18 @@
                        width="500px">
                 <el-form :model="AddFormData" :rules="AddFormRule" label-width="80px" ref="AddForm" @@submit.native.prevent>
                     <el-form-item label="物料">
-                        <el-input v-model="AddFormData.MaterielName"  :readonly="true"></el-input>
+                        <el-input v-model="AddFormData.MaterielName" :readonly="true"></el-input>
                     </el-form-item>
                     <el-form-item label="数量">
                         <el-input v-model="AddFormData.Quantity" :readonly="true"></el-input>
-                     
+
+                    </el-form-item>
+                    <el-form-item label="申请人">
+                        <el-input v-model="AddFormData.CreateUserName" :readonly="true"></el-input>
                     </el-form-item>
                     <el-form-item label="申请原因">
                         <el-input v-model="AddFormData.ApplyReason" type="textarea" :readonly="true"></el-input>
-                    
+
                     </el-form-item>
                     <el-form-item label="审核结果" prop="AuditStatus">
                         <el-radio-group v-model="AddFormData.AuditStatus">
@@ -251,6 +254,7 @@
                 MaterielName: "",
                 Quantity: 1,
                 ApplyReason: "",
+                CreateUserName:""
             },
             AddFormRule: {
                 AuditReason: [

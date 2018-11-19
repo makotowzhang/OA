@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>费用审批</title>
+    <title>借物审批</title>
     @Html.Partial("~/Views/Shared/_Head.cshtml")
     <style>
     </style>
@@ -78,7 +78,19 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-             
+                            <el-form-item label="租借物品" prop="LeaseIds">
+                                <el-select v-model="QueryFormData.LeaseIds"
+                                           placeholder="请选择租借物品"
+                                           :clearable="true"
+                                           multiple
+                                           collapse-tags>
+                                    <el-option v-for="item in SelectOption.LeaseList"
+                                               :key="item.Id"
+                                               :label="item.LeaseName"
+                                               :value="item.Id">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
                         </el-col>
                         <el-col :span="6">
                             <el-button type="primary" @@click="onQuery" icon="el-icon-search">查询</el-button>
@@ -90,6 +102,7 @@
                 <el-row class="Table_Button_Row">
                     <el-col :span="24">
                         <el-button type="primary" v-if="ActionPermission.Audit" :disabled="ButtonState.btnAudit" ref="btnAudit" @@click="openAuditDialog" icon="icon iconfont icon-audit">审核</el-button>
+                        <el-button type="primary" v-if="ActionPermission.Return" :disabled="ButtonState.btnAudit" ref="btnAudit" @@click="openReturnDialog" icon="icon iconfont icon-undo">归还</el-button>
                     </el-col>
                 </el-row>
             </div>
@@ -111,9 +124,30 @@
                 <el-table-column type="selection"
                                  width="50">
                 </el-table-column>
-                <el-table-column prop="Amount"
-                                 label="金额"
-                                 width="100">
+                <el-table-column prop="LeaseName"
+                                 label="租借物品名称"
+                                 width="250">
+                </el-table-column>
+                <el-table-column prop="LeaseBeginTime"
+                                 label="租借开始时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        {{ DateFormat(scope.row.CreateTime,'yyyy-MM-dd HH:mm:ss') }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="LeaseEndTime"
+                                 label="租借结束时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        {{ DateFormat(scope.row.CreateTime,'yyyy-MM-dd HH:mm:ss') }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="ActualReturnTime"
+                                 label="实际归还时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        {{ DateFormat(scope.row.CreateTime,'yyyy-MM-dd HH:mm:ss') }}
+                    </template>
                 </el-table-column>
                 <el-table-column prop="ApplyReason"
                                  label="申请原因"
@@ -169,16 +203,24 @@
             <el-dialog :title="modifyTitle"
                        :visible.sync="Dialog.addDialog"
                        width="500px">
-                <el-form :model="AddFormData" :rules="AddFormRule" label-width="80px" ref="AddForm" @@submit.native.prevent>
+                <el-form :model="AddFormData" :rules="AddFormRule" label-width="120px" ref="AddForm" @@submit.native.prevent>
+                    <el-form-item label="租借物品">
+                        <el-input v-model="AddFormData.LeaseName" :readonly="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="租借开始时间">
+                        <el-input v-model="AddFormData.LeaseBeginTime" :readonly="true"></el-input>
 
-                    <el-form-item label="金额">
-                        <el-input v-model="AddFormData.Amount" :readonly="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="租借结束时间">
+                        <el-input v-model="AddFormData.LeaseEndTime" :readonly="true"></el-input>
+
                     </el-form-item>
                     <el-form-item label="申请人">
                         <el-input v-model="AddFormData.CreateUserName" :readonly="true"></el-input>
                     </el-form-item>
                     <el-form-item label="申请原因">
                         <el-input v-model="AddFormData.ApplyReason" type="textarea" :readonly="true"></el-input>
+
                     </el-form-item>
                     <el-form-item label="审核结果" prop="AuditStatus">
                         <el-radio-group v-model="AddFormData.AuditStatus">
@@ -198,6 +240,25 @@
                     <el-button @@click="cancelAddForm">取 消</el-button>
                 </span>
             </el-dialog>
+            <el-dialog title="租借物品归还"
+                       :visible.sync="Dialog.returnDialog"
+                       width="500px">
+                <el-form :model="RetrunFormData" :rules="RetrunFormRule" label-width="120px" ref="RetrunForm" @@submit.native.prevent>
+                    <el-form-item label="实际归还时间" prop="ActualReturnTime">
+                        <el-date-picker v-model="RetrunFormData.ActualReturnTime"
+                                        type="datetime"
+                                        placeholder="选择日期时间"
+                                        :clearable="true">
+                        </el-date-picker>
+                    </el-form-item>
+
+                </el-form>
+
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @@click="submitAuditForm">保 存</el-button>
+                    <el-button @@click="cancelAddForm">取 消</el-button>
+                </span>
+            </el-dialog>
         </template>
     </div>
 </body>
@@ -207,6 +268,7 @@
         el: "#App",
         data: {
             QueryFormData: {
+                LeaseIds: [],
                 AuditStatus: [],
                 CreateUserName: "",
                 CreateBeginTime: "",
@@ -220,19 +282,26 @@
             tableData: [],
             tableHeight: 500,
             ButtonState: {
-                btnAudit: true
+                btnAudit: true,
+                btnReturn: true
             },
             Dialog: {
                 addDialog: false,
-                editDialog: false
+                returnDialog: false
             },
             AddFormData: {
                 Id: null,
                 AuditReason: "",
                 AuditStatus: "Passed",
-                Amount:0,
+                LeaseName: "",
+                LeaseBeginTime: "",
+                LeaseEndTime: "",
                 ApplyReason: "",
                 CreateUserName:""
+            },
+            RetrunFormData: {
+                Id: null,
+                ActualReturnTime: new Date()
             },
             AddFormRule: {
                 AuditReason: [
@@ -253,6 +322,7 @@
                     { Value: "Reject", Text: "驳回" },
                     { Value: "Revoke", Text: "撤销" }
                 ],
+                LeaseList: [],
                 DepList: [],
                 EmpList: []
             },
@@ -264,7 +334,7 @@
             },
             ActionPermission: {
                 Audit: false,
-
+                Return: false
             },
             modifyTitle: "",
             Dic: {
@@ -288,7 +358,7 @@
             resetQueryForm: function () {
                 this.$refs.QueryForm.resetFields();
             },
-
+           
             openAuditDialog: function () {
                 this.modifyTitle = "审核";
                 AutoMapper($vue.AddFormData, $vue.$refs.dataTable.selection[0]);
@@ -296,6 +366,12 @@
                 $vue.AddFormData.AuditReason = "";
                 setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 0);
                 $vue.Dialog.addDialog = true;
+            },
+            openReturnDialog: function () {
+                this.RetrunFormData.Id = this.$refs.dataTable.selection[0].Id;
+                this.RetrunFormData.RetrunFormData = new Date();
+                setTimeout(function () { $vue.$refs.RetrunForm.clearValidate(); }, 0);
+                $vue.Dialog.returnDialog = true;
             },
             submitAuditForm: function () {
                 this.$refs.AddForm.validate(function (success, validateobj) {
@@ -321,13 +397,16 @@
                 }
                 else if (this.$refs.dataTable.selection.length == 1) {
                     var status = this.$refs.dataTable.selection[0].AuditStatus;
+                    if (status == "") {
+
+                    }
                     if (status == "WaitAudit") {
                         this.ButtonState.btnAudit = false;
                     }
                     else {
                         this.ButtonState.btnAudit = true;
                     }
-
+                   
 
                 }
                 else {
@@ -382,7 +461,12 @@
     }
 
 
-
+    axios.post("/Lease/GetAllLease", {}).then(function (response) {
+        $vue.SelectOption.LeaseList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+    
     function checkAuditReason(rule, value, callback) {
         var status = $vue.AddFormData.AuditStatus;
         var reason = $vue.AddFormData.AuditReason;
@@ -395,8 +479,8 @@
 
     }
 
-
-
+   
+   
 
     window.onresize = function () {
         $vue.tableHeight = $vue.$refs.App.getBoundingClientRect().height -
