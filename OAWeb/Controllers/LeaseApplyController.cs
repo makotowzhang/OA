@@ -43,7 +43,7 @@ namespace OAWeb.Controllers
             return Json(new TableDataModel(total, data));
         }
 
-        public ActionResult GetMATModel(Guid id)
+        public ActionResult GetLEAModel(Guid id)
         {
             return Json(business.GetModel(id));
         }

@@ -133,21 +133,21 @@
                                  label="租借开始时间"
                                  width="200">
                     <template slot-scope="scope">
-                        {{ DateFormat(scope.row.CreateTime,'yyyy-MM-dd HH:mm:ss') }}
+                        {{ DateFormat(scope.row.LeaseBeginTime,'yyyy-MM-dd HH:mm:ss') }}
                     </template>
                 </el-table-column>
                 <el-table-column prop="LeaseEndTime"
                                  label="租借结束时间"
                                  width="200">
                     <template slot-scope="scope">
-                        {{ DateFormat(scope.row.CreateTime,'yyyy-MM-dd HH:mm:ss') }}
+                        {{ DateFormat(scope.row.LeaseEndTime,'yyyy-MM-dd HH:mm:ss') }}
                     </template>
                 </el-table-column>
                 <el-table-column prop="ActualReturnTime"
                                  label="实际归还时间"
                                  width="200">
                     <template slot-scope="scope">
-                        {{ DateFormat(scope.row.CreateTime,'yyyy-MM-dd HH:mm:ss') }}
+                        {{ DateFormat(scope.row.ActualReturnTime,'yyyy-MM-dd HH:mm:ss') }}
                     </template>
                 </el-table-column>
                 <el-table-column prop="ApplyReason"

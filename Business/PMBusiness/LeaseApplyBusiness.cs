@@ -25,10 +25,10 @@ namespace Business.PMBusiness
                 if (model != null)
                 {
                     model.AuditDep = dp.PM_Department.Where(m => !m.IsDel &&
-                                                            dp.PM_AuditUser.Where(x => x.AuditId == m.Id).Select(x => x.AuditId).Contains(m.Id))
+                                                            dp.PM_AuditUser.Where(x => x.ApplyId == model.Id).Select(x => x.AuditId).Contains(m.Id))
                                                           .Select(m => m.Id).ToList();
                     model.AuditUserIds = dp.System_User.Where(m => m.IsDel == false &&
-                                                             dp.PM_AuditUser.Where(x => x.AuditId == m.Id).Select(x => x.AuditId).Contains(m.Id))
+                                                             dp.PM_AuditUser.Where(x => x.ApplyId == model.Id).Select(x => x.AuditId).Contains(m.Id))
                                                           .Select(m => m.Id).ToList();
                 }
                 return model;

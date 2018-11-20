@@ -153,6 +153,12 @@ function DateFormat(date, format) {
     return format;
 }
 
+function GetStringToDate(str) {
+    if (str == null) return "";
+    var temp = eval("new " + str.replace("/", "").replace("/", ""));
+    return temp;
+}
+
 function compareTime(startDate, endDate) {
     if (startDate.length > 0 && endDate.length > 0) {
         var startDateTemp = startDate.split(" ");
@@ -206,7 +212,12 @@ function compareCalendar(startDate, endDate) {
 //属性自动赋值
 function AutoMapper(source, data) {
     for (var m in source) {
-        source[m] = data[m];
+        if (data[m] != null && data[m].constructor == String && data[m].indexOf("/Date(") > -1) {
+            source[m] = GetStringToDate(data[m]);
+        }
+        else {
+            source[m] = data[m];
+        }
     }
 }
 

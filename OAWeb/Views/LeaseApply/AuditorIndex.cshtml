@@ -102,7 +102,7 @@
                 <el-row class="Table_Button_Row">
                     <el-col :span="24">
                         <el-button type="primary" v-if="ActionPermission.Audit" :disabled="ButtonState.btnAudit" ref="btnAudit" @@click="openAuditDialog" icon="icon iconfont icon-audit">审核</el-button>
-                        <el-button type="primary" v-if="ActionPermission.Return" :disabled="ButtonState.btnAudit" ref="btnAudit" @@click="openReturnDialog" icon="icon iconfont icon-undo">归还</el-button>
+                        <el-button type="primary" v-if="ActionPermission.Return" :disabled="ButtonState.btnReturn" ref="btnReturn" @@click="openReturnDialog" icon="icon iconfont icon-undo">归还</el-button>
                     </el-col>
                 </el-row>
             </div>
@@ -132,21 +132,21 @@
                                  label="租借开始时间"
                                  width="200">
                     <template slot-scope="scope">
-                        {{ DateFormat(scope.row.CreateTime,'yyyy-MM-dd HH:mm:ss') }}
+                        {{ DateFormat(scope.row.LeaseBeginTime,'yyyy-MM-dd HH:mm:ss') }}
                     </template>
                 </el-table-column>
                 <el-table-column prop="LeaseEndTime"
                                  label="租借结束时间"
                                  width="200">
                     <template slot-scope="scope">
-                        {{ DateFormat(scope.row.CreateTime,'yyyy-MM-dd HH:mm:ss') }}
+                        {{ DateFormat(scope.row.LeaseEndTime,'yyyy-MM-dd HH:mm:ss') }}
                     </template>
                 </el-table-column>
                 <el-table-column prop="ActualReturnTime"
                                  label="实际归还时间"
                                  width="200">
                     <template slot-scope="scope">
-                        {{ DateFormat(scope.row.CreateTime,'yyyy-MM-dd HH:mm:ss') }}
+                        {{ DateFormat(scope.row.ActualReturnTime,'yyyy-MM-dd HH:mm:ss') }}
                     </template>
                 </el-table-column>
                 <el-table-column prop="ApplyReason"
@@ -208,11 +208,17 @@
                         <el-input v-model="AddFormData.LeaseName" :readonly="true"></el-input>
                     </el-form-item>
                     <el-form-item label="租借开始时间">
-                        <el-input v-model="AddFormData.LeaseBeginTime" :readonly="true"></el-input>
+                        <el-date-picker type="datetime"
+                                        v-model="AddFormData.LeaseBeginTime" 
+                                        :readonly="true">
+                        </el-date-picker>
 
                     </el-form-item>
                     <el-form-item label="租借结束时间">
-                        <el-input v-model="AddFormData.LeaseEndTime" :readonly="true"></el-input>
+                        <el-date-picker type="datetime"
+                                        v-model="AddFormData.LeaseEndTime" 
+                                        :readonly="true">
+                        </el-date-picker>
 
                     </el-form-item>
                     <el-form-item label="申请人">
@@ -243,9 +249,9 @@
             <el-dialog title="租借物品归还"
                        :visible.sync="Dialog.returnDialog"
                        width="500px">
-                <el-form :model="RetrunFormData" :rules="RetrunFormRule" label-width="120px" ref="RetrunForm" @@submit.native.prevent>
+                <el-form :model="ReturnFormData" :rules="ReturnFormRule" label-width="120px" ref="ReturnForm" @@submit.native.prevent>
                     <el-form-item label="实际归还时间" prop="ActualReturnTime">
-                        <el-date-picker v-model="RetrunFormData.ActualReturnTime"
+                        <el-date-picker v-model="ReturnFormData.ActualReturnTime"
                                         type="datetime"
                                         placeholder="选择日期时间"
                                         :clearable="true">
@@ -255,8 +261,8 @@
                 </el-form>
 
                 <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @@click="submitAuditForm">保 存</el-button>
-                    <el-button @@click="cancelAddForm">取 消</el-button>
+                    <el-button type="primary" @@click="submitReturnForm">保 存</el-button>
+                    <el-button @@click="Dialog.returnDialog=false">取 消</el-button>
                 </span>
             </el-dialog>
         </template>
@@ -299,7 +305,7 @@
                 ApplyReason: "",
                 CreateUserName:""
             },
-            RetrunFormData: {
+            ReturnFormData: {
                 Id: null,
                 ActualReturnTime: new Date()
             },
@@ -309,6 +315,11 @@
                 ],
                 AuditStatus: [
                     { required: true, message: '请选择审核结果', trigger: 'change' }
+                ]
+            },
+            ReturnFormRule: {
+                ActualReturnTime: [
+                    { required: true, message: '请选择实际归还时间', trigger: 'change' }
                 ]
             },
             Loading: {
@@ -368,9 +379,9 @@
                 $vue.Dialog.addDialog = true;
             },
             openReturnDialog: function () {
-                this.RetrunFormData.Id = this.$refs.dataTable.selection[0].Id;
-                this.RetrunFormData.RetrunFormData = new Date();
-                setTimeout(function () { $vue.$refs.RetrunForm.clearValidate(); }, 0);
+                this.ReturnFormData.Id = this.$refs.dataTable.selection[0].Id;
+                this.ReturnFormData.ReturnFormData = new Date();
+                setTimeout(function () { $vue.$refs.ReturnForm.clearValidate(); }, 0);
                 $vue.Dialog.returnDialog = true;
             },
             submitAuditForm: function () {
@@ -388,17 +399,34 @@
                     }
                 });
             },
+            submitReturnForm: function () {
+                this.$refs.ReturnForm.validate(function (success, validateobj) {
+                    if (success) {
+                        $vue.Loading.bodyLoading = true;
+                        axios.post("Return", $vue.ReturnFormData).then(function (response) {
+                            ActionCommonHandle(response.data, $vue, "退还成功", "退还失败", getList());
+                        }).catch(function (error) {
+                            ErrorCommonHandle($vue);
+                        }).finally(function () {
+                            $vue.Loading.bodyLoading = false;
+                            $vue.Dialog.returnDialog = false;
+                        });
+                    }
+                });
+            },
             cancelAddForm: function () {
                 this.Dialog.addDialog = false;
             },
             selectChange: function (selectValue) {
                 if (this.$refs.dataTable.selection.length == 0) {
                     this.ButtonState.btnAudit = true;
+                    this.ButtonState.btnReturn = true;
                 }
                 else if (this.$refs.dataTable.selection.length == 1) {
                     var status = this.$refs.dataTable.selection[0].AuditStatus;
-                    if (status == "") {
-
+                    this.ButtonState.btnReturn = true;
+                    if (status == "Passed") {
+                        this.ButtonState.btnReturn = false;
                     }
                     if (status == "WaitAudit") {
                         this.ButtonState.btnAudit = false;
@@ -406,11 +434,10 @@
                     else {
                         this.ButtonState.btnAudit = true;
                     }
-                   
-
                 }
                 else {
                     this.ButtonState.btnAudit = true;
+                    this.ButtonState.btnReturn = true;
                 }
             },
             rowClick: function (row, event, column) {
