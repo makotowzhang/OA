@@ -16,11 +16,35 @@ namespace Data.PMData
             return dp.PM_Notice.FirstOrDefault(m => m.Id == notId);
         }
 
+        public NoticeModel GetNotByIdForShow(DataProvider dp, int? notId)
+        {
+            var list = from not in dp.PM_Notice.Where(m => !m.IsDel)
+                       join user1 in dp.System_User.Where(m => m.IsDel == false) on not.CreateUser equals user1.Id
+                       join dic in dp.System_DicItem.Where(m => !m.IsDel) on not.NoticeType equals dic.Id
+                       where not.Id==notId
+                       select new NoticeModel
+                       {
+                           Id = not.Id,
+                           CreateTime = not.CreateTime,
+                           CreateUser = not.CreateUser,
+                           CreateUserName = user1.TrueName,
+                           IsEnabled = not.IsEnabled,
+                           NoticeTitle = not.NoticeTitle,
+                           NoticeType = not.NoticeType,
+                           NoticeTypeName = dic.ItemDesc,
+                           Priority = not.Priority,
+                           Remarks = not.Remarks,
+                           NoticeContent=not.NoticeContent
+                       };
+            return list.FirstOrDefault();
+        }
+
         public List<NoticeModel> GetNotList(DataProvider dp, NoticeFilter filter, out int total, bool IsPage = true)
         {
             var list = from not in dp.PM_Notice.Where(m => !m.IsDel)
                        join user1 in dp.System_User.Where(m => m.IsDel == false) on not.CreateUser equals user1.Id
                        join user2 in dp.System_User.Where(m => m.IsDel == false) on not.UpdateUser equals user2.Id
+                                     into user2dc from user2dci in user2dc.DefaultIfEmpty()
                        join dic in dp.System_DicItem.Where(m => !m.IsDel) on not.NoticeType equals dic.Id
                        select new NoticeModel
                        {
@@ -36,7 +60,7 @@ namespace Data.PMData
                            Remarks = not.Remarks,
                            UpdateTime = not.UpdateTime,
                            UpdateUser = not.UpdateUser,
-                           UpdateUserName = user2.TrueName
+                           UpdateUserName = user2dci.TrueName
                        };
             if (filter.NoticeTitle.IsNotNullOrWhiteSpace())
             {

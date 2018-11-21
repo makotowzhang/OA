@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width" />
     <title>公告管理</title>
     @Html.Partial("~/Views/Shared/_Head.cshtml")
+    @Html.Partial("~/Views/Shared/QuillEditor.cshtml")
     <style>
     </style>
 </head>
@@ -51,6 +52,7 @@
                         <el-button type="primary" v-if="ActionPermission.Add" ref="btnAdd" @@click="openAddDialog" icon="icon iconfont icon-file-add">新增</el-button>
                         <el-button type="primary" v-if="ActionPermission.Edit" :disabled="ButtonState.btnEdit" ref="btnEdit" @@click="openEditDialog" icon="icon iconfont icon-edit">编辑</el-button>
                         <el-button type="danger" v-if="ActionPermission.Delete" :disabled="ButtonState.btnDelete" ref="btnDelete" @@click="deleteClick" icon="icon iconfont icon-delete">删除</el-button>
+                        <el-button type="primary" v-if="ActionPermission.Preview" :disabled="ButtonState.btnPreview" ref="btnPreview" @@click="previewNotice" icon="icon iconfont icon-eye">预览</el-button>
                     </el-col>
                 </el-row>
             </div>
@@ -82,7 +84,7 @@
                 </el-table-column>
                 <el-table-column prop="Priority"
                                  label="优先级"
-                                 width="50">
+                                 width="80">
                 </el-table-column>
                 <el-table-column prop="Remarks"
                                  label="公告备注"
@@ -90,7 +92,7 @@
                 </el-table-column>
                 <el-table-column prop="IsEnabled"
                                  label="是否有效"
-                                 width="50">
+                                 width="80">
                     <template slot-scope="scope">
                         {{ scope.row.IsEnabled?"是":"否" }}
                     </template>
@@ -132,16 +134,14 @@
             </div>
             <el-dialog :title="modifyTitle"
                        :visible.sync="Dialog.addDialog"
-                       width="500px">
+                       width="650px">
                 <el-form :model="AddFormData" :rules="AddFormRule" label-width="80px" ref="AddForm" @@submit.native.prevent>
                     <el-form-item label="公告标题" prop="NoticeTitle">
                         <el-input v-model="AddFormData.NoticeTitle" placeholder="请输入公告标题"></el-input>
                     </el-form-item>
                     <el-form-item label="公告类别" prop="NoticeType">
-                        <el-select v-model="QueryFormData.NoticeType"
-                                   placeholder="请选择公告类别"
-                                   multiple
-                                   collapse-tags>
+                        <el-select v-model="AddFormData.NoticeType"
+                                   placeholder="请选择公告类别">
                             <el-option v-for="item in SelectOption.NoticeTypeList"
                                        :key="item.Id"
                                        :label="item.ItemDesc"
@@ -150,7 +150,10 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="公告内容" prop="NoticeContent">
-                        <el-input v-model="AddFormData.NoticeContent" type="textarea" placeholder="请输入公告内容"></el-input>
+                        <quill-editor :content.sync="AddFormData.NoticeContent"
+                                      placeholder="请输入公告内容"
+                                      style="height:350px;"
+                                      ></quill-editor>
                     </el-form-item>
                     <el-form-item label="优先级" prop="Priority">
                         <el-input-number v-model="AddFormData.Priority" :precision="0"></el-input-number>
@@ -176,7 +179,6 @@
 </body>
 </html>
 <script>
-    var firstTime = true;
     $vue = new Vue({
         el: "#App",
         data: {
@@ -190,7 +192,8 @@
             tableHeight: 500,
             ButtonState: {
                 btnEdit: true,
-                btnDelete: true
+                btnDelete: true,
+                btnPreview: true,
             },
             Dialog: {
                 addDialog: false,
@@ -239,7 +242,8 @@
             ActionPermission: {
                 Add: false,
                 Edit: false,
-                Delete: false
+                Delete: false,
+                Preview:false
             } ,
             modifyTitle: ""
         },
@@ -319,14 +323,17 @@
             selectChange: function (selectValue) {
                 if (this.$refs.dataTable.selection.length == 0) {
                     this.ButtonState.btnEdit = true;
+                    this.ButtonState.btnPreview = true;
                     this.ButtonState.btnDelete = true;
                 }
                 else if (this.$refs.dataTable.selection.length == 1) {
                     this.ButtonState.btnEdit = false;
+                    this.ButtonState.btnPreview = false;
                     this.ButtonState.btnDelete = false;
                 }
                 else {
                     this.ButtonState.btnEdit = true;
+                    this.ButtonState.btnPreview = true;
                     this.ButtonState.btnDelete = false;
                 }
             },
@@ -348,6 +355,10 @@
             },
             closeAddDialog: function (done) {
                 done();
+            },
+            previewNotice: function () {
+                var notice = this.$refs.dataTable.selection[0];
+                AddTabPage("公告预览-" + notice.NoticeTitle, "/Notice/NoticeDetail?id=" + notice.Id);
             },
             DateFormat: DateFormat
         }

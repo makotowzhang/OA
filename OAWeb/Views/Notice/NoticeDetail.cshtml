@@ -1,0 +1,79 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<script src="~/Scripts/Vue/vue.js"></script>
+<script src="~/Scripts/Axios/axios.min.js"></script>
+<script src="~/Scripts/Polyfill/polyfill.min.js"></script>
+<script src="~/Scripts/Common/Common.js"></script>
+<link href="~/Scripts/Quill/quill.snow.css" rel="stylesheet" />
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>NoticeDetail</title>
+    <style>
+        #Title {
+            text-align: center;
+            font-size: 26px;
+            font-weight: bold;
+            font-family: 'Microsoft YaHei';
+            margin-top: 30px;
+        }
+        #NoticeHead {
+        padding-top:10px;
+        padding-bottom:10px;
+        }
+        #NoticeHead span {
+            float: left;
+            display: block;
+            width: 33.3%;
+            text-align: center;
+        }
+      
+    </style>
+</head>
+<body>
+    <div id="App" ref="App" style="height:initial">
+        <template>
+            <div id="Title">{{Notice.NoticeTitle}}</div>
+            <div id="NoticeHead">
+                <span id="NoticeType"> 公告类别：{{Notice.NoticeTypeName}} </span>
+                <span id="CreateTime"> 发布时间：  {{ DateFormat(Notice.CreateTime,'yyyy-MM-dd HH:mm:ss') }} </span>
+                <span id="CreateUser"> 发布人：  {{ Notice.CreateUserName }} </span>
+                <div style="clear:both;"></div>
+            </div>
+            <hr />
+            <div class="ql-container ql-snow" v-html="DecodeURI(Notice.NoticeContent)" style="border:0">
+
+            </div>
+        </template>
+    </div>
+</body>
+</html>
+<script>
+
+    $vue = new Vue({
+        el: "#App",
+        data: {
+            Notice: {
+                CreateUserName: "",
+                NoticeTitle: "",
+                NoticeContent: "",
+                NoticeTypeName: "",
+                CreateTime: null
+            }
+        },
+        methods: {
+            DecodeURI: decodeURI,
+            DateFormat: DateFormat
+        }
+    });
+    axios.post("GetNotModelForShow", { id: GetUrlParameter("id") }).then(function (response) {
+        AutoMapper($vue.Notice, response.data);
+        setTimeout(function () {
+            document.getElementsByClassName("ql-editor")[0].contentEditable = false;
+        }, 0);
+    });
+</script>

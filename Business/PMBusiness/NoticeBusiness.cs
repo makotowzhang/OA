@@ -26,6 +26,15 @@ namespace Business.PMBusiness
             }
         }
 
+        public NoticeModel GetNotByIdForShow(int id)
+        {
+            using (DataProvider dp = new DataProvider())
+            {
+                NoticeModel model = data.GetNotByIdForShow(dp,id);
+                return model;
+            }
+        }
+
         public bool Save(NoticeModel model)
         {
             using (DataProvider dp = new DataProvider())

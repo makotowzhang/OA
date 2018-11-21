@@ -33,6 +33,11 @@ namespace OAWeb.Controllers
             return Json(business.GetModel(id));
         }
 
+        public ActionResult GetNotModelForShow(int id)
+        {
+            return Json(business.GetNotByIdForShow(id));
+        }
+
         [LogFilter("编辑", "公告管理", LogActionType.Operation)]
         public ActionResult Save(NoticeModel not)
         {
@@ -67,6 +72,11 @@ namespace OAWeb.Controllers
             {
                 return Json(new JsonMessage(false, e.Message));
             }
+        }
+
+        public ActionResult NoticeDetail()
+        {
+            return View();
         }
     }
 }

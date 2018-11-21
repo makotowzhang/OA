@@ -122,9 +122,14 @@ function ErrorCommonHandle(vueEx) {
 //日期格式化
 function DateFormat(date, format) {
     if (date == null) return "";
-    //date = date.replace('T', ' ');
-    date = eval("new " + date.replace("/", "").replace("/",""));
-
+    if (date.constructor == String) {
+        if (date.indexOf("T") > 1) {
+            return date.replace('T', ' ');
+        }
+        else {
+            date = eval("new " + date.replace("/", "").replace("/", ""));
+        }
+    }
 
     var map = {
         "M": date.getMonth() + 1, //月份
@@ -219,6 +224,23 @@ function AutoMapper(source, data) {
             source[m] = data[m];
         }
     }
+}
+
+//新增tab标签页
+function AddTabPage(title, url, iconfont) {
+    if (iconfont == null) {
+        iconfont = "icon iconfont icon-eye";
+    }
+    var tabName = Math.random().toString();
+    top.$app.editableTabs.push({
+        title: title,
+        name: tabName,
+        content: url,
+        closable: true,
+        url: url,
+        IconClass: iconfont
+    });
+    top.$app.editableTabsValue = tabName;
 }
 
 //页面左击右击事件监听，去除Tab的菜单

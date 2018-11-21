@@ -666,6 +666,8 @@
     <Content Include="Views\LeaseApply\Index.cshtml" />
     <Content Include="Views\LeaseApply\AuditorIndex.cshtml" />
     <Content Include="Views\LeaseApply\PersonalIndex.cshtml" />
+    <Content Include="Views\Notice\NoticeDetail.cshtml" />
+    <Content Include="Views\Shared\_Svg.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">
