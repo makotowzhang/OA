@@ -13,6 +13,7 @@ namespace OAWeb.Controllers
     {
         DicBusiness business = new DicBusiness();
         // GET: Dictionary
+        [PageAuthorizeFilter]
         public ActionResult Index()
         {
             return View();

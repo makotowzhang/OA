@@ -113,7 +113,6 @@
             };
         },
         mounted: function () {
-            this.$refs.editContainer.innerHTML = decodeURI(this.content);
             //注册大小
             var Size = Quill.import('attributors/style/size');
             Size.whitelist = ['10px', '12px', '14px', '16px', '18px', '20px'];
@@ -171,18 +170,27 @@
             var temp = this;
             this.editor.on('editor-change', function () {
                 temp.editorContent = temp.editor.getContents();
-                temp.$emit('update:content', encodeURI(temp.$refs.editContainer.innerHTML));
+                temp.$emit('update:content', encodeURI(document.querySelector("#" + temp.containerId+" .ql-editor").innerHTML));
             });
+            setTimeout(function () {
+                document.querySelector("#" + temp.containerId + " .ql-editor").innerHTML = decodeURI(temp.content);
+            }, 0);
         },
         methods: {
             getText: function () {
                 return this.$refs.editContainer.innerHTML;
                 //return document.getElementsByClassName("ql-editor").item(0).innerHTML;
             },
+            editorBlur: function () {
+                document.querySelector("#" + this.containerId + " .ql-editor").blur();
+            }
         },
         watch: {
             content: function (curVal, oldVal) {
-                this.$refs.editContainer.innerHTML = decodeURI(this.content);
+                if (this.editor.hasFocus()) {
+                    return;
+                }
+                document.querySelector("#" + this.containerId + " .ql-editor").innerHTML = decodeURI(this.content);
             }
         },
         template: '#QuillEditorComponent'

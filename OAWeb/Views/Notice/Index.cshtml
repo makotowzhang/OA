@@ -150,7 +150,8 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="公告内容" prop="NoticeContent">
-                        <quill-editor :content.sync="AddFormData.NoticeContent"
+                        <quill-editor ref="queditor"
+                                      :content.sync="AddFormData.NoticeContent"
                                       placeholder="请输入公告内容"
                                       style="height:350px;"
                                       ></quill-editor>
@@ -197,7 +198,6 @@
             },
             Dialog: {
                 addDialog: false,
-                editDialog: false
             },
             AddFormData: {
                 Id: null,

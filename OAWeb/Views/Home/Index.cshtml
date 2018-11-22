@@ -449,7 +449,12 @@
             refreshTab: function () {
                 for (var i = 0; i < this.editableTabs.length; i++) {
                     if (this.editableTabs[i].name == this.TabMenuPosition.navName) {
-                        this.editableTabs[i].content = this.editableTabs[i].url + "?MenuId=" + this.editableTabs[i].name + "&r=" + Math.random();
+                        if (this.editableTabs[i].url.indexOf("?") == -1) {
+                            this.editableTabs[i].content = this.editableTabs[i].url + "?MenuId=" + this.editableTabs[i].name + "&r=" + Math.random();
+                        }
+                        else {
+                            this.editableTabs[i].content = this.editableTabs[i].url + "&MenuId=" + this.editableTabs[i].name + "&r=" + Math.random();
+                        }
                     }
                 }
                 this.TabMenuPosition.visible = false;

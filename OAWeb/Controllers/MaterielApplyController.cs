@@ -19,11 +19,13 @@ namespace OAWeb.Controllers
             return View();
         }
 
+        [PageAuthorizeFilter]
         public ActionResult PersonalIndex()
         {
             return View();
         }
 
+        [PageAuthorizeFilter]
         public ActionResult AuditorIndex()
         {
             return View();
