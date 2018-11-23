@@ -74,6 +74,13 @@ namespace OAWeb.Controllers
             result.Data = data;
             return result;
         }
+
+        public ActionResult GetCurrentUser()
+        {
+            var user = CurrentUser;
+            user.Password = null;
+            return Json(user);
+        }
     }
 
     public class EnumJsonResult : ActionResult

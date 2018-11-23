@@ -72,8 +72,5 @@
     });
     axios.post("GetNotModelForShow", { id: GetUrlParameter("id") }).then(function (response) {
         AutoMapper($vue.Notice, response.data);
-        setTimeout(function () {
-            document.getElementsByClassName("ql-editor")[0].contentEditable = false;
-        }, 0);
     });
 </script>

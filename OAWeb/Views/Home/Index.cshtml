@@ -164,6 +164,10 @@
                     background-color: #ecf5ff;
                     color: #66b1ff;
                 }
+        .HelloLabel {
+            color:yellow;
+            margin-right:20px;
+        }
     </style>
 
     <script type="text/x-template" id="NavMenu">
@@ -194,6 +198,7 @@
             </div>
             <div class="HeadDiv">
                 <div class="SignOutDiv">
+                    <label class="HelloLabel">你好：{{UserInfo.TrueName}}</label>
                     <el-badge :value="MessageDiv.messageNum" :max="99" :hidden="MessageDiv.messageNum==0" class="item">
                         <i class="icon iconfont icon-mail msgButton" @@click.stop="MessageDiv.visible=!MessageDiv.visible"></i>
                         <el-card class="box-card" v-show="MessageDiv.visible" shadow="always">
@@ -323,7 +328,10 @@
                 visible: false,
                 messageNum:0
             },
-            MessageData: [ ]
+            MessageData: [],
+            UserInfo: {
+                TrueName:""
+            }
         },
         methods: {
             signout: function () {
@@ -515,6 +523,10 @@
 
     axios.post("/SysMessage/GetMsgList", {  Page: 1, PageSize: 5}).then(function (response) {
         $app.MessageData = response.data.List;
+    });
+
+    axios.post("/Home/GetCurrentUser").then(function (response) {
+        $app.UserInfo = response.data;
     });
 
     function getMenu(menuList, navId) {

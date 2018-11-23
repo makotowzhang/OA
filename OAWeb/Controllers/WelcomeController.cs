@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace OAWeb.Controllers
 {
-    public class WelcomeController : Controller
+    public class WelcomeController : BaseController
     {
         // GET: Welcome
         public ActionResult Index()
