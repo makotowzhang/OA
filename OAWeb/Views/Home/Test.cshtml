@@ -9,30 +9,31 @@
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
     @Html.Partial("~/Views/Shared/_Head.cshtml")
-    @Html.Partial("~/Views/Shared/QuillEditor.cshtml")
+    @Html.Partial("~/Views/Shared/SingleFileUploader.cshtml")
 </head>
 <body>
-    <div id="App" >
-        <quill-editor ref="editor" :onlyshow="true" style="height:300px;width:500px" :content.sync="content">
+    <div id="App">
+       <single-file-uploader :filepath.sync="fp" :filename.sync="fn" accept="image/*">
 
-        </quill-editor>
-        <div style="clear:both"></div>
-        <button type="button"  @@click="ck">aaaasdas</button>
+       </single-file-uploader>
+        <button type="button" @@click="ck">aaaasdas</button>
     </div>
+   
 </body>
 </html>
 <script>
     $vue = new Vue({
         el: "#App",
         data: {
-            content: ""
+            content: "",
+            fp: "",
+            fn:""
         },
         methods: {
             ck: function () {
-                alert(this.content);
-                alert(this.$refs.editor.getText());
+                alert(this.fp);
+                alert(this.fn);
             }
         }
     });
-    setInterval($vue.$refs.editor.editorBlur, 2000);
 </script>
