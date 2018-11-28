@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="2c131a0e898042939568cfdfbbb126fa" Name="Diagram1" ZoomLevel="100">
+      <Diagram DiagramId="2c131a0e898042939568cfdfbbb126fa" Name="Diagram1" ZoomLevel="89">
         <EntityTypeShape EntityType="Entity.System_User" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="Entity.System_Role" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="Entity.System_UserRole" Width="1.5" PointX="4.75" PointY="0.75" />
@@ -24,9 +24,9 @@
         <EntityTypeShape EntityType="Entity.PM_Notice" Width="1.5" PointX="10.75" PointY="10.75" />
         <EntityTypeShape EntityType="Entity.PM_Lease" Width="1.5" PointX="0.75" PointY="12.75" />
         <EntityTypeShape EntityType="Entity.PM_LeaseApply" Width="1.5" PointX="13.375" PointY="0.75" />
-        <EntityTypeShape EntityType="Entity.RM_HouseReport" Width="1.5" PointX="3.375" PointY="13.75" />
         <EntityTypeShape EntityType="Entity.RM_ReportAudit" Width="1.5" PointX="13.375" PointY="5.75" />
         <EntityTypeShape EntityType="Entity.RM_ReportDicItem" Width="1.5" PointX="5.375" PointY="13.75" />
+        <EntityTypeShape EntityType="Entity.RM_HouseReport" Width="1.5" PointX="7.375" PointY="13.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

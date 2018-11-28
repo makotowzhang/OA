@@ -252,7 +252,7 @@
             </div>
             <div class="Mainfoot"></div>
 
-            <el-dialog title="修改密码"
+            <el-dialog :close-on-click-modal="false" title="修改密码"
                        :visible.sync="Dialog.changePwd"
                        width="500px">
                 <el-form :model="ChangePwdData" :rules="ChangePwdRule" label-width="80px" ref="ChangePwdForm" @@submit.native.prevent>

@@ -44,8 +44,8 @@ namespace Entity
         public virtual DbSet<PM_Notice> PM_Notice { get; set; }
         public virtual DbSet<PM_Lease> PM_Lease { get; set; }
         public virtual DbSet<PM_LeaseApply> PM_LeaseApply { get; set; }
-        public virtual DbSet<RM_HouseReport> RM_HouseReport { get; set; }
         public virtual DbSet<RM_ReportAudit> RM_ReportAudit { get; set; }
         public virtual DbSet<RM_ReportDicItem> RM_ReportDicItem { get; set; }
+        public virtual DbSet<RM_HouseReport> RM_HouseReport { get; set; }
     }
 }

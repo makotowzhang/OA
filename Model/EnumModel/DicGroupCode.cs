@@ -26,6 +26,21 @@ namespace Model.EnumModel
         /// <summary>
         /// 租借物品类型
         /// </summary>
-        LeaseType
+        LeaseType=4,
+
+        /// <summary>
+        /// 估价目的
+        /// </summary>
+        ValuationObjective = 5,
+
+        /// <summary>
+        /// 估价方法
+        /// </summary>
+        ValuationMethods=6,
+
+        /// <summary>
+        /// 收费状态
+        /// </summary>
+        ChargeStatus=7
     }
 }

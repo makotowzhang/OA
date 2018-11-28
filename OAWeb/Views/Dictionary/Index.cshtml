@@ -111,7 +111,7 @@
             </div>
         </template>
         <template>
-            <el-dialog :title="Dialog.addGroupDialogTitle"
+            <el-dialog :close-on-click-modal="false" :title="Dialog.addGroupDialogTitle"
                        :visible.sync="Dialog.addGroupDialog"
                        width="50%">
                 <el-form :model="AddGroupData" :rules="AddGroupRule" label-width="80px" ref="AddGroupForm" @@submit.native.prevent>
@@ -128,7 +128,7 @@
                 </span>
             </el-dialog>
 
-            <el-dialog title="新增项"
+            <el-dialog :close-on-click-modal="false" title="新增项"
                        :visible.sync="Dialog.addItemDialog"
                        width="50%">
                 <el-form :model="AddItemData" :rules="AddItemRule" label-width="120px" ref="AddItemForm" @@submit.native.prevent>

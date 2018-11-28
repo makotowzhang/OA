@@ -139,7 +139,7 @@
                                style="width:100%;padding-left:20px;box-sizing:border-box">
                 </el-pagination>
             </div>
-            <el-dialog :title="Dialog.addDialogTitle"
+            <el-dialog :close-on-click-modal="false" :title="Dialog.addDialogTitle"
                        :visible.sync="Dialog.addDialog"
                        :limit="1"
                        width="600px"

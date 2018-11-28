@@ -40,9 +40,10 @@ namespace Entity
         public string Salesman { get; set; }
         public string Contacts { get; set; }
         public string ContactsPhone { get; set; }
-        public Nullable<decimal> ChargeAmount { get; set; }
-        public Nullable<bool> IsInvoice { get; set; }
-        public int ReportType { get; set; }
+        public decimal ChargeAmount { get; set; }
+        public bool ChargeStatus { get; set; }
+        public bool IsInvoice { get; set; }
+        public string ReportType { get; set; }
         public string ReportStatus { get; set; }
         public Nullable<System.Guid> AuditUser { get; set; }
         public string AuditReason { get; set; }
@@ -50,6 +51,7 @@ namespace Entity
         public bool IsDel { get; set; }
         public System.Guid CreateUser { get; set; }
         public System.DateTime CreateTime { get; set; }
+        public Nullable<System.DateTime> SubmitTime { get; set; }
         public Nullable<System.Guid> UpdateUser { get; set; }
         public Nullable<System.DateTime> UpdateTime { get; set; }
     }

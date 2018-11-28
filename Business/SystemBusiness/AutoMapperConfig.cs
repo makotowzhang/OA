@@ -7,6 +7,7 @@ using AutoMapper;
 using Entity;
 using Model.SystemModel;
 using Model.PMModel;
+using Model.RMModel;
 
 namespace Business.SystemBusiness
 {
@@ -58,6 +59,9 @@ namespace Business.SystemBusiness
 
                 m.CreateMap<PM_LeaseApply, LeaseApplyModel>();
                 m.CreateMap<LeaseApplyModel, PM_LeaseApply>();
+
+                m.CreateMap<RM_HouseReport, HouseReportModel>();
+                m.CreateMap<HouseReportModel, RM_HouseReport>();
             });
         }
     }

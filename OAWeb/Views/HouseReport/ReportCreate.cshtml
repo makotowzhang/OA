@@ -1,0 +1,785 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>房地产评估报告</title>
+    @Html.Partial("~/Views/Shared/_Head.cshtml")
+    @Html.Partial("~/Views/Shared/SingleFileUploader.cshtml")
+    <style>
+    </style>
+</head>
+<body>
+    <div id="App" ref="App" v-loading="Loading.bodyLoading">
+        <template>
+            <div ref="QueryFormDiv">
+                <el-form :model="QueryFormData" :inline="true" class="Query_Form" ref="QueryForm" @@submit.native.prevent label-width="80px">
+                    <el-row>
+                        <el-col :span="6">
+                            <el-form-item label="审核人" prop="AuditUserName">
+                                <el-input v-model="QueryFormData.AuditUserName" placeholder="请输入审核人"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="审核状态" prop="AuditStatus">
+                                <el-select v-model="QueryFormData.AuditStatus"
+                                           placeholder="请选择审核状态"
+                                           :clearable="true"
+                                           multiple
+                                           collapse-tags>
+                                    <el-option v-for="item in SelectOption.AuditStatus"
+                                               :key="item.Value"
+                                               :label="item.Text"
+                                               :value="item.Value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="申请开始" prop="CreateBeginTime">
+                                <el-date-picker v-model="QueryFormData.CreateBeginTime"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="申请结束" prop="CreateEndTime">
+                                <el-date-picker v-model="QueryFormData.CreateEndTime"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="6">
+                            <el-form-item label="审核开始" prop="AuditBeginTime">
+                                <el-date-picker v-model="QueryFormData.AuditBeginTime"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="审核结束" prop="AuditEndTime">
+                                <el-date-picker v-model="QueryFormData.AuditEndTime"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                         
+                        </el-col>
+                        <el-col :span="6">
+                            <el-button type="primary" @@click="onQuery" icon="el-icon-search">查询</el-button>
+                            <el-button type="primary" @@click="resetQueryForm" icon="el-icon-refresh">重置</el-button>
+                        </el-col>
+
+                    </el-row>
+                </el-form>
+                <el-row class="Table_Button_Row">
+                    <el-col :span="24">
+                        <el-button type="primary" @*v-if="ActionPermission.Add"*@ ref="btnAdd" @@click="openAddDialog" icon="icon iconfont icon-file-add">新增</el-button>
+                        <el-button type="primary" v-if="ActionPermission.Edit" :disabled="ButtonState.btnEdit" ref="btnEdit" @@click="openEditDialog" icon="icon iconfont icon-edit">编辑</el-button>
+                        <el-button type="danger" v-if="ActionPermission.Delete" :disabled="ButtonState.btnDelete" ref="btnDelete" @@click="deleteClick" icon="icon iconfont icon-delete">删除</el-button>
+                    </el-col>
+                </el-row>
+            </div>
+            <el-table ref="dataTable"
+                      :data="tableData"
+                      :border="true"
+                      :height="tableHeight"
+                      @@selection-change="selectChange"
+                      @@row-click="rowClick"
+                      style="width: 100%;margin-top:20px;"
+                      element-loading-text="拼命加载中"
+                      element-loading-spinner="el-icon-loading"
+                      element-loading-background="rgba(200, 200,200, 0.5)"
+                      v-loading="Loading.tableLoading">
+                <el-table-column type="index"
+                                 :index="showIdex"
+                                 label=" ">
+                </el-table-column>
+                <el-table-column type="selection"
+                                 width="50">
+                </el-table-column>
+                <el-table-column prop="LeaseName"
+                                 label="租借物品名称"
+                                 width="250">
+                </el-table-column>
+                <el-table-column prop="LeaseBeginTime"
+                                 label="租借开始时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        {{ DateFormat(scope.row.LeaseBeginTime,'yyyy-MM-dd HH:mm:ss') }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="LeaseEndTime"
+                                 label="租借结束时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        {{ DateFormat(scope.row.LeaseEndTime,'yyyy-MM-dd HH:mm:ss') }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="ActualReturnTime"
+                                 label="实际归还时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        {{ DateFormat(scope.row.ActualReturnTime,'yyyy-MM-dd HH:mm:ss') }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="ApplyReason"
+                                 label="申请原因"
+                                 width="200">
+                </el-table-column>
+                <el-table-column v-if="QueryFormData.ListType!='Personal'"
+                                 prop="CreateUserName"
+                                 label="申请人"
+                                 width="100">
+                </el-table-column>
+                <el-table-column prop="CreateTime"
+                                 label="申请时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        {{ DateFormat(scope.row.CreateTime,'yyyy-MM-dd HH:mm:ss') }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="AuditStatus"
+                                 label="审核状态"
+                                 width="100">
+                    <template slot-scope="scope">
+                        {{ Dic.AuditStatus[scope.row.AuditStatus] }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="AuditUserName"
+                                 label="审核人"
+                                 width="100">
+                </el-table-column>
+                <el-table-column prop="AuditReason"
+                                 label="审核描述"
+                                 width="200">
+                </el-table-column>
+                <el-table-column prop="AuditTime"
+                                 label="审核时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        {{ DateFormat(scope.row.AuditTime,'yyyy-MM-dd HH:mm:ss') }}
+                    </template>
+                </el-table-column>
+
+            </el-table>
+            <div ref="Pagination">
+                <el-pagination @@size-change="handleSizeChange"
+                               @@current-change="handleCurrentChange"
+                               :current-page.sync="QueryFormData.Page"
+                               :page-size.sync="QueryFormData.PageSize"
+                               :page-sizes="PaginationData.pageSizes"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="PaginationData.total"
+                               style="width:100%;padding-left:20px;box-sizing:border-box">
+                </el-pagination>
+            </div>
+            <el-dialog :close-on-click-modal="false" :title="modifyTitle"
+                       :visible.sync="Dialog.addDialog">
+                <el-form :model="AddFormData"  :rules="AddFormRule" label-width="120px" ref="AddForm" @@submit.native.prevent>
+                    <el-tabs>
+
+                        <el-tab-pane label="报告信息">
+                            <el-form-item label="报告类型" prop="ReportType">
+                                <el-radio v-model="AddFormData.ReportType" label="Formal" border>正式</el-radio>
+                                <el-radio v-model="AddFormData.ReportType" label="PreAssessment" border>预评</el-radio>
+                                <el-radio v-model="AddFormData.ReportType" label="Consultation" border>咨询</el-radio>
+                            </el-form-item>
+                            <el-form-item label="报告编号" prop="ReportCode">
+                                <el-input v-model="AddFormData.ReportCode" placeholder="请输入报告编号" @@blur="ReportCodeBlur" ></el-input>
+                            </el-form-item>
+                            <el-form-item label="项目名称" prop="ReportName">
+                                <el-input v-model="AddFormData.ReportName" placeholder="请输入项目名称"></el-input>
+                            </el-form-item>
+                            <div style="margin-bottom:20px;border-top:1px solid #dcdfe6;"></div>
+                            <el-form-item label="报告委托方" prop="ReportEntruster">
+                                <el-input v-model="AddFormData.ReportEntruster" placeholder="请输入报告委托方"></el-input>
+                            </el-form-item>
+                            <el-form-item label="报告使用方" prop="ReportUser">
+                                <el-input v-model="AddFormData.ReportUser" placeholder="请输入报告使用方"></el-input>
+                            </el-form-item>
+                            <div style="margin-bottom:20px;border-top:1px solid #dcdfe6;"></div>
+                            <el-form-item label="权利人" prop="Obligee">
+                                <el-input v-model="AddFormData.Obligee" placeholder="请输入权利人"></el-input>
+                            </el-form-item>
+                            <el-form-item label="坐落地址" prop="LocationAddress">
+                                <el-input v-model="AddFormData.LocationAddress" placeholder="请输入坐落地址"></el-input>
+                            </el-form-item>
+                            <el-form-item label="房产证号" prop="HouseNumber">
+                                <el-input v-model="AddFormData.HouseNumber" placeholder="请输入房产证号"></el-input>
+                            </el-form-item>
+                            <el-form-item label="建筑面积" prop="BuildArea">
+                                <el-input v-model="AddFormData.BuildArea" placeholder="请输入建筑面积">
+                                    <template slot="append">
+                                        m²
+                                    </template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="土地证号" prop="LandNumber">
+                                <el-input v-model="AddFormData.LandNumber" placeholder="请输入土地证号"></el-input>
+                            </el-form-item>
+                            <el-form-item label="土地面积" prop="LandArea">
+                                <el-input v-model="AddFormData.LandArea" placeholder="请输入土地面积">
+                                    <template slot="append">
+                                        m²
+                                    </template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="评估单价" prop="ValuationPrice">
+                                <el-input v-model="AddFormData.ValuationPrice" placeholder="请输入评估单价">
+                                    <template slot="append">
+                                        元/m²
+                                    </template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="评估价值" prop="ValuationValue">
+                                <el-input v-model="AddFormData.ValuationValue" placeholder="请输入评估价值">
+                                    <template slot="append">
+                                        万元
+                                    </template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="估价对象用途" prop="ValuationPurpose">
+                                <el-input v-model="AddFormData.ValuationPurpose" placeholder="请输入估价对象用途"></el-input>
+                            </el-form-item>
+                            <el-form-item label="估价对象结构" prop="ValuationStruct">
+                                <el-input v-model="AddFormData.ValuationStruct" placeholder="请输入估价对象结构"></el-input>
+                            </el-form-item>
+                            <el-form-item label="估价目的" prop="ValuationObjective">
+                                <el-select v-model="AddFormData.ValuationObjective"
+                                           placeholder="请选择估价目的"
+                                           :clearable="true"
+                                           multiple
+                                           collapse-tags>
+                                    <el-option v-for="item in SelectOption.ValuationObjectiveList"
+                                               :key="item.Id"
+                                               :label="item.ItemDesc"
+                                               :value="item.Id">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="估价方法" prop="ValuationMethods">
+                                <el-select v-model="AddFormData.ValuationMethods"
+                                           placeholder="请选择估价方法"
+                                           :clearable="true"
+                                           multiple
+                                           collapse-tags>
+                                    <el-option v-for="item in SelectOption.ValuationMethodsList"
+                                               :key="item.Id"
+                                               :label="item.ItemDesc"
+                                               :value="item.Id">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="价值时点" prop="ValueTime">
+                                <el-date-picker v-model="AddFormData.ValueTime"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
+                            <el-form-item label="报告日期" prop="ReportTime">
+                                <el-date-picker v-model="AddFormData.ReportTime"
+                                                type="datetime"
+                                                placeholder="报告日期"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
+                            <el-form-item label="签字估价师" prop="SignAppraiser">
+                                <el-select v-model="AddFormData.SignAppraisers"
+                                           placeholder="请选择签字估价师"
+                                           :clearable="true"
+                                           multiple
+                                           collapse-tags>
+                                    <el-option v-for="item in SelectOption.EmpList"
+                                               :key="item.RelateUserId"
+                                               :label="item.EmpName"
+                                               :value="item.RelateUserId">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="报告描述" prop="ReportDesc">
+                                <el-input v-model="AddFormData.ReportDesc" type="textarea" placeholder="请输入报告描述"></el-input>
+                            </el-form-item>
+                        </el-tab-pane>
+                        <el-tab-pane label="工作内容">
+                            <el-form-item label="工作名称" prop="WorkName">
+                                <el-input v-model="AddFormData.WorkName" placeholder="请输入工作名称"></el-input>
+                            </el-form-item>
+                            <el-form-item label="工作描述" prop="WorkDesc">
+                                <el-input v-model="AddFormData.WorkDesc" type="textarea" placeholder="请输入工作描述"></el-input>
+                            </el-form-item>
+                            <el-form-item label="附件" prop="EnclosureName">
+                                <single-file-uploader :filename.sync="AddFormData.EnclosureName"
+                                                      :filepath.sync="AddFormData.EnclusurePath"
+                                                      placeholder="请选择附件"></single-file-uploader>
+                            </el-form-item>
+                        </el-tab-pane>
+                        <el-tab-pane label="业务信息">
+                            <el-form-item label="经办人" prop="Operator">
+                                <el-input v-model="AddFormData.Operator" placeholder="请输入经办人"></el-input>
+                            </el-form-item>
+                            <el-form-item label="业务员" prop="Salesman">
+                                <el-input v-model="AddFormData.Salesman" placeholder="请输入业务员"></el-input>
+                            </el-form-item>
+                            <div style="margin-bottom:20px;border-top:1px solid #dcdfe6;"></div>
+                            <el-form-item label="联系人" prop="Contacts">
+                                <el-input v-model="AddFormData.Contacts" placeholder="请输入联系人"></el-input>
+                            </el-form-item>
+                            <el-form-item label="联系电话" prop="ContactsPhone">
+                                <el-input v-model="AddFormData.ContactsPhone" placeholder="请输入联系电话"></el-input>
+                            </el-form-item>
+                            <el-form-item label="收费金额" prop="ChargeAmount">
+                                <el-input v-model="AddFormData.ChargeAmount" placeholder="请输入收费金额"></el-input>
+                            </el-form-item>
+                            <el-form-item label="收费状态" prop="ChargeStatus">
+                                <el-radio v-model="AddFormData.ChargeStatus" :label="true" border>已收费</el-radio>
+                                <el-radio v-model="AddFormData.ChargeStatus" :label="false" border>未收费</el-radio>
+                            </el-form-item>
+                            <el-form-item label="是否开票" prop="IsInvoice">
+                                <el-radio v-model="AddFormData.IsInvoice" :label="true" border>是</el-radio>
+                                <el-radio v-model="AddFormData.IsInvoice" :label="false" border>否</el-radio>
+                            </el-form-item>
+                        </el-tab-pane>
+                        <el-tab-pane label="审核信息">
+                            <el-form-item label="审核部门" prop="AuditDep">
+                                <el-select v-model="AddFormData.AuditDep"
+                                           placeholder="请选择审核部门"
+                                           :clearable="true"
+                                           multiple
+                                           collapse-tags>
+                                    <el-option v-for="item in SelectOption.DepList"
+                                               :key="item.Id"
+                                               :label="item.DepName"
+                                               :value="item.Id">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                            <el-form-item label="审核人" prop="AuditUserIds">
+                                <el-select v-model="AddFormData.AuditUserIds"
+                                           placeholder="请选择审核人"
+                                           :clearable="true"
+                                           multiple
+                                           collapse-tags>
+                                    <el-option v-for="item in SelectOption.EmpList"
+                                               :key="item.RelateUserId"
+                                               :label="item.EmpName"
+                                               :value="item.RelateUserId">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-tab-pane>
+
+                    </el-tabs>
+                </el-form>
+
+                <span slot="footer" class="dialog-footer">
+                    <el-button type="primary" @@click="submitAddForm">保 存</el-button>
+                    <el-button @@click="cancelAddForm">取 消</el-button>
+                </span>
+            </el-dialog>
+        </template>
+    </div>
+</body>
+</html>
+<script>
+    var firstTime = true;
+    $vue = new Vue({
+        el: "#App",
+        data: {
+            QueryFormData: {
+                LeaseIds:[],
+                AuditStatus: [],
+                AuditUserName: "",
+                CreateBeginTime: "",
+                CreateEndTime: "",
+                AuditBeginTime: "",
+                AuditEndTime:"",
+                ListType:"Personal",
+                Page: 1,
+                PageSize: 10,
+            },
+            tableData: [],
+            tableHeight: 500,
+            ButtonState: {
+                btnEdit: true,
+                btnDelete: true
+            },
+            Dialog: {
+                addDialog: false,
+                editDialog: false
+            },
+            AddFormData: {
+                Id: null,
+                ReportCode: "",
+                ReportName: "",
+                ReportEntruster:"",
+                ReportUser: "",
+                Obligee: "",
+                LocationAddress: "",
+                HouseNumber: "",
+                BuildArea: "",
+                LandNumber: "",
+                LandArea: "",
+                ValuationPrice: "",
+                ValuationValue: "",
+                ValuationPurpose: "",
+                ValuationStruct: "",
+                ValueTime: "",
+                ReportTime: "",
+                ReportDesc: "",
+                WorkName: "",
+                WorkDesc: "",
+                EnclosureName: "",
+                EnclusurePath: "",
+                Operator: "",
+                Salesman: "",
+                Contacts: "",
+                ContactsPhone: "",
+                ChargeAmount: "",
+                ChargeStatus: true,
+                IsInvoice: true,
+                ReportType: "Formal",
+                ValuationObjective: [],
+                ValuationMethods: [],
+                SignAppraiser: [],
+                AuditDep: [],
+                AuditUserIds:[],
+            },
+            AddFormRule: {
+                ReportCode: [
+                    { required: true, message: '请填写报告编号', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                ReportName: [
+                    { required: true, message: '请填写项目名称', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                ReportEntruster: [
+                    { required: true, message: '请填写报告委托方', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                ReportUser: [
+                    { required: true, message: '请填写报告使用方', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                Obligee: [
+                    { required: true, message: '请填写权利人', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                LocationAddress: [
+                    { required: true, message: '请填写坐落地址', trigger: 'change' },
+                    { max: 100, message: '长度不能超过100个字符', trigger: 'change' }
+                ],
+                HouseNumber: [
+                    { required: true, message: '请填写房产证号', trigger: 'change' },
+                    { max: 50, message: '长度不能超过50个字符', trigger: 'change' }
+                ],
+                BuildArea: [
+                    { required: true, message: '请填写建筑面积', trigger: 'change' },
+                    { validator: checkNumber, trigger: 'change' }
+                ],
+                LandNumber: [
+                    { required: true, message: '请填写土地证号', trigger: 'change' },
+                    { max: 50, message: '长度不能超过50个字符', trigger: 'change' }
+                ],
+                LandArea: [
+                    { validator: checkNumber, trigger: 'change' }
+                ],
+                ValuationPrice: [
+                    { validator: checkNumber, trigger: 'change' }
+                ],
+                ValuationValue: [
+                    { validator: checkNumber, trigger: 'change' }
+                ],
+                ValuationPurpose: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                ValuationStruct: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                ReportDesc: [
+                    { max: 250, message: '长度不能超过250个字符', trigger: 'change' }
+                ],
+                WorkName: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                WorkDesc: [
+                    { max: 250, message: '长度不能超过250个字符', trigger: 'change' }
+                ],
+                Operator: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                Salesman: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                Contacts: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                ContactsPhone: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                ChargeAmount: [
+                    { validator: checkNumber, trigger: 'change' }
+                ],
+                ChargeStatus: [
+                    { required: true, message: '请选择收费状态', trigger: 'change' }
+                ],
+                IsInvoice: [
+                    { required: true, message: '请选择是否开票', trigger: 'change' }
+                ],
+                ReportType: [
+                    { required: true, message: '请选择报告类型', trigger: 'change' }
+                ],
+                AuditDep:[
+                    { validator: checkAuditId, trigger: 'change' }
+                ],
+                AuditUserIds: [
+                    { validator: checkAuditId, trigger: 'change' }
+                ]
+            },
+            Loading: {
+                bodyLoading: false,
+                tableLoading: false
+            },
+            SelectOption: {
+                AuditStatus: [
+                    { Value: "WaitAudit", Text: "待审核" },
+                    { Value: "Passed", Text: "审核通过" },
+                    { Value: "Reject", Text: "驳回" },
+                    { Value: "Revoke", Text: "撤销" }
+                ],
+                ValuationObjectiveList: [],
+                ValuationMethodsList: [],
+                ChargeStatusList:[],
+                DepList: [],
+                EmpList:[]
+            },
+            PaginationData: {
+                pageSizes: [10, 20, 50, 100],
+                total: 0
+            },
+            PaginationFilter: {
+            },
+            ActionPermission: {
+                Add: false,
+                Edit: false,
+                Delete: false
+            } ,
+            modifyTitle: "",
+            Dic: {
+                AuditStatus: {
+                    WaitAudit: "待审核",
+                    Passed: "审核通过",
+                    Reject: "驳回",
+                    Revoke: "撤销"
+                }
+            }
+        },
+        methods: {
+            onQuery: function () {
+                this.QueryFormData.Page = 1;
+                this.PaginationFilter = JSON.parse(JSON.stringify(this.QueryFormData));
+                getList();
+            },
+            showIdex: function (index) {
+                return (this.QueryFormData.Page - 1) * this.QueryFormData.PageSize + 1 + index;
+            },
+            resetQueryForm: function () {
+                this.$refs.QueryForm.resetFields();
+            },
+            openAddDialog: function () {
+                this.modifyTitle = "新增报告";
+               
+                this.Dialog.addDialog = true;
+                setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 0);
+            },
+            openEditDialog: function () {
+                this.modifyTitle = "编辑申请";
+                axios.post("GetLEAModel", { id: this.$refs.dataTable.selection[0].Id }).then(function (response) {
+                    AutoMapper($vue.AddFormData, response.data);
+                    $vue.Dialog.addDialog = true;
+                });
+
+            },
+            submitAddForm: function () {
+                this.$refs.AddForm.validate(function (success, validateobj) {
+                    if (success) {
+                        $vue.Loading.bodyLoading = true;
+                        axios.post("SaveReport", $vue.AddFormData).then(function (response) {
+                            ActionCommonHandle(response.data, $vue, "保存成功", "保存失败", getList());
+                        }).catch(function (error) {
+                            ErrorCommonHandle($vue);
+                        }).finally(function () {
+                            $vue.Loading.bodyLoading = false;
+                            $vue.Dialog.addDialog = false;
+                        });
+                    }
+                });
+            },
+            cancelAddForm: function () {
+                this.Dialog.addDialog = false;
+            },
+            deleteClick: function () {
+                this.$confirm('是否确认删除这' + this.$refs.dataTable.selection.length + '行数据', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(function () {
+                    $vue.Loading.bodyLoading = true;
+                    axios.post("Delete", $vue.$refs.dataTable.selection).then(function (response) {
+                        $vue.Loading.bodyLoading = false;
+                        ActionCommonHandle(response.data, $vue, "删除成功", "删除失败", getList());
+                    }).catch(function (error) {
+                        ErrorCommonHandle($vue);
+                    }).finally(function () {
+                        $vue.Loading.bodyLoading = false;
+                    });
+                }).catch(function () {
+                    $vue.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+            selectChange: function (selectValue) {
+                if (this.$refs.dataTable.selection.length == 0) {
+                    this.ButtonState.btnEdit = true;
+                    this.ButtonState.btnDelete = true;
+                }
+                else if (this.$refs.dataTable.selection.length == 1) {
+                    var status = this.$refs.dataTable.selection[0].AuditStatus;
+                    if (status == "WaitAudit") {
+                        this.ButtonState.btnEdit = false;
+                    }
+                    else {
+                        this.ButtonState.btnEdit = true;
+                    }
+                    this.ButtonState.btnDelete = false;
+
+                }
+                else {
+                    this.ButtonState.btnEdit = true;
+                    this.ButtonState.btnDelete = false;
+                }
+            },
+            rowClick: function (row, event, column) {
+                this.$refs.dataTable.toggleRowSelection(row);
+            },
+            handleSizeChange: function (val) {
+                if (this.QueryFormData.Page > (this.PaginationData.total / val + 1)) {
+                    return;
+                }
+                this.PaginationFilter.Page = this.QueryFormData.Page;
+                this.PaginationFilter.PageSize = val;
+                getList(this.PaginationFilter);
+            },
+            handleCurrentChange: function (val) {
+                this.PaginationFilter.Page = val;
+                this.PaginationFilter.PageSize = this.QueryFormData.PageSize;
+                getList(this.PaginationFilter);
+            },
+            closeAddDialog: function (done) {
+                done();
+            },
+            ReportCodeBlur: function (value) {
+                if (this.AddFormData.ReportType == "PreAssessment" && this.AddFormData.ReportCode.substr(0,1)!="预") {
+                    this.AddFormData.ReportCode = "预"+this.AddFormData.ReportCode;
+                }
+            },
+            DateFormat: DateFormat
+        }
+
+    });
+
+    function getList(filter) {
+        if (filter == null) {
+            filter = $vue.QueryFormData;
+        }
+        $vue.$refs.dataTable.clearSelection();
+        $vue.ButtonState.btnEdit = true;
+        $vue.ButtonState.btnDelete = true;
+        $vue.Loading.tableLoading = true;
+        axios.post("GetList", filter).then(function (response) {
+            $vue.Loading.tableLoading = false;
+            $vue.tableData = response.data.List;
+            $vue.PaginationData.total = response.data.Total;
+        }).catch(function (error) {
+            $vue.Loading.tableLoading = false;
+            $vue.tableData = [];
+            $vue.PaginationData.total = 0;
+            $vue.$message({
+                type: 'error',
+                message: '服务器出错'
+            });
+        });
+    }
+
+
+    axios.post("/Employee/GetUserEmp", {}).then(function (response) {
+        $vue.SelectOption.EmpList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+        });
+
+    axios.post("/Department/GetAllDep", {}).then(function (response) {
+        $vue.SelectOption.DepList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+        });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "ValuationObjective" }).then(function (response) {
+        $vue.SelectOption.ValuationObjectiveList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+        });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "ValuationMethods" }).then(function (response) {
+        $vue.SelectOption.ValuationMethodsList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+        });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "ChargeStatus" }).then(function (response) {
+        $vue.SelectOption.ChargeStatusList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+
+
+
+    function checkAuditId(rule, value, callback) {
+        $vue.$refs.AddForm.clearValidate(["AuditDep", "AuditUserIds"]);
+        if ($vue.AddFormData.AuditDep.length == 0 && $vue.AddFormData.AuditUserIds.length == 0) {
+
+            callback(new Error("请选择审核人或者审核部门！"));
+        }
+        else {
+            callback();
+        }
+
+    }
+
+
+    window.onresize = function () {
+        $vue.tableHeight = $vue.$refs.App.getBoundingClientRect().height -
+            $vue.$refs.QueryFormDiv.getBoundingClientRect().height -
+            $vue.$refs.Pagination.getBoundingClientRect().height - 20;
+    }
+    getList();
+
+    GetActionAuthorize($vue);
+</script>

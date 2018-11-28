@@ -200,7 +200,7 @@
                                style="width:100%;padding-left:20px;box-sizing:border-box">
                 </el-pagination>
             </div>
-            <el-dialog :title="modifyTitle"
+            <el-dialog :close-on-click-modal="false" :title="modifyTitle"
                        :visible.sync="Dialog.addDialog"
                        width="500px">
                 <el-form :model="AddFormData" :rules="AddFormRule" label-width="120px" ref="AddForm" @@submit.native.prevent>
@@ -246,7 +246,7 @@
                     <el-button @@click="cancelAddForm">取 消</el-button>
                 </span>
             </el-dialog>
-            <el-dialog title="租借物品归还"
+            <el-dialog :close-on-click-modal="false" title="租借物品归还"
                        :visible.sync="Dialog.returnDialog"
                        width="500px">
                 <el-form :model="ReturnFormData" :rules="ReturnFormRule" label-width="120px" ref="ReturnForm" @@submit.native.prevent>

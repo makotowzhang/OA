@@ -158,7 +158,7 @@
                     </el-form-item>
                 </el-form>
             </div>
-            <el-dialog title="选择图标"
+            <el-dialog :close-on-click-modal="false" title="选择图标"
                        :visible.sync="Dialog.iconDialog"
                        width="50%">
                 <div style="max-height:200px;overflow-y:auto;overflow-x:hidden">

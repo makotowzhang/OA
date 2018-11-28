@@ -243,6 +243,18 @@ function AddTabPage(title, url, iconfont) {
     top.$app.editableTabsValue = tabName;
 }
 
+function checkNumber(rule, value, callback) {
+    if (value == null || value == "") {
+        callback();
+    }
+    else if (isNaN(value)) {
+        callback(new Error("请填写正确数字格式！"));
+    }
+    else {
+        callback();
+    }
+}
+
 //页面左击右击事件监听，去除Tab的菜单
 window.addEventListener("load", function () {
     document.body.addEventListener("click", function () {

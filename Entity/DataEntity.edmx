@@ -194,9 +194,10 @@
           <Property Name="Salesman" Type="varchar" MaxLength="50" />
           <Property Name="Contacts" Type="varchar" MaxLength="50" />
           <Property Name="ContactsPhone" Type="varchar" MaxLength="50" />
-          <Property Name="ChargeAmount" Type="decimal" Precision="18" Scale="2" />
-          <Property Name="IsInvoice" Type="bit" />
-          <Property Name="ReportType" Type="int" Nullable="false" />
+          <Property Name="ChargeAmount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ChargeStatus" Type="bit" Nullable="false" />
+          <Property Name="IsInvoice" Type="bit" Nullable="false" />
+          <Property Name="ReportType" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="ReportStatus" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="AuditUser" Type="uniqueidentifier" />
           <Property Name="AuditReason" Type="varchar" MaxLength="400" />
@@ -204,6 +205,7 @@
           <Property Name="IsDel" Type="bit" Nullable="false" />
           <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="SubmitTime" Type="datetime" />
           <Property Name="UpdateUser" Type="uniqueidentifier" />
           <Property Name="UpdateTime" Type="datetime" />
         </EntityType>
@@ -400,9 +402,9 @@
           <EntitySet Name="PM_Notice" EntityType="Entity.PM_Notice" />
           <EntitySet Name="PM_Lease" EntityType="Entity.PM_Lease" />
           <EntitySet Name="PM_LeaseApply" EntityType="Entity.PM_LeaseApply" />
-          <EntitySet Name="RM_HouseReport" EntityType="Entity.RM_HouseReport" />
           <EntitySet Name="RM_ReportAudit" EntityType="Entity.RM_ReportAudit" />
           <EntitySet Name="RM_ReportDicItem" EntityType="Entity.RM_ReportDicItem" />
+          <EntitySet Name="RM_HouseReport" EntityType="Entity.RM_HouseReport" />
         </EntityContainer>
         <EntityType Name="System_User">
           <Key>
@@ -691,6 +693,23 @@
           <Property Name="UpdateUser" Type="Guid" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="RM_ReportAudit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReportId" Type="Guid" Nullable="false" />
+          <Property Name="AuditId" Type="Guid" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RM_ReportDicItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReportId" Type="Guid" Nullable="false" />
+          <Property Name="DicGroupCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DicItemId" Type="Guid" Nullable="false" />
+        </EntityType>
         <EntityType Name="RM_HouseReport">
           <Key>
             <PropertyRef Name="Id" />
@@ -721,9 +740,10 @@
           <Property Name="Salesman" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Contacts" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ContactsPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ChargeAmount" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="IsInvoice" Type="Boolean" />
-          <Property Name="ReportType" Type="Int32" Nullable="false" />
+          <Property Name="ChargeAmount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="ChargeStatus" Type="Boolean" Nullable="false" />
+          <Property Name="IsInvoice" Type="Boolean" Nullable="false" />
+          <Property Name="ReportType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ReportStatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="AuditUser" Type="Guid" />
           <Property Name="AuditReason" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
@@ -731,25 +751,9 @@
           <Property Name="IsDel" Type="Boolean" Nullable="false" />
           <Property Name="CreateUser" Type="Guid" Nullable="false" />
           <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SubmitTime" Type="DateTime" Precision="3" />
           <Property Name="UpdateUser" Type="Guid" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="RM_ReportAudit">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ReportId" Type="Guid" Nullable="false" />
-          <Property Name="AuditId" Type="Guid" Nullable="false" />
-        </EntityType>
-        <EntityType Name="RM_ReportDicItem">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ReportId" Type="Guid" Nullable="false" />
-          <Property Name="DicGroupCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DicItemId" Type="Guid" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1063,11 +1067,31 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="RM_ReportAudit">
+            <EntityTypeMapping TypeName="Entity.RM_ReportAudit">
+              <MappingFragment StoreEntitySet="RM_ReportAudit">
+                <ScalarProperty Name="AuditId" ColumnName="AuditId" />
+                <ScalarProperty Name="ReportId" ColumnName="ReportId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RM_ReportDicItem">
+            <EntityTypeMapping TypeName="Entity.RM_ReportDicItem">
+              <MappingFragment StoreEntitySet="RM_ReportDicItem">
+                <ScalarProperty Name="DicItemId" ColumnName="DicItemId" />
+                <ScalarProperty Name="DicGroupCode" ColumnName="DicGroupCode" />
+                <ScalarProperty Name="ReportId" ColumnName="ReportId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="RM_HouseReport">
             <EntityTypeMapping TypeName="Entity.RM_HouseReport">
               <MappingFragment StoreEntitySet="RM_HouseReport">
                 <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
                 <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="SubmitTime" ColumnName="SubmitTime" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
                 <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
                 <ScalarProperty Name="IsDel" ColumnName="IsDel" />
@@ -1077,6 +1101,7 @@
                 <ScalarProperty Name="ReportStatus" ColumnName="ReportStatus" />
                 <ScalarProperty Name="ReportType" ColumnName="ReportType" />
                 <ScalarProperty Name="IsInvoice" ColumnName="IsInvoice" />
+                <ScalarProperty Name="ChargeStatus" ColumnName="ChargeStatus" />
                 <ScalarProperty Name="ChargeAmount" ColumnName="ChargeAmount" />
                 <ScalarProperty Name="ContactsPhone" ColumnName="ContactsPhone" />
                 <ScalarProperty Name="Contacts" ColumnName="Contacts" />
@@ -1103,25 +1128,6 @@
                 <ScalarProperty Name="ReportEntruster" ColumnName="ReportEntruster" />
                 <ScalarProperty Name="ReportName" ColumnName="ReportName" />
                 <ScalarProperty Name="ReportCode" ColumnName="ReportCode" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="RM_ReportAudit">
-            <EntityTypeMapping TypeName="Entity.RM_ReportAudit">
-              <MappingFragment StoreEntitySet="RM_ReportAudit">
-                <ScalarProperty Name="AuditId" ColumnName="AuditId" />
-                <ScalarProperty Name="ReportId" ColumnName="ReportId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="RM_ReportDicItem">
-            <EntityTypeMapping TypeName="Entity.RM_ReportDicItem">
-              <MappingFragment StoreEntitySet="RM_ReportDicItem">
-                <ScalarProperty Name="DicItemId" ColumnName="DicItemId" />
-                <ScalarProperty Name="DicGroupCode" ColumnName="DicGroupCode" />
-                <ScalarProperty Name="ReportId" ColumnName="ReportId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
