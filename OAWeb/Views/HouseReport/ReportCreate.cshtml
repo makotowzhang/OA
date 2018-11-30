@@ -21,6 +21,58 @@
                 <el-form :model="QueryFormData" :inline="true" class="Query_Form" ref="QueryForm" @@submit.native.prevent label-width="80px">
                     <el-row>
                         <el-col :span="6">
+                            <el-form-item label="报告编号" prop="ReportCode">
+                                <el-input v-model="QueryFormData.ReportCode" placeholder="请输入报告编号"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="项目名称" prop="ReportName">
+                                <el-input v-model="QueryFormData.ReportName" placeholder="请输入项目名称"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="报告类型" prop="ReportType">
+                                <el-select v-model="QueryFormData.ReportType"
+                                           placeholder="请选择报告类型"
+                                           :clearable="true"
+                                           multiple
+                                           collapse-tags>
+                                    <el-option key="Formal"
+                                               label="正式"
+                                               value="Formal">
+                                    </el-option>
+                                    <el-option key="PreAssessment"
+                                               label="预评"
+                                               value="PreAssessment">
+                                    </el-option>
+                                    <el-option key="Consultation"
+                                               label="咨询"
+                                               value="Consultation">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="收费状态" prop="ChargeStatus">
+                                <el-select v-model="QueryFormData.ChargeStatus"
+                                           placeholder="请选择收费状态"
+                                           :clearable="true"
+                                           multiple
+                                           collapse-tags>
+                                    <el-option key="true"
+                                               label="已收费"
+                                               :value="true">
+                                    </el-option>
+                                    <el-option key="false"
+                                               label="未收费"
+                                               :value="false">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="6">
                             <el-form-item label="审核人" prop="AuditUserName">
                                 <el-input v-model="QueryFormData.AuditUserName" placeholder="请输入审核人"></el-input>
                             </el-form-item>
@@ -114,45 +166,42 @@
                 <el-table-column type="selection"
                                  width="50">
                 </el-table-column>
-                <el-table-column prop="LeaseName"
-                                 label="租借物品名称"
-                                 width="250">
+                <el-table-column prop="ReportCode"
+                                 label="报告编号"
+                                 width="150">
                 </el-table-column>
-                <el-table-column prop="LeaseBeginTime"
-                                 label="租借开始时间"
-                                 width="200">
+                <el-table-column prop="ReportName"
+                                 label="项目名称"
+                                 width="150">
+                </el-table-column>
+                <el-table-column prop="ReportType"
+                                 label="报告类型"
+                                 width="100">
                     <template slot-scope="scope">
-                        {{ DateFormat(scope.row.LeaseBeginTime,'yyyy-MM-dd HH:mm:ss') }}
+                        {{ Dic.ReportType[scope.row.ReportType] }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="LeaseEndTime"
-                                 label="租借结束时间"
-                                 width="200">
-                    <template slot-scope="scope">
-                        {{ DateFormat(scope.row.LeaseEndTime,'yyyy-MM-dd HH:mm:ss') }}
-                    </template>
+                <el-table-column prop="ChargeAmount"
+                                 label="收费金额"
+                                 width="100">
                 </el-table-column>
-                <el-table-column prop="ActualReturnTime"
-                                 label="实际归还时间"
-                                 width="200">
+                <el-table-column prop="ChargeStatus"
+                                 label="收费状态"
+                                 width="100">
                     <template slot-scope="scope">
-                        {{ DateFormat(scope.row.ActualReturnTime,'yyyy-MM-dd HH:mm:ss') }}
+                        {{ scope.row.ChargeStatus?"已收费":"未收费" }}
                     </template>
-                </el-table-column>
-                <el-table-column prop="ApplyReason"
-                                 label="申请原因"
-                                 width="200">
                 </el-table-column>
                 <el-table-column v-if="QueryFormData.ListType!='Personal'"
                                  prop="CreateUserName"
-                                 label="申请人"
+                                 label="创建人"
                                  width="100">
                 </el-table-column>
                 <el-table-column prop="CreateTime"
-                                 label="申请时间"
+                                 label="提交时间"
                                  width="200">
                     <template slot-scope="scope">
-                        {{ DateFormat(scope.row.CreateTime,'yyyy-MM-dd HH:mm:ss') }}
+                        {{ DateFormat(scope.row.SubmitTime,'yyyy-MM-dd HH:mm:ss') }}
                     </template>
                 </el-table-column>
                 <el-table-column prop="AuditStatus"
@@ -390,8 +439,8 @@
                 </el-form>
 
                 <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @@click="submitAddForm">保 存</el-button>
-                    <el-button @@click="cancelAddForm">取 消</el-button>
+                    <el-button type="primary" @@click="submitAddForm">提 交</el-button>
+                    <el-button @@click="saveReprotData">保 存</el-button>
                 </span>
             </el-dialog>
         </template>
@@ -399,7 +448,7 @@
 </body>
 </html>
 <script>
-    var firstTime = true;
+    var lastAddFormData = null;
     $vue = new Vue({
         el: "#App",
         data: {
@@ -589,6 +638,11 @@
                     Passed: "审核通过",
                     Reject: "驳回",
                     Revoke: "撤销"
+                },
+                ReportType: {
+                    Formal: "正式",
+                    PreAssessment: "预评",
+                    Consultation: "咨询",
                 }
             }
         },
@@ -606,9 +660,16 @@
             },
             openAddDialog: function () {
                 this.modifyTitle = "新增报告";
-               
-                this.Dialog.addDialog = true;
-                setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 0);
+                $vue.Loading.bodyLoading = true;
+                setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 500);
+                axios.post("GetUserCreateReport").then(function (response) {
+                    AutoMapper($vue.AddFormData, response.data);
+                    $vue.Dialog.addDialog = true;
+                }).catch(function (error) {
+                    ErrorCommonHandle($vue);
+                }).finally(function () {
+                    $vue.Loading.bodyLoading = false;
+                });
             },
             openEditDialog: function () {
                 this.modifyTitle = "编辑申请";
@@ -703,6 +764,10 @@
                     this.AddFormData.ReportCode = "预"+this.AddFormData.ReportCode;
                 }
             },
+            saveReprotData: function () {
+                axios.post("SaveReport", $vue.AddFormData);
+                this.Dialog.addDialog = false;
+            } ,
             DateFormat: DateFormat
         }
 
@@ -759,7 +824,15 @@
         console.log(error);
     });
 
-
+    function autoSave() {
+        if (lastAddFormData == null) {
+            lastAddFormData = JSON.stringify($vue.AddFormData);
+        }
+        if (lastAddFormData != JSON.stringify($vue.AddFormData) && $vue.Dialog.addDialog) {
+            lastAddFormData = JSON.stringify($vue.AddFormData);
+            axios.post("SaveReport", $vue.AddFormData);
+        }
+    }
 
     function checkAuditId(rule, value, callback) {
         $vue.$refs.AddForm.clearValidate(["AuditDep", "AuditUserIds"]);
@@ -773,6 +846,7 @@
 
     }
 
+    setInterval(autoSave, 5000);
 
     window.onresize = function () {
         $vue.tableHeight = $vue.$refs.App.getBoundingClientRect().height -

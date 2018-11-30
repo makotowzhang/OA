@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Model.RMModel;
 using Business.RMBusiness;
 using Model.SystemModel;
+using Model.EnumModel;
 
 namespace OAWeb.Controllers
 {
@@ -25,7 +26,7 @@ namespace OAWeb.Controllers
 
         public ActionResult GetUserCreateReport()
         {
-            return Json(service.GetOrCreateModel(CurrentUser.Id));
+            return EnumJson(service.GetOrCreateModel(CurrentUser.Id));
         }
 
         public ActionResult SaveReport(HouseReportModel model)
@@ -38,6 +39,21 @@ namespace OAWeb.Controllers
         {
             model.UpdateUser = CurrentUser.Id;
             return Json(new JsonMessage(service.SaveReport(model,true)));
+        }
+
+        public ActionResult GetList(HouseReportFilter filter)
+        {
+            if (filter.ListType == ListType.Personal)
+            {
+                filter.CreateUserId = CurrentUser.Id;
+            }
+            if (filter.ListType == ListType.Auditor)
+            {
+                filter.AuditUserId = CurrentUser.Id;
+            }
+            //var data = service.GetLEAList(filter, out int total);
+            var data = new List<object>();
+            return Json(new TableDataModel(0, data));
         }
     }
 }

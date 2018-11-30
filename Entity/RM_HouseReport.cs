@@ -22,7 +22,7 @@ namespace Entity
         public string Obligee { get; set; }
         public string LocationAddress { get; set; }
         public string HouseNumber { get; set; }
-        public decimal BuildArea { get; set; }
+        public Nullable<decimal> BuildArea { get; set; }
         public string LandNumber { get; set; }
         public Nullable<decimal> LandArea { get; set; }
         public Nullable<decimal> ValuationPrice { get; set; }
@@ -40,7 +40,7 @@ namespace Entity
         public string Salesman { get; set; }
         public string Contacts { get; set; }
         public string ContactsPhone { get; set; }
-        public decimal ChargeAmount { get; set; }
+        public Nullable<decimal> ChargeAmount { get; set; }
         public bool ChargeStatus { get; set; }
         public bool IsInvoice { get; set; }
         public string ReportType { get; set; }
