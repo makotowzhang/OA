@@ -24,9 +24,19 @@ namespace OAWeb.Controllers
             return View();
         }
 
+        public ActionResult ReportAudit()
+        {
+            return View();
+        }
+
         public ActionResult GetUserCreateReport()
         {
             return EnumJson(service.GetOrCreateModel(CurrentUser.Id));
+        }
+
+        public ActionResult GetRoportModel(Guid id)
+        {
+            return EnumJson(service.GetModel(id));
         }
 
         public ActionResult SaveReport(HouseReportModel model)
@@ -41,6 +51,19 @@ namespace OAWeb.Controllers
             return Json(new JsonMessage(service.SaveReport(model,true)));
         }
 
+        public ActionResult Audit(HouseReportModel model)
+        {
+            try
+            {
+                model.AuditUser = CurrentUser.Id;
+                return Json(new JsonMessage(service.Audit(model)));
+            }
+            catch (Exception e)
+            {
+                return Json(new JsonMessage(false, e.Message));
+            }
+        }
+
         public ActionResult GetList(HouseReportFilter filter)
         {
             if (filter.ListType == ListType.Personal)
@@ -51,8 +74,7 @@ namespace OAWeb.Controllers
             {
                 filter.AuditUserId = CurrentUser.Id;
             }
-            //var data = service.GetLEAList(filter, out int total);
-            var data = new List<object>();
+            var data = service.GetReportList(filter, out int total);
             return Json(new TableDataModel(0, data));
         }
     }

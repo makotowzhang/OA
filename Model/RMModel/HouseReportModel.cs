@@ -43,22 +43,34 @@ namespace Model.RMModel
         public bool IsInvoice { get; set; } = true;
         [JsonConverter(typeof(StringEnumConverter))]
         public ReportType ReportType { get; set; } = ReportType.Formal;
+
+        public string ReportTypeString { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
         public ReportStatus ReportStatus { get; set; } = ReportStatus.WaitSubmit;
+
+        public string ReportStatusString { get; set; }
         public Guid? AuditUser { get; set; }
         public string AuditReason { get; set; }
         public DateTime? AuditTime { get; set; }
         public bool IsDel { get; set; }
         public DateTime? SubmitTime { get; set; }
 
-        public List<Guid> ValuationObjective { get; set; }
+        public List<Guid> ValuationObjective { get; set; } = new List<Guid>();
 
-        public List<Guid> ValuationMethods { get; set; }
+        public List<Guid> ValuationMethods { get; set; } = new List<Guid>();
 
-        public List<Guid> SignAppraiser { get; set; }
+        public List<Guid> SignAppraiser { get; set; } = new List<Guid>();
 
-        public List<Guid> AuditDep { get; set; }
-        public List<Guid> AuditUserIds { get; set; }
+        public List<string> SignAppraiserName { get; set; } = new List<string>();
+
+        public List<Guid> AuditDep { get; set; } = new List<Guid>();
+        public List<Guid> AuditUserIds { get; set; } = new List<Guid>();
+
+        public string CreateUserName { get; set; }
+
+        public string AuditUserName { get; set; }
+
+        public string CreateDepName { get; set; }
     }
 
     public class HouseReportFilter : PageModel

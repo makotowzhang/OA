@@ -671,6 +671,7 @@
     <Content Include="Views\Shared\_Svg.cshtml" />
     <Content Include="Views\Shared\SingleFileUploader.cshtml" />
     <Content Include="Views\HouseReport\ReportCreate.cshtml" />
+    <Content Include="Views\HouseReport\ReportAudit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">

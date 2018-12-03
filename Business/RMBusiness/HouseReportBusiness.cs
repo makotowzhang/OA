@@ -176,5 +176,38 @@ namespace Business.RMBusiness
             }
         }
 
+        public List<HouseReportModel> GetReportList(HouseReportFilter filter, out int total, bool isPage = true)
+        {
+            using (DataProvider dp = new DataProvider())
+            {
+                var list = data.GetReportList(dp, filter, out total, isPage);
+                return list;
+            }
+        }
+
+        public bool Audit(HouseReportModel model)
+        {
+            if (model == null || !model.Id.HasValue)
+            {
+                return false;
+            }
+            using (DataProvider dp = new DataProvider())
+            {
+                var entity = data.GetEntity(dp, model.Id);
+                entity.ReportStatus = model.ReportStatus.ToString();
+                entity.AuditReason = model.AuditReason;
+                entity.AuditTime = DateTime.Now;
+                entity.AuditUser = model.AuditUser;
+                try
+                {
+                    dp.SaveChanges();
+                    return true;
+                }
+                catch
+                {
+                    throw;
+                }
+            }
+        }
     }
 }
