@@ -318,7 +318,8 @@
                             <el-form-item label="附件" prop="EnclosureName">
                                 <single-file-uploader :filename.sync="AddFormData.EnclosureName"
                                                       :filepath.sync="AddFormData.EnclusurePath"
-                                                      placeholder="请选择附件"></single-file-uploader>
+                                                      placeholder="请选择附件"
+                                                      :isread="true"></single-file-uploader>
                             </el-form-item>
                         </el-tab-pane>
                         <el-tab-pane label="业务信息">

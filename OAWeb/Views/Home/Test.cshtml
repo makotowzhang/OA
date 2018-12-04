@@ -8,32 +8,48 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
-    @Html.Partial("~/Views/Shared/_Head.cshtml")
-    @Html.Partial("~/Views/Shared/SingleFileUploader.cshtml")
+    @*@Html.Partial("~/Views/Shared/_Head.cshtml")
+    @Html.Partial("~/Views/Shared/SingleFileUploader.cshtml")*@
+    <style>
+        * {
+        margin:0;
+        padding:0;
+        }
+    </style>
 </head>
 <body>
-    <div id="App">
-       <single-file-uploader :filepath.sync="fp" :filename.sync="fn" accept="image/*">
+    @*<div id="App">
+       <single-file-uploader :filepath.sync="fp" :isread="true" :filename.sync="fn" accept="image/*">
 
        </single-file-uploader>
         <button type="button" @@click="ck">aaaasdas</button>
-    </div>
-   
+    </div>*@
+   <canvas style="background-color:#999999" height="500" width="500" id="ca" >
+
+   </canvas>
 </body>
 </html>
 <script>
-    $vue = new Vue({
-        el: "#App",
-        data: {
-            content: "",
-            fp: "",
-            fn:""
-        },
-        methods: {
-            ck: function () {
-                alert(this.fp);
-                alert(this.fn);
-            }
-        }
-    });
+    //$vue = new Vue({
+    //    el: "#App",
+    //    data: {
+    //        content: "",
+    //        fp: "/Upload/temp/file/ce3ddeff-7bcc-40a2-bf56-5b1b4f2608ca.xlsx",
+    //        fn:"新建 Microsoft Excel 工作表.xlsx"
+    //    },
+    //    methods: {
+    //        ck: function () {
+    //            alert(this.fp);
+    //            alert(this.fn);
+    //        }
+    //    }
+    //});
+    var img = new Image();
+    img.src = "/Content/Images/login-img.png";
+    img.onload=function () {
+        var can = document.getElementById("ca");
+        var ctx = can.getContext("2d");
+        ctx.drawImage(img, 0, 0,100,100,0,0,100,100);
+    };
+    
 </script>

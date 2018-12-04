@@ -68,6 +68,24 @@ namespace OAWeb.Controllers
             }
         }
 
+        public ActionResult CommonDownloadFile(string path, string fileName)
+        {
+            if (!path.StartsWith("~"))
+            {
+                path = "~" + path;
+            }
+            FileStream file;
+            try
+            {
+                file = System.IO.File.OpenRead(Server.MapPath(path));
+            }
+            catch
+            {
+                return Content("文件未找到");
+            }
+            return File(file, "application/octet-stream", fileName);
+        }
+
         public EnumJsonResult EnumJson(object data)
         {
             EnumJsonResult result = new EnumJsonResult();

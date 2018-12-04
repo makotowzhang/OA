@@ -1,28 +1,34 @@
 ﻿<script type="text/x-template" id="SingleFileUploader">
     <div style="height:40px;">
-        <div style="display:inline-block;
+        <div v-if="!isread">
+            <div style="display:inline-block;
                     width:180px;overflow:hidden;height:42px;
                     line-height:42px;width:calc( 100% - 200px)">
-            <el-progress :text-inside="true"
-                         :stroke-width="18"
-                         :percentage="percentage"
-                         v-if="isUploading"
-                         style="margin-top:10px;">
-            </el-progress>
-            <el-input v-else
-                      :placeholder="placeholder"
-                      :value="filename"
-                      disabled
-                      style="width:100%">
-            </el-input>
+                <el-progress :text-inside="true"
+                             :stroke-width="18"
+                             :percentage="percentage"
+                             v-if="isUploading"
+                             style="margin-top:10px;">
+                </el-progress>
+                <el-input v-else
+                          :placeholder="placeholder"
+                          :value="filename"
+                          disabled
+                          style="width:100%">
+                </el-input>
 
+            </div>
+            <el-button type="primary" @@click="buttonClick" style="vertical-align:top;margin-top:2px;">{{buttonText}}</el-button>
+            <el-button type="warning"
+                       @@click="clearFile"
+                       style="vertical-align:top;margin-top:2px;"
+                       :disabled="canClear">清除</el-button>
         </div>
-        <el-button type="primary" @@click="buttonClick" style="vertical-align:top;margin-top:2px;">{{buttonText}}</el-button>
-        <el-button type="warning" 
-                   @@click="clearFile" 
-                   style="vertical-align:top;margin-top:2px;"
-                   :disabled="canClear"
-                   >清除</el-button>
+        <div v-else style="height:40px;line-height:40px;">
+            <span class="SingleFileDownloader"
+                  title="点击下载"
+                  @@click="downloadFile"><i class="el-icon-document"></i>{{filename}}</span>
+        </div>
     </div>
 </script>
 <script>
@@ -51,7 +57,11 @@
             action: {
                 type: String,
                 default: '/Base/CommonUploadFile'
-            } 
+            },
+            isread: {
+                type: Boolean,
+                default: false
+            }
         },
         data: function () {
             return {
@@ -122,6 +132,9 @@
             clearFile: function () {
                 this.$emit('update:filepath', "");
                 this.$emit('update:filename', "");
+            },
+            downloadFile: function () {
+                window.open(encodeURI("/Base/CommonDownloadFile?path=" + this.filepath + "&fileName=" + this.filename));
             }
         },
         computed: {
@@ -140,3 +153,17 @@
         template: '#SingleFileUploader'
     })
 </script>
+<style>
+    .SingleFileDownloader {
+        padding-left:5px;
+        cursor: pointer;
+    }
+
+        .SingleFileDownloader:hover {
+            color: blue;
+            text-decoration: underline;
+        }
+        .SingleFileDownloader i {
+            margin-right:5px;
+        }
+</style>
