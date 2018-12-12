@@ -47,5 +47,6 @@ namespace Entity
         public virtual DbSet<RM_ReportAudit> RM_ReportAudit { get; set; }
         public virtual DbSet<RM_ReportDicItem> RM_ReportDicItem { get; set; }
         public virtual DbSet<RM_HouseReport> RM_HouseReport { get; set; }
+        public virtual DbSet<RM_AreaReport> RM_AreaReport { get; set; }
     }
 }

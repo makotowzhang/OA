@@ -12,11 +12,11 @@ using Common;
 
 namespace Business.RMBusiness
 {
-    public class HouseReportBusiness
+    public class AreaReportBusiness
     {
-        HouseReportData data = new HouseReportData();
+        AreaReportData data = new AreaReportData();
 
-        public HouseReportModel GetModel(Guid? id)
+        public AreaReportModel GetModel(Guid? id)
         {
             if (!id.HasValue)
             {
@@ -26,7 +26,7 @@ namespace Business.RMBusiness
             {
                 using (DataProvider dp = new DataProvider())
                 { 
-                    HouseReportModel model = Mapper.Map<HouseReportModel>(data.GetEntity(dp,id));
+                    AreaReportModel model = Mapper.Map<AreaReportModel>(data.GetEntity(dp,id));
                     model.ReportStatusString = model.ReportStatus.ToString();
                     var dicValue = dp.RM_ReportDicItem.Where(m => m.ReportId == model.Id).ToList();
                     model.ValuationObjective = dicValue.Where(m => m.DicGroupCode == DicGroupCode.ValuationObjective.ToString()).Select(m => m.DicItemId).ToList();
@@ -44,26 +44,26 @@ namespace Business.RMBusiness
             }
         }
 
-        public HouseReportModel GetOrCreateModel(Guid createUserId)
+        public AreaReportModel GetOrCreateModel(Guid createUserId)
         {
             Guid? modelId = null;
             using (DataProvider dp = new DataProvider())
             {
                 string reportStatus = ReportStatus.WaitSubmit.ToString();
-                if (dp.RM_HouseReport.Count(m => m.CreateUser == createUserId && !m.IsDel && m.ReportStatus == reportStatus) > 0)
+                if (dp.RM_AreaReport.Count(m => m.CreateUser == createUserId && !m.IsDel && m.ReportStatus == reportStatus) > 0)
                 {
-                    modelId = dp.RM_HouseReport.Where(m => m.CreateUser == createUserId && !m.IsDel && m.ReportStatus == reportStatus).Select(m => m.Id).FirstOrDefault();
+                    modelId = dp.RM_AreaReport.Where(m => m.CreateUser == createUserId && !m.IsDel && m.ReportStatus == reportStatus).Select(m => m.Id).FirstOrDefault();
                 }
                 else
                 {
-                    HouseReportModel model = new HouseReportModel()
+                    AreaReportModel model = new AreaReportModel()
                     {
                         Id = Guid.NewGuid(),
                         IsDel = false,
                         CreateUser = createUserId,
                         CreateTime = DateTime.Now
                     };
-                    dp.RM_HouseReport.Add(Mapper.Map<RM_HouseReport>(model));
+                    dp.RM_AreaReport.Add(Mapper.Map<RM_AreaReport>(model));
                     dp.SaveChanges();
                     return model;
                 }
@@ -71,7 +71,7 @@ namespace Business.RMBusiness
             return GetModel(modelId);
         }
 
-        public bool SaveReport(HouseReportModel model,bool isSubmit=false)
+        public bool SaveReport(AreaReportModel model,bool isSubmit=false)
         {
             using (DataProvider dp = new DataProvider())
             {
@@ -82,10 +82,15 @@ namespace Business.RMBusiness
                 entity.ReportUser = model.ReportUser;
                 entity.Obligee = model.Obligee;
                 entity.LocationAddress = model.LocationAddress;
-                entity.HouseNumber = model.HouseNumber;
-                entity.BuildArea = model.BuildArea;
-                entity.LandNumber = model.LandNumber;
-                entity.LandArea = model.LandArea;
+                entity.AreaNumber = model.AreaNumber;
+                entity.AreaRegLand = model.AreaRegLand;
+                entity.AreaValuationLand = model.AreaValuationLand;
+                entity.AreaEndTime = model.AreaEndTime;
+                entity.LiftUseYear = model.LiftUseYear;
+                entity.AreaPurpose = model.AreaPurpose;
+                entity.SetFloorAreaRatio = model.SetFloorAreaRatio;
+                entity.SetLevelDev = model.SetLevelDev;
+                entity.ActualDevelopmentLevel = model.ActualDevelopmentLevel;
                 entity.ValuationPrice = model.ValuationPrice;
                 entity.ValuationValue = model.ValuationValue;
                 entity.ValuationPurpose = model.ValuationPurpose;
@@ -180,7 +185,7 @@ namespace Business.RMBusiness
             }
         }
 
-        public List<HouseReportModel> GetReportList(HouseReportFilter filter, out int total, bool isPage = true)
+        public List<AreaReportModel> GetReportList(AreaReportFilter filter, out int total, bool isPage = true)
         {
             using (DataProvider dp = new DataProvider())
             {
@@ -189,7 +194,7 @@ namespace Business.RMBusiness
             }
         }
 
-        public bool Audit(HouseReportModel model)
+        public bool Audit(AreaReportModel model)
         {
             if (model == null || !model.Id.HasValue)
             {

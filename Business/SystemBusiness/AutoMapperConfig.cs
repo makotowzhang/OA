@@ -62,6 +62,9 @@ namespace Business.SystemBusiness
 
                 m.CreateMap<RM_HouseReport, HouseReportModel>();
                 m.CreateMap<HouseReportModel, RM_HouseReport>();
+
+                m.CreateMap<RM_AreaReport, AreaReportModel>();
+                m.CreateMap<AreaReportModel, RM_AreaReport>();
             });
         }
     }

@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>房地产评估报告审核</title>
+    <title>土地评估报告审核</title>
     @Html.Partial("~/Views/Shared/_Head.cshtml")
     @Html.Partial("~/Views/Shared/SingleFileUploader.cshtml")
     <style>
@@ -184,12 +184,12 @@
                     <el-tabs v-model="TabName">
 
                         <el-tab-pane name="first" label="报告信息">
-                            <el-form-item label="报告类型" prop="ReportType" >
+                            <el-form-item label="报告类型" prop="ReportType">
                                 <el-radio v-model="AddFormData.ReportType" :disabled="AddFormData.ReportType!='Formal'" readonly label="Formal" border>正式</el-radio>
                                 <el-radio v-model="AddFormData.ReportType" :disabled="AddFormData.ReportType!='PreAssessment'" label="PreAssessment" border>预评</el-radio>
                                 <el-radio v-model="AddFormData.ReportType" :disabled="AddFormData.ReportType!='Consultation'" readonly label="Consultation" border>咨询</el-radio>
                             </el-form-item>
-                            <el-form-item label="报告编号" prop="ReportCode" >
+                            <el-form-item label="报告编号" prop="ReportCode">
                                 <el-input readonly v-model="AddFormData.ReportCode" placeholder="请输入报告编号" @@blur="ReportCodeBlur"></el-input>
                             </el-form-item>
                             <el-form-item label="项目名称" prop="ReportName">
@@ -209,25 +209,49 @@
                             <el-form-item label="坐落地址" prop="LocationAddress">
                                 <el-input readonly v-model="AddFormData.LocationAddress" placeholder="请输入坐落地址"></el-input>
                             </el-form-item>
-                            <el-form-item label="房产证号" prop="HouseNumber">
-                                <el-input readonly v-model="AddFormData.HouseNumber" placeholder="请输入房产证号"></el-input>
+                            <el-form-item label="土地证号" prop="AreaNumber">
+                                <el-input v-model="AddFormData.AreaNumber" readonly placeholder="请输入土地证号"></el-input>
                             </el-form-item>
-                            <el-form-item label="建筑面积" prop="BuildArea">
-                                <el-input readonly v-model="AddFormData.BuildArea" placeholder="请输入建筑面积">
+                            <el-form-item label="土地登记面积" prop="AreaRegLand">
+                                <el-input v-model="AddFormData.AreaRegLand" readonly placeholder="请输入土地登记面积">
                                     <template slot="append">
                                         m²
                                     </template>
                                 </el-input>
                             </el-form-item>
-                            <el-form-item label="土地证号" prop="LandNumber">
-                                <el-input readonly v-model="AddFormData.LandNumber" placeholder="请输入土地证号"></el-input>
-                            </el-form-item>
-                            <el-form-item label="土地面积" prop="LandArea">
-                                <el-input readonly v-model="AddFormData.LandArea" placeholder="请输入土地面积">
+                            <el-form-item label="土地评估面积" prop="AreaValuationLand">
+                                <el-input v-model="AddFormData.AreaValuationLand" readonly placeholder="请输入土地评估面积">
                                     <template slot="append">
                                         m²
                                     </template>
                                 </el-input>
+                            </el-form-item>
+                            <el-form-item label="土地终止日期" prop="AreaEndTime">
+                                <el-date-picker v-model="AddFormData.AreaEndTime"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true"
+                                                readonly>
+                                </el-date-picker>
+                            </el-form-item>
+                            <el-form-item label="剩余使用年限" prop="LiftUseYear">
+                                <el-input v-model="AddFormData.LiftUseYear" readonly placeholder="请输入剩余使用年限">
+                                    <template slot="append">
+                                        年
+                                    </template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="土地用途" prop="AreaPurpose">
+                                <el-input v-model="AddFormData.AreaPurpose" readonly placeholder="请输入土地用途"></el-input>
+                            </el-form-item>
+                            <el-form-item label="设定容积率" prop="SetFloorAreaRatio">
+                                <el-input v-model="AddFormData.SetFloorAreaRatio" readonly placeholder="请输入设定容积率"></el-input>
+                            </el-form-item>
+                            <el-form-item label="设定开发程度" prop="SetLevelDev">
+                                <el-input v-model="AddFormData.SetLevelDev" readonly placeholder="请输入设定开发程度"></el-input>
+                            </el-form-item>
+                            <el-form-item label="实际开发程度" prop="ActualDevelopmentLevel">
+                                <el-input v-model="AddFormData.ActualDevelopmentLevel" readonly placeholder="请输入实际开发程度"></el-input>
                             </el-form-item>
                             <el-form-item label="评估单价" prop="ValuationPrice">
                                 <el-input readonly v-model="AddFormData.ValuationPrice" placeholder="请输入评估单价">
@@ -243,12 +267,12 @@
                                     </template>
                                 </el-input>
                             </el-form-item>
-                            <el-form-item label="估价对象用途" prop="ValuationPurpose">
+                            @*<el-form-item label="估价对象用途" prop="ValuationPurpose">
                                 <el-input readonly v-model="AddFormData.ValuationPurpose" placeholder="请输入估价对象用途"></el-input>
                             </el-form-item>
                             <el-form-item label="估价对象结构" prop="ValuationStruct">
                                 <el-input readonly v-model="AddFormData.ValuationStruct" placeholder="请输入估价对象结构"></el-input>
-                            </el-form-item>
+                            </el-form-item>*@
                             <el-form-item label="估价目的" prop="ValuationObjective">
                                 <el-select v-model="AddFormData.ValuationObjective"
                                            placeholder="请选择估价目的"
@@ -411,14 +435,19 @@
                 ReportUser: "",
                 Obligee: "",
                 LocationAddress: "",
-                HouseNumber: "",
-                BuildArea: "",
-                LandNumber: "",
-                LandArea: "",
+                AreaNumber: "",
+                AreaRegLand: "",
+                AreaValuationLand: "",
+                AreaEndTime: "",
+                LiftUseYear: "",
+                AreaPurpose: "",
+                SetFloorAreaRatio: "",
+                SetLevelDev: "",
+                ActualDevelopmentLevel: "",
                 ValuationPrice: "",
                 ValuationValue: "",
-                ValuationPurpose: "",
-                ValuationStruct: "",
+                //ValuationPurpose: "",
+                //ValuationStruct: "",
                 ValueTime: "",
                 ReportTime: "",
                 ReportDesc: "",

@@ -10,7 +10,7 @@ using Newtonsoft.Json.Converters;
 
 namespace Model.RMModel
 {
-    public class HouseReportModel:CommonModel
+    public class AreaReportModel : CommonModel
     {
         public Guid? Id { get; set; }
         public string ReportCode { get; set; }
@@ -18,11 +18,20 @@ namespace Model.RMModel
         public string ReportEntruster { get; set; } 
         public string ReportUser { get; set; } 
         public string Obligee { get; set; } 
-        public string LocationAddress { get; set; } 
-        public string HouseNumber { get; set; }
-        public decimal? BuildArea { get; set; }
-        public string LandNumber { get; set; }
-        public decimal? LandArea { get; set; }
+        public string LocationAddress { get; set; }
+
+
+        public string AreaNumber { get; set; }
+        public decimal? AreaRegLand { get; set; }
+        public decimal? AreaValuationLand { get; set; }
+        public DateTime? AreaEndTime { get; set; }
+        public decimal? LiftUseYear { get; set; }
+        public string AreaPurpose { get; set; }
+        public string SetFloorAreaRatio { get; set; }
+        public string SetLevelDev { get; set; }
+        public string ActualDevelopmentLevel { get; set; }
+
+
         public decimal? ValuationPrice { get; set; }
         public decimal? ValuationValue { get; set; }
         public string ValuationPurpose { get; set; }
@@ -75,7 +84,7 @@ namespace Model.RMModel
         public string CreateDepName { get; set; }
     }
 
-    public class HouseReportFilter : PageModel
+    public class AreaReportFilter : PageModel
     {
         public List<string> ReportType { get; set; }
 

@@ -27,7 +27,8 @@
         <div v-else style="height:40px;line-height:40px;">
             <span class="SingleFileDownloader"
                   title="点击下载"
-                  @@click="downloadFile"><i class="el-icon-document"></i>{{filename}}</span>
+                  @@click="downloadFile" v-if="hasFile"><i class="el-icon-document"></i>{{filename}}</span>
+            <span v-else>无文件</span>
         </div>
     </div>
 </script>
@@ -148,6 +149,12 @@
             },
             canClear: function () {
                 return this.isUploading || this.filename == '';
+            },
+            hasFile: function () {
+                if (this.filepath == "" || this.filepath == null) {
+                    return false;
+                }
+                return true;
             }
         },
         template: '#SingleFileUploader'

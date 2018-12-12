@@ -160,6 +160,7 @@
     <Compile Include="Controllers\AuthorizeController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DataLibraryController.cs" />
+    <Compile Include="Controllers\AreaReportController.cs" />
     <Compile Include="Controllers\HouseReportController.cs" />
     <Compile Include="Controllers\MaterielApplyController.cs" />
     <Compile Include="Controllers\LeaseController.cs" />
@@ -672,6 +673,8 @@
     <Content Include="Views\Shared\SingleFileUploader.cshtml" />
     <Content Include="Views\HouseReport\ReportCreate.cshtml" />
     <Content Include="Views\HouseReport\ReportAudit.cshtml" />
+    <Content Include="Views\AreaReport\ReportAudit.cshtml" />
+    <Content Include="Views\AreaReport\ReportCreate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">

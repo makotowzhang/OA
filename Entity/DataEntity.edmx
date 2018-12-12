@@ -164,6 +164,58 @@
           <Property Name="UpdateUser" Type="uniqueidentifier" />
           <Property Name="UpdateTime" Type="datetime" />
         </EntityType>
+        <EntityType Name="RM_AreaReport">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ReportCode" Type="varchar" MaxLength="50" />
+          <Property Name="ReportName" Type="varchar" MaxLength="50" />
+          <Property Name="ReportEntruster" Type="varchar" MaxLength="50" />
+          <Property Name="ReportUser" Type="varchar" MaxLength="50" />
+          <Property Name="Obligee" Type="varchar" MaxLength="50" />
+          <Property Name="LocationAddress" Type="varchar" MaxLength="200" />
+          <Property Name="AreaNumber" Type="varchar" MaxLength="100" />
+          <Property Name="AreaRegLand" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AreaValuationLand" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AreaEndTime" Type="datetime" />
+          <Property Name="LiftUseYear" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="AreaPurpose" Type="varchar" MaxLength="50" />
+          <Property Name="SetFloorAreaRatio" Type="varchar" MaxLength="50" />
+          <Property Name="SetLevelDev" Type="varchar" MaxLength="50" />
+          <Property Name="ActualDevelopmentLevel" Type="varchar" MaxLength="50" />
+          <Property Name="ValuationPrice" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="ValuationValue" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="ValuationPurpose" Type="varchar" MaxLength="50" />
+          <Property Name="ValuationStruct" Type="varchar" MaxLength="50" />
+          <Property Name="ValueTime" Type="datetime" />
+          <Property Name="ReportTime" Type="datetime" />
+          <Property Name="ReportDesc" Type="varchar" MaxLength="500" />
+          <Property Name="WorkName" Type="varchar" MaxLength="50" />
+          <Property Name="WorkDesc" Type="varchar" MaxLength="500" />
+          <Property Name="EnclosureName" Type="varchar" MaxLength="50" />
+          <Property Name="EnclusurePath" Type="varchar" MaxLength="200" />
+          <Property Name="Operator" Type="varchar" MaxLength="50" />
+          <Property Name="Salesman" Type="varchar" MaxLength="50" />
+          <Property Name="Contacts" Type="varchar" MaxLength="50" />
+          <Property Name="ContactsPhone" Type="varchar" MaxLength="50" />
+          <Property Name="ChargeAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ChargeStatus" Type="bit" Nullable="false" />
+          <Property Name="IsInvoice" Type="bit" Nullable="false" />
+          <Property Name="ReportType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ReportStatus" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AuditUser" Type="uniqueidentifier" />
+          <Property Name="AuditReason" Type="varchar" MaxLength="400" />
+          <Property Name="AuditFileName" Type="varchar" MaxLength="50" />
+          <Property Name="AuditFilePath" Type="varchar" MaxLength="200" />
+          <Property Name="AuditTime" Type="datetime" />
+          <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="SubmitTime" Type="datetime" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+          <Property Name="UpdateTime" Type="datetime" />
+        </EntityType>
         <EntityType Name="RM_HouseReport">
           <Key>
             <PropertyRef Name="Id" />
@@ -201,6 +253,8 @@
           <Property Name="ReportStatus" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="AuditUser" Type="uniqueidentifier" />
           <Property Name="AuditReason" Type="varchar" MaxLength="400" />
+          <Property Name="AuditFileName" Type="varchar" MaxLength="50" />
+          <Property Name="AuditFilePath" Type="varchar" MaxLength="200" />
           <Property Name="AuditTime" Type="datetime" />
           <Property Name="IsDel" Type="bit" Nullable="false" />
           <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
@@ -365,6 +419,7 @@
           <EntitySet Name="PM_MaterielApply" EntityType="Self.PM_MaterielApply" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_MoneyApply" EntityType="Self.PM_MoneyApply" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_Notice" EntityType="Self.PM_Notice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RM_AreaReport" EntityType="Self.RM_AreaReport" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RM_HouseReport" EntityType="Self.RM_HouseReport" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RM_ReportAudit" EntityType="Self.RM_ReportAudit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RM_ReportDicItem" EntityType="Self.RM_ReportDicItem" Schema="dbo" store:Type="Tables" />
@@ -405,6 +460,7 @@
           <EntitySet Name="RM_ReportAudit" EntityType="Entity.RM_ReportAudit" />
           <EntitySet Name="RM_ReportDicItem" EntityType="Entity.RM_ReportDicItem" />
           <EntitySet Name="RM_HouseReport" EntityType="Entity.RM_HouseReport" />
+          <EntitySet Name="RM_AreaReport" EntityType="Entity.RM_AreaReport" />
         </EntityContainer>
         <EntityType Name="System_User">
           <Key>
@@ -754,6 +810,60 @@
           <Property Name="SubmitTime" Type="DateTime" Precision="3" />
           <Property Name="UpdateUser" Type="Guid" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="AuditFileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AuditFilePath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="RM_AreaReport">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="ReportCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportEntruster" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportUser" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Obligee" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LocationAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="AreaNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="AreaRegLand" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="AreaValuationLand" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="AreaEndTime" Type="DateTime" Precision="3" />
+          <Property Name="LiftUseYear" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="AreaPurpose" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SetFloorAreaRatio" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SetLevelDev" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ActualDevelopmentLevel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ValuationPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ValuationValue" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ValuationPurpose" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ValuationStruct" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ValueTime" Type="DateTime" Precision="3" />
+          <Property Name="ReportTime" Type="DateTime" Precision="3" />
+          <Property Name="ReportDesc" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="WorkName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="WorkDesc" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="EnclosureName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EnclusurePath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Operator" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Salesman" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Contacts" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ContactsPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ChargeAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ChargeStatus" Type="Boolean" Nullable="false" />
+          <Property Name="IsInvoice" Type="Boolean" Nullable="false" />
+          <Property Name="ReportType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportStatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AuditUser" Type="Guid" />
+          <Property Name="AuditReason" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="AuditFileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AuditFilePath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="AuditTime" Type="DateTime" Precision="3" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SubmitTime" Type="DateTime" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1089,6 +1199,8 @@
           <EntitySetMapping Name="RM_HouseReport">
             <EntityTypeMapping TypeName="Entity.RM_HouseReport">
               <MappingFragment StoreEntitySet="RM_HouseReport">
+                <ScalarProperty Name="AuditFilePath" ColumnName="AuditFilePath" />
+                <ScalarProperty Name="AuditFileName" ColumnName="AuditFileName" />
                 <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
                 <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
                 <ScalarProperty Name="SubmitTime" ColumnName="SubmitTime" />
@@ -1122,6 +1234,59 @@
                 <ScalarProperty Name="LandNumber" ColumnName="LandNumber" />
                 <ScalarProperty Name="BuildArea" ColumnName="BuildArea" />
                 <ScalarProperty Name="HouseNumber" ColumnName="HouseNumber" />
+                <ScalarProperty Name="LocationAddress" ColumnName="LocationAddress" />
+                <ScalarProperty Name="Obligee" ColumnName="Obligee" />
+                <ScalarProperty Name="ReportUser" ColumnName="ReportUser" />
+                <ScalarProperty Name="ReportEntruster" ColumnName="ReportEntruster" />
+                <ScalarProperty Name="ReportName" ColumnName="ReportName" />
+                <ScalarProperty Name="ReportCode" ColumnName="ReportCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RM_AreaReport">
+            <EntityTypeMapping TypeName="Entity.RM_AreaReport">
+              <MappingFragment StoreEntitySet="RM_AreaReport">
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="SubmitTime" ColumnName="SubmitTime" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="AuditTime" ColumnName="AuditTime" />
+                <ScalarProperty Name="AuditFilePath" ColumnName="AuditFilePath" />
+                <ScalarProperty Name="AuditFileName" ColumnName="AuditFileName" />
+                <ScalarProperty Name="AuditReason" ColumnName="AuditReason" />
+                <ScalarProperty Name="AuditUser" ColumnName="AuditUser" />
+                <ScalarProperty Name="ReportStatus" ColumnName="ReportStatus" />
+                <ScalarProperty Name="ReportType" ColumnName="ReportType" />
+                <ScalarProperty Name="IsInvoice" ColumnName="IsInvoice" />
+                <ScalarProperty Name="ChargeStatus" ColumnName="ChargeStatus" />
+                <ScalarProperty Name="ChargeAmount" ColumnName="ChargeAmount" />
+                <ScalarProperty Name="ContactsPhone" ColumnName="ContactsPhone" />
+                <ScalarProperty Name="Contacts" ColumnName="Contacts" />
+                <ScalarProperty Name="Salesman" ColumnName="Salesman" />
+                <ScalarProperty Name="Operator" ColumnName="Operator" />
+                <ScalarProperty Name="EnclusurePath" ColumnName="EnclusurePath" />
+                <ScalarProperty Name="EnclosureName" ColumnName="EnclosureName" />
+                <ScalarProperty Name="WorkDesc" ColumnName="WorkDesc" />
+                <ScalarProperty Name="WorkName" ColumnName="WorkName" />
+                <ScalarProperty Name="ReportDesc" ColumnName="ReportDesc" />
+                <ScalarProperty Name="ReportTime" ColumnName="ReportTime" />
+                <ScalarProperty Name="ValueTime" ColumnName="ValueTime" />
+                <ScalarProperty Name="ValuationStruct" ColumnName="ValuationStruct" />
+                <ScalarProperty Name="ValuationPurpose" ColumnName="ValuationPurpose" />
+                <ScalarProperty Name="ValuationValue" ColumnName="ValuationValue" />
+                <ScalarProperty Name="ValuationPrice" ColumnName="ValuationPrice" />
+                <ScalarProperty Name="ActualDevelopmentLevel" ColumnName="ActualDevelopmentLevel" />
+                <ScalarProperty Name="SetLevelDev" ColumnName="SetLevelDev" />
+                <ScalarProperty Name="SetFloorAreaRatio" ColumnName="SetFloorAreaRatio" />
+                <ScalarProperty Name="AreaPurpose" ColumnName="AreaPurpose" />
+                <ScalarProperty Name="LiftUseYear" ColumnName="LiftUseYear" />
+                <ScalarProperty Name="AreaEndTime" ColumnName="AreaEndTime" />
+                <ScalarProperty Name="AreaValuationLand" ColumnName="AreaValuationLand" />
+                <ScalarProperty Name="AreaRegLand" ColumnName="AreaRegLand" />
+                <ScalarProperty Name="AreaNumber" ColumnName="AreaNumber" />
                 <ScalarProperty Name="LocationAddress" ColumnName="LocationAddress" />
                 <ScalarProperty Name="Obligee" ColumnName="Obligee" />
                 <ScalarProperty Name="ReportUser" ColumnName="ReportUser" />

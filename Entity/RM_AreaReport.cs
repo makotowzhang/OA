@@ -12,7 +12,7 @@ namespace Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class RM_HouseReport
+    public partial class RM_AreaReport
     {
         public System.Guid Id { get; set; }
         public string ReportCode { get; set; }
@@ -21,10 +21,15 @@ namespace Entity
         public string ReportUser { get; set; }
         public string Obligee { get; set; }
         public string LocationAddress { get; set; }
-        public string HouseNumber { get; set; }
-        public Nullable<decimal> BuildArea { get; set; }
-        public string LandNumber { get; set; }
-        public Nullable<decimal> LandArea { get; set; }
+        public string AreaNumber { get; set; }
+        public Nullable<decimal> AreaRegLand { get; set; }
+        public Nullable<decimal> AreaValuationLand { get; set; }
+        public Nullable<System.DateTime> AreaEndTime { get; set; }
+        public Nullable<decimal> LiftUseYear { get; set; }
+        public string AreaPurpose { get; set; }
+        public string SetFloorAreaRatio { get; set; }
+        public string SetLevelDev { get; set; }
+        public string ActualDevelopmentLevel { get; set; }
         public Nullable<decimal> ValuationPrice { get; set; }
         public Nullable<decimal> ValuationValue { get; set; }
         public string ValuationPurpose { get; set; }
@@ -47,6 +52,8 @@ namespace Entity
         public string ReportStatus { get; set; }
         public Nullable<System.Guid> AuditUser { get; set; }
         public string AuditReason { get; set; }
+        public string AuditFileName { get; set; }
+        public string AuditFilePath { get; set; }
         public Nullable<System.DateTime> AuditTime { get; set; }
         public bool IsDel { get; set; }
         public System.Guid CreateUser { get; set; }
@@ -54,7 +61,5 @@ namespace Entity
         public Nullable<System.DateTime> SubmitTime { get; set; }
         public Nullable<System.Guid> UpdateUser { get; set; }
         public Nullable<System.DateTime> UpdateTime { get; set; }
-        public string AuditFileName { get; set; }
-        public string AuditFilePath { get; set; }
     }
 }
