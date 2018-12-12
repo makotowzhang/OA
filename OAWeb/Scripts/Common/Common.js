@@ -231,17 +231,60 @@ function AddTabPage(title, url, iconfont) {
     if (iconfont == null) {
         iconfont = "icon iconfont icon-eye";
     }
-    var tabName = Math.random().toString();
-    top.$app.editableTabs.push({
-        title: title,
-        name: tabName,
-        content: url,
-        closable: true,
-        url: url,
-        IconClass: iconfont
-    });
-    top.$app.editableTabsValue = tabName;
+    var item = GetMenuByUrl(top.$app.MenuList, url);
+    if (item == null) {
+        var tabName = Math.random().toString();
+        top.$app.editableTabs.push({
+            title: title,
+            name: tabName,
+            content: url,
+            closable: true,
+            url: url,
+            IconClass: iconfont
+        });
+        top.$app.editableTabsValue = tabName;
+    }
+    else {
+        let temp;
+        top.$app.editableTabs.forEach(function (tab, index) {
+            if (item.Id == tab.name) {
+                temp = tab;
+            }
+        })
+        if (temp != null) {
+            $app.editableTabsValue = temp.name;
+            return;
+        }
+
+        top.$app.editableTabs.push({
+            title: item.MenuName,
+            name: item.Id,
+            IconClass: item.IconClass,
+            content: item.MenuUrl + "?MenuId=" + item.Id,
+            url: item.MenuUrl
+        });
+        $app.editableTabsValue = item.Id;
+    }
 }
+
+//通过URL获取菜单
+function GetMenuByUrl(menuList,url) {
+    var menu;
+    for (var i = 0; i < menuList.length; i++) {
+        var m = menuList[i];
+        if (menu != null) {
+            break;
+        }
+        if (m.MenuUrl.toUpperCase() == url.toUpperCase()) {
+            menu = m;
+        }
+        if (menu == null && m.Children != null && m.Children.length > 0) {
+            menu = getMenu(m.Children, navId);
+        }
+    }
+    return menu;
+}
+
 
 function checkNumber(rule, value, callback) {
     if (value == null || value == "") {
