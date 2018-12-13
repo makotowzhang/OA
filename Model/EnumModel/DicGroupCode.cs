@@ -41,6 +41,21 @@ namespace Model.EnumModel
         /// <summary>
         /// 收费状态
         /// </summary>
-        ChargeStatus=7
+        ChargeStatus=7,
+
+        /// <summary>
+        /// 评估对象
+        /// </summary>
+        AssessmentObject=8,
+
+        /// <summary>
+        /// 资产性质
+        /// </summary>
+        AssetsNature=9,
+
+        /// <summary>
+        /// 价值类型
+        /// </summary>
+        ValueType=10
     }
 }

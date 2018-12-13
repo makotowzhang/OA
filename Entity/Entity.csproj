@@ -99,6 +99,9 @@
     <Compile Include="RM_AreaReport.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
+    <Compile Include="RM_AssetsReport.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="RM_HouseReport.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
