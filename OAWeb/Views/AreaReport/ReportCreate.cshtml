@@ -179,10 +179,10 @@
                 </el-pagination>
             </div>
             <el-dialog :close-on-click-modal="false" :title="modifyTitle"
-                       :visible.sync="Dialog.addDialog">
+                       :visible.sync="Dialog.addDialog" top="50px">
                 <el-form :model="AddFormData" :rules="AddFormRule" label-width="120px" ref="AddForm" @@submit.native.prevent>
                     <el-tabs v-model="TabName">
-                        <el-tab-pane name="first" label="报告信息">
+                        <el-tab-pane name="first" label="报告信息" :style="{height:panelHeight+'px',overflow:'auto',paddingRight:'10px'}">
                             <el-form-item label="报告类型" prop="ReportType">
                                 <el-radio v-model="AddFormData.ReportType" label="Formal" :disabled="AddFormData.ReportType!='Formal'&&!Dialog.IsAdd" border>正式</el-radio>
                                 <el-radio v-model="AddFormData.ReportType" label="PreAssessment" :disabled="AddFormData.ReportType!='PreAssessment'&&!Dialog.IsAdd" border>预评</el-radio>
@@ -267,11 +267,11 @@
                                 </el-input>
                             </el-form-item>
                             @*<el-form-item label="估价对象用途" prop="ValuationPurpose">
-                                <el-input v-model="AddFormData.ValuationPurpose" :readonly="Dialog.IsDetail" placeholder="请输入估价对象用途"></el-input>
-                            </el-form-item>
-                            <el-form-item label="估价对象结构" prop="ValuationStruct">
-                                <el-input v-model="AddFormData.ValuationStruct" :readonly="Dialog.IsDetail" placeholder="请输入估价对象结构"></el-input>
-                            </el-form-item>*@
+                <el-input v-model="AddFormData.ValuationPurpose" :readonly="Dialog.IsDetail" placeholder="请输入估价对象用途"></el-input>
+            </el-form-item>
+            <el-form-item label="估价对象结构" prop="ValuationStruct">
+                <el-input v-model="AddFormData.ValuationStruct" :readonly="Dialog.IsDetail" placeholder="请输入估价对象结构"></el-input>
+            </el-form-item>*@
                             <el-form-item label="估价目的" prop="ValuationObjective">
                                 <el-select v-model="AddFormData.ValuationObjective"
                                            placeholder="请选择估价目的"
@@ -334,7 +334,7 @@
                                 <el-input v-model="AddFormData.ReportDesc" type="textarea" :readonly="Dialog.IsDetail" placeholder="请输入报告描述"></el-input>
                             </el-form-item>
                         </el-tab-pane>
-                        <el-tab-pane label="工作内容">
+                        <el-tab-pane label="工作内容" :style="{height:panelHeight+'px',overflow:'auto',paddingRight:'10px'}">
                             <el-form-item label="工作名称" prop="WorkName">
                                 <el-input v-model="AddFormData.WorkName" :readonly="Dialog.IsDetail" placeholder="请输入工作名称"></el-input>
                             </el-form-item>
@@ -348,7 +348,7 @@
                                                       placeholder="请选择附件"></single-file-uploader>
                             </el-form-item>
                         </el-tab-pane>
-                        <el-tab-pane label="业务信息">
+                        <el-tab-pane label="业务信息" :style="{height:panelHeight+'px',overflow:'auto',paddingRight:'10px'}">
                             <el-form-item label="经办人" prop="Operator">
                                 <el-input v-model="AddFormData.Operator" :readonly="Dialog.IsDetail" placeholder="请输入经办人"></el-input>
                             </el-form-item>
@@ -366,15 +366,15 @@
                                 <el-input v-model="AddFormData.ChargeAmount" :readonly="Dialog.IsDetail" placeholder="请输入收费金额"></el-input>
                             </el-form-item>
                             <el-form-item label="收费状态" prop="ChargeStatus">
-                                <el-radio v-model="AddFormData.ChargeStatus" :label="true"  :disabled="!AddFormData.ChargeStatus" border>已收费</el-radio>
+                                <el-radio v-model="AddFormData.ChargeStatus" :label="true" :disabled="!AddFormData.ChargeStatus" border>已收费</el-radio>
                                 <el-radio v-model="AddFormData.ChargeStatus" :label="false" :disabled="AddFormData.ChargeStatus" border>未收费</el-radio>
                             </el-form-item>
                             <el-form-item label="是否开票" prop="IsInvoice">
-                                <el-radio v-model="AddFormData.IsInvoice" :label="true"  :disabled="!AddFormData.IsInvoice"  border>是</el-radio>
+                                <el-radio v-model="AddFormData.IsInvoice" :label="true" :disabled="!AddFormData.IsInvoice" border>是</el-radio>
                                 <el-radio v-model="AddFormData.IsInvoice" :label="false" :disabled="AddFormData.IsInvoice" border>否</el-radio>
                             </el-form-item>
                         </el-tab-pane>
-                        <el-tab-pane label="审核信息">
+                        <el-tab-pane label="审核信息" :style="{height:panelHeight+'px',overflow:'auto',paddingRight:'10px'}">
                             <el-form-item label="审核部门" prop="AuditDep">
                                 <el-select v-model="AddFormData.AuditDep"
                                            placeholder="请选择审核部门"
@@ -404,7 +404,7 @@
                                 </el-select>
                             </el-form-item>
                         </el-tab-pane>
-                        <el-tab-pane label="审核结果" v-if="Dialog.IsShowEditResult">
+                        <el-tab-pane label="审核结果" v-if="Dialog.IsShowEditResult" :style="{height:panelHeight+'px',overflow:'auto',paddingRight:'10px'}">
                             <el-form-item label="审核人" prop="AuditUserName">
                                 <el-input readonly v-model="AddFormData.AuditUserName" placeholder=""></el-input>
                             </el-form-item>
@@ -423,6 +423,11 @@
                             <el-form-item label="审核理由" prop="AuditReason">
                                 <el-input v-model="AddFormData.AuditReason" readonly type="textarea" placeholder=""></el-input>
                             </el-form-item>
+                        </el-tab-pane>
+                        <el-tab-pane label="二维码" :style="{height:panelHeight+'px',overflow:'auto'}">
+                            <div style="text-align:center;padding-top:20px;">
+                                <img :src="'/Base/GetReportQRCode?ReportId='+AddFormData.Id+'&ControllerName=AreaReport'" />
+                            </div>
                         </el-tab-pane>
                     </el-tabs>
                 </el-form>
@@ -659,7 +664,8 @@
                     Consultation: "咨询",
                 }
             },
-            TabName: "first"
+            TabName: "first",
+            panelHeight: 200
         },
         methods: {
             onQuery: function () {
@@ -691,6 +697,7 @@
                 });
             },
             openDetailDialog: function () {
+                this.TabName = "first";
                 $vue.Loading.bodyLoading = true;
                 $vue.Dialog.IsAdd = false;
                 this.modifyTitle = "查看报告";
@@ -855,6 +862,7 @@
         $vue.tableHeight = $vue.$refs.App.getBoundingClientRect().height -
             $vue.$refs.QueryFormDiv.getBoundingClientRect().height -
             $vue.$refs.Pagination.getBoundingClientRect().height - 20;
+        $vue.panelHeight = $vue.$refs.App.getBoundingClientRect().height - 350;
     }
     getList();
 

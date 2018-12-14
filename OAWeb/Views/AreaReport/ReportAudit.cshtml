@@ -179,11 +179,11 @@
                 </el-pagination>
             </div>
             <el-dialog :close-on-click-modal="false" :title="modifyTitle"
-                       :visible.sync="Dialog.addDialog">
+                       :visible.sync="Dialog.addDialog" top="50px">
                 <el-form :model="AddFormData" :rules="AddFormRule" label-width="120px" ref="AddForm" @@submit.native.prevent>
                     <el-tabs v-model="TabName">
 
-                        <el-tab-pane name="first" label="报告信息">
+                        <el-tab-pane name="first" label="报告信息" :style="{height:panelHeight+'px',overflow:'auto',paddingRight:'10px'}">
                             <el-form-item label="报告类型" prop="ReportType">
                                 <el-radio v-model="AddFormData.ReportType" :disabled="AddFormData.ReportType!='Formal'" readonly label="Formal" border>正式</el-radio>
                                 <el-radio v-model="AddFormData.ReportType" :disabled="AddFormData.ReportType!='PreAssessment'" label="PreAssessment" border>预评</el-radio>
@@ -268,11 +268,11 @@
                                 </el-input>
                             </el-form-item>
                             @*<el-form-item label="估价对象用途" prop="ValuationPurpose">
-                                <el-input readonly v-model="AddFormData.ValuationPurpose" placeholder="请输入估价对象用途"></el-input>
-                            </el-form-item>
-                            <el-form-item label="估价对象结构" prop="ValuationStruct">
-                                <el-input readonly v-model="AddFormData.ValuationStruct" placeholder="请输入估价对象结构"></el-input>
-                            </el-form-item>*@
+                <el-input readonly v-model="AddFormData.ValuationPurpose" placeholder="请输入估价对象用途"></el-input>
+            </el-form-item>
+            <el-form-item label="估价对象结构" prop="ValuationStruct">
+                <el-input readonly v-model="AddFormData.ValuationStruct" placeholder="请输入估价对象结构"></el-input>
+            </el-form-item>*@
                             <el-form-item label="估价目的" prop="ValuationObjective">
                                 <el-select v-model="AddFormData.ValuationObjective"
                                            placeholder="请选择估价目的"
@@ -332,7 +332,7 @@
                                 <el-input readonly v-model="AddFormData.ReportDesc" type="textarea" placeholder="请输入报告描述"></el-input>
                             </el-form-item>
                         </el-tab-pane>
-                        <el-tab-pane label="工作内容">
+                        <el-tab-pane label="工作内容" :style="{height:panelHeight+'px',overflow:'auto',paddingRight:'10px'}">
                             <el-form-item label="工作名称" prop="WorkName">
                                 <el-input readonly v-model="AddFormData.WorkName" placeholder="请输入工作名称"></el-input>
                             </el-form-item>
@@ -346,7 +346,7 @@
                                                       :isread="true"></single-file-uploader>
                             </el-form-item>
                         </el-tab-pane>
-                        <el-tab-pane label="业务信息">
+                        <el-tab-pane label="业务信息" :style="{height:panelHeight+'px',overflow:'auto',paddingRight:'10px'}">
                             <el-form-item label="经办人" prop="Operator">
                                 <el-input readonly v-model="AddFormData.Operator" placeholder="请输入经办人"></el-input>
                             </el-form-item>
@@ -372,7 +372,7 @@
                                 <el-radio v-model="AddFormData.IsInvoice" :disabled="AddFormData.IsInvoice" :label="false" border>否</el-radio>
                             </el-form-item>
                         </el-tab-pane>
-                        <el-tab-pane label="审核信息" v-if="Dialog.IsAudit">
+                        <el-tab-pane label="审核信息" v-if="Dialog.IsAudit" :style="{height:panelHeight+'px',overflow:'auto',paddingRight:'10px'}">
                             <el-form-item label="审核结果" prop="ReportStatus">
                                 <el-radio-group v-model="AddFormData.ReportStatus">
                                     <el-radio label="Passed" border>通过</el-radio>
@@ -388,7 +388,11 @@
                                 <el-input v-model="AddFormData.AuditReason" type="textarea" placeholder="请输入审核理由"></el-input>
                             </el-form-item>
                         </el-tab-pane>
-
+                        <el-tab-pane label="二维码" :style="{height:panelHeight+'px',overflow:'auto'}">
+                            <div style="text-align:center;padding-top:20px;">
+                                <img :src="'/Base/GetReportQRCode?ReportId='+AddFormData.Id+'&ControllerName=AreaReport'" />
+                            </div>
+                        </el-tab-pane>
                     </el-tabs>
                 </el-form>
 
@@ -522,7 +526,8 @@
                     Consultation: "咨询",
                 }
             },
-            TabName: "first"
+            TabName: "first",
+            panelHeight: 200
         },
         methods: {
             onQuery: function () {
@@ -538,6 +543,7 @@
             },
             openAddDialog: function () {
                 this.modifyTitle = "查看报告";
+                this.TabName = "first";
                 this.Dialog.IsAudit = false;
                 $vue.Loading.bodyLoading = true;
                 setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 500);
@@ -552,6 +558,7 @@
             },
             openAuditDialog: function () {
                 this.modifyTitle = "审核报告";
+                this.TabName = "first";
                 this.Dialog.IsAudit = true;
                 $vue.Loading.bodyLoading = true;
                 setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 500);
@@ -705,6 +712,7 @@
         $vue.tableHeight = $vue.$refs.App.getBoundingClientRect().height -
             $vue.$refs.QueryFormDiv.getBoundingClientRect().height -
             $vue.$refs.Pagination.getBoundingClientRect().height - 20;
+        $vue.panelHeight = $vue.$refs.App.getBoundingClientRect().height - 350;
     }
     getList();
 

@@ -8,6 +8,7 @@ using Business.SystemBusiness;
 using Business.PMBusiness;
 using Newtonsoft.Json;
 using System.IO;
+using Common;
 
 namespace OAWeb.Controllers
 {
@@ -98,6 +99,12 @@ namespace OAWeb.Controllers
             var user = CurrentUser;
             user.Password = null;
             return Json(user);
+        }
+
+        public ActionResult GetReportQRCode(Guid? ReportId,string ControllerName) {
+            ReportId = ReportId ?? Guid.Empty;
+            var url = Request.Url.ToString().Replace(Request.Url.PathAndQuery, "") + "/" + ControllerName + "/ReportMobileDetail?reportId=" + ReportId.Value;
+            return File(QRCodeHelper.GetQRCodeByteArray(url), "image/Jpeg");
         }
     }
 
