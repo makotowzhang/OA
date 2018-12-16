@@ -9,6 +9,8 @@ using Model.RMModel;
 using Model.EnumModel;
 using Entity;
 using Common;
+using Ionic.Zip;
+using System.IO;
 
 namespace Business.RMBusiness
 {
@@ -217,6 +219,50 @@ namespace Business.RMBusiness
                 catch
                 {
                     throw;
+                }
+            }
+        }
+
+        public byte[] DownloadReportFile(Guid reportId, string rootPath, out string fileName)
+        {
+            AreaReportModel hr;
+            using (DataProvider dp = new DataProvider())
+            {
+                hr = dp.RM_AreaReport.Where(m => m.Id == reportId).Select(m => new AreaReportModel()
+                {
+                    ReportName = m.ReportName,
+                    EnclosureName = m.EnclosureName,
+                    EnclusurePath = m.EnclusurePath,
+                    AuditFileName = m.AuditFileName,
+                    AuditFilePath = m.AuditFilePath
+                }).FirstOrDefault();
+            }
+            if (hr == null)
+            {
+                fileName = "";
+                return null;
+            }
+            fileName = hr.ReportName + ".zip";
+            using (ZipFile zips = new ZipFile(Encoding.UTF8))
+            {
+                if (File.Exists(rootPath.TrimEnd('\\') + "\\" + hr.EnclusurePath?.TrimStart('\\')))
+                {
+                    ZipEntry entry = zips.AddFile(rootPath.TrimEnd('\\') + "\\" + hr.EnclusurePath?.TrimStart('\\'));
+                    entry.FileName = $"（工作文件）{hr.EnclosureName}";
+                }
+                if (File.Exists(rootPath.TrimEnd('\\') + "\\" + hr.AuditFilePath?.TrimStart('\\')))
+                {
+                    ZipEntry entry = zips.AddFile(rootPath.TrimEnd('\\') + "\\" + hr.AuditFilePath?.TrimStart('\\'));
+                    entry.FileName = $"（审核文件）{hr.AuditFileName}";
+                }
+                using (MemoryStream stream = new MemoryStream())
+                {
+
+                    zips.Save(stream);
+                    byte[] vs = new byte[stream.Length];
+                    stream.Seek(0, SeekOrigin.Begin);
+                    stream.Read(vs, 0, vs.Length);
+                    return vs;
                 }
             }
         }

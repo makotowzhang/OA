@@ -166,6 +166,13 @@
                                  label="发起部门"
                                  width="100">
                 </el-table-column>
+                <el-table-column prop="ext"
+                                 label="报告文件"
+                                 width="100">
+                    <template slot-scope="scope">
+                        <el-button type="success" @@click="DownloadReportFile(scope.row.Id)" round>下载</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
             <div ref="Pagination">
                 <el-pagination @@size-change="handleSizeChange"
@@ -608,7 +615,10 @@
                 axios.post("SaveReport", $vue.AddFormData);
                 this.Dialog.addDialog = false;
             } ,
-            DateFormat: DateFormat
+            DateFormat: DateFormat,
+            DownloadReportFile: function (reportId) {
+                window.open("DownloadReportFile?reportId=" + reportId);
+            }
         }
 
     });

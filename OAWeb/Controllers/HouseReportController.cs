@@ -77,5 +77,20 @@ namespace OAWeb.Controllers
             var data = service.GetReportList(filter, out int total);
             return Json(new TableDataModel(0, data));
         }
+
+
+        public ActionResult DownloadReportFile(Guid? reportId)
+        {
+            if (!reportId.HasValue)
+            {
+                return Content("参数错误");
+            }
+            byte[] file = service.DownloadReportFile(reportId.Value, Server.MapPath("~"), out string fileName);
+            if (file == null)
+            {
+                return Content("报告不存在");
+            }
+            return File(file, "application/octet-stream", fileName);
+        }
     }
 }
