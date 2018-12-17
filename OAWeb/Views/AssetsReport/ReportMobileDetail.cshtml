@@ -3,7 +3,7 @@
     Layout = null;
 }
 @using Model.RMModel
-@model HouseReportModel
+@model AssetsReportModel
 <!DOCTYPE html>
 
 <html>
@@ -65,45 +65,22 @@
                 <td>@Model.ReportUser</td>
             </tr>
             <tr>
-                <td>权利人:</td>
-                <td>@Model.Obligee</td>
+                <td>评估对象:</td>
+                <td>@string.Join(", ", Model.AssessmentObjectStr) </td>
             </tr>
             <tr>
-                <td>坐落地址:</td>
-                <td>@Model.LocationAddress</td>
+                <td>评估范围:</td>
+                <td>@Model.AssessmentScope</td>
             </tr>
             <tr>
-                <td>房产证号:</td>
-                <td>@Model.HouseNumber</td>
+                <td>资产性质:</td>
+                <td>@string.Join(", ", Model.AssetsNatureStr) </td>
             </tr>
             <tr>
-                <td>建筑面积:</td>
-                <td>@Model.BuildArea m²</td>
+                <td>价值类型:</td>
+                <td>@string.Join(", ", Model.ValueTypeStr) </td>
             </tr>
-            <tr>
-                <td>土地证号:</td>
-                <td>@Model.LandNumber</td>
-            </tr>
-            <tr>
-                <td>土地面积:</td>
-                <td>@Model.LandArea m²</td>
-            </tr>
-            <tr>
-                <td>评估单价:</td>
-                <td>@Model.ValuationPrice 元/m²</td>
-            </tr>
-            <tr>
-                <td>评估价值:</td>
-                <td>@Model.ValuationValue 万元</td>
-            </tr>
-            <tr>
-                <td>估价对象用途:</td>
-                <td>@Model.ValuationPurpose </td>
-            </tr>
-            <tr>
-                <td>估价对象结构:</td>
-                <td>@Model.ValuationStruct </td>
-            </tr>
+
             <tr>
                 <td>估价目的:</td>
                 <td>@string.Join(", ", Model.ValuationObjectiveStr) </td>
@@ -112,6 +89,11 @@
                 <td>估价方法:</td>
                 <td>@string.Join(", ", Model.ValuationMethodsStr) </td>
             </tr>
+            <tr>
+                <td>评估价值:</td>
+                <td>@Model.ValuationValue 万元</td>
+            </tr>
+
             <tr>
                 <td>价值时点:</td>
                 <td>@Model.ValueTime </td>

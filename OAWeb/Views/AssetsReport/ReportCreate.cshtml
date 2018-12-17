@@ -208,53 +208,50 @@
                             <el-form-item label="报告使用方" prop="ReportUser">
                                 <el-input v-model="AddFormData.ReportUser" :readonly="Dialog.IsDetail" placeholder="请输入报告使用方"></el-input>
                             </el-form-item>
-                            <div style="margin-bottom:20px;border-top:1px solid #dcdfe6;"></div>
-                            <el-form-item label="权利人" prop="Obligee">
-                                <el-input v-model="AddFormData.Obligee" :readonly="Dialog.IsDetail" placeholder="请输入权利人"></el-input>
+                            <el-form-item label="评估对象" prop="AssessmentObject">
+                                <el-select v-model="AddFormData.AssessmentObject"
+                                           placeholder="请选择评估对象"
+                                           :clearable="true"
+                                           :disabled="Dialog.IsDetail">
+                                    <el-option v-for="item in SelectOption.AssessmentObjectList"
+                                               :key="item.Id"
+                                               :label="item.ItemDesc"
+                                               :value="item.Id">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
-                            <el-form-item label="坐落地址" prop="LocationAddress">
-                                <el-input v-model="AddFormData.LocationAddress" :readonly="Dialog.IsDetail" placeholder="请输入坐落地址"></el-input>
+
+                            <el-form-item label="评估范围" prop="AssessmentScope">
+                                <el-input :readonly="Dialog.IsDetail" v-model="AddFormData.AssessmentScope" placeholder="请输入报告使用方"></el-input>
                             </el-form-item>
-                            <el-form-item label="房产证号" prop="HouseNumber">
-                                <el-input v-model="AddFormData.HouseNumber" :readonly="Dialog.IsDetail" placeholder="请输入房产证号"></el-input>
+
+
+                            <el-form-item label="资产性质" prop="AssetsNature">
+                                <el-select v-model="AddFormData.AssetsNature"
+                                           placeholder="请选择资产性质"
+                                           :clearable="true"
+                                           :disabled="Dialog.IsDetail">
+                                    <el-option v-for="item in SelectOption.AssetsNatureList"
+                                               :key="item.Id"
+                                               :label="item.ItemDesc"
+                                               :value="item.Id">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
-                            <el-form-item label="建筑面积" prop="BuildArea">
-                                <el-input v-model="AddFormData.BuildArea" :readonly="Dialog.IsDetail" placeholder="请输入建筑面积">
-                                    <template slot="append">
-                                        m²
-                                    </template>
-                                </el-input>
+
+                            <el-form-item label="价值类型" prop="ValueType">
+                                <el-select v-model="AddFormData.ValueType"
+                                           placeholder="请选择价值类型"
+                                           :clearable="true"
+                                           :disabled="Dialog.IsDetail">
+                                    <el-option v-for="item in SelectOption.ValueTypeList"
+                                               :key="item.Id"
+                                               :label="item.ItemDesc"
+                                               :value="item.Id">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
-                            <el-form-item label="土地证号" prop="LandNumber">
-                                <el-input v-model="AddFormData.LandNumber" :readonly="Dialog.IsDetail" placeholder="请输入土地证号"></el-input>
-                            </el-form-item>
-                            <el-form-item label="土地面积" prop="LandArea">
-                                <el-input v-model="AddFormData.LandArea" :readonly="Dialog.IsDetail" placeholder="请输入土地面积">
-                                    <template slot="append">
-                                        m²
-                                    </template>
-                                </el-input>
-                            </el-form-item>
-                            <el-form-item label="评估单价" prop="ValuationPrice">
-                                <el-input v-model="AddFormData.ValuationPrice" :readonly="Dialog.IsDetail" placeholder="请输入评估单价">
-                                    <template slot="append">
-                                        元/m²
-                                    </template>
-                                </el-input>
-                            </el-form-item>
-                            <el-form-item label="评估价值" prop="ValuationValue">
-                                <el-input v-model="AddFormData.ValuationValue" :readonly="Dialog.IsDetail" placeholder="请输入评估价值">
-                                    <template slot="append">
-                                        万元
-                                    </template>
-                                </el-input>
-                            </el-form-item>
-                            <el-form-item label="估价对象用途" prop="ValuationPurpose">
-                                <el-input v-model="AddFormData.ValuationPurpose" :readonly="Dialog.IsDetail" placeholder="请输入估价对象用途"></el-input>
-                            </el-form-item>
-                            <el-form-item label="估价对象结构" prop="ValuationStruct">
-                                <el-input v-model="AddFormData.ValuationStruct" :readonly="Dialog.IsDetail" placeholder="请输入估价对象结构"></el-input>
-                            </el-form-item>
+
                             <el-form-item label="估价目的" prop="ValuationObjective">
                                 <el-select v-model="AddFormData.ValuationObjective"
                                            placeholder="请选择估价目的"
@@ -283,6 +280,14 @@
                                     </el-option>
                                 </el-select>
                             </el-form-item>
+                            <el-form-item label="评估价值" prop="ValuationValue">
+                                <el-input v-model="AddFormData.ValuationValue" :readonly="Dialog.IsDetail" placeholder="请输入评估价值">
+                                    <template slot="append">
+                                        万元
+                                    </template>
+                                </el-input>
+                            </el-form-item>
+
                             <el-form-item label="价值时点" prop="ValueTime">
                                 <el-date-picker v-model="AddFormData.ValueTime"
                                                 type="datetime"
@@ -409,7 +414,7 @@
                         </el-tab-pane>
                         <el-tab-pane label="二维码" v-if="AddFormData.ReportStatus=='Passed'" :style="{height:panelHeight+'px',overflow:'auto'}">
                             <div style="text-align:center;padding-top:20px;">
-                                <img :src="'/Base/GetReportQRCode?ReportId='+AddFormData.Id+'&ControllerName=HouseReport'" />
+                                <img :src="'/Base/GetReportQRCode?ReportId='+AddFormData.Id+'&ControllerName=AssetsReport'" />
                             </div>
                         </el-tab-pane>
                     </el-tabs>
@@ -464,16 +469,11 @@
                 ReportName: "",
                 ReportEntruster:"",
                 ReportUser: "",
-                Obligee: "",
-                LocationAddress: "",
-                HouseNumber: "",
-                BuildArea: "",
-                LandNumber: "",
-                LandArea: "",
-                ValuationPrice: "",
+                AssessmentObject: "",
+                AssessmentScope: "",
+                AssetsNature: "",
+                ValueType: "",
                 ValuationValue: "",
-                ValuationPurpose: "",
-                ValuationStruct: "",
                 ValueTime: "",
                 ReportTime: "",
                 ReportDesc: "",
@@ -518,41 +518,13 @@
                     { required: true, message: '请填写报告使用方', trigger: 'change' },
                     { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
                 ],
-                Obligee: [
-                    { required: true, message: '请填写权利人', trigger: 'change' },
+                AssessmentScope: [
                     { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
-                ],
-                LocationAddress: [
-                    { required: true, message: '请填写坐落地址', trigger: 'change' },
-                    { max: 100, message: '长度不能超过100个字符', trigger: 'change' }
-                ],
-                HouseNumber: [
-                    { required: true, message: '请填写房产证号', trigger: 'change' },
-                    { max: 50, message: '长度不能超过50个字符', trigger: 'change' }
-                ],
-                BuildArea: [
-                    { required: true, message: '请填写建筑面积', trigger: 'change' },
-                    { validator: checkNumber, trigger: 'change' }
-                ],
-                LandNumber: [
-                    { required: true, message: '请填写土地证号', trigger: 'change' },
-                    { max: 50, message: '长度不能超过50个字符', trigger: 'change' }
-                ],
-                LandArea: [
-                    { validator: checkNumber, trigger: 'change' }
-                ],
-                ValuationPrice: [
-                    { validator: checkNumber, trigger: 'change' }
                 ],
                 ValuationValue: [
                     { validator: checkNumber, trigger: 'change' }
                 ],
-                ValuationPurpose: [
-                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
-                ],
-                ValuationStruct: [
-                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
-                ],
+               
                 ReportDesc: [
                     { max: 250, message: '长度不能超过250个字符', trigger: 'change' }
                 ],
@@ -608,7 +580,10 @@
                 ValuationMethodsList: [],
                 ChargeStatusList:[],
                 DepList: [],
-                EmpList:[]
+                EmpList: [],
+                AssessmentObjectList: [],
+                AssetsNatureList: [],
+                ValueTypeList: []
             },
             PaginationData: {
                 pageSizes: [10, 20, 50, 100],
@@ -798,6 +773,21 @@
     }).catch(function (error) {
         console.log(error);
         });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "AssessmentObject" }).then(function (response) {
+        $vue.SelectOption.AssessmentObjectList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "AssetsNature" }).then(function (response) {
+        $vue.SelectOption.AssetsNatureList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "ValueType" }).then(function (response) {
+        $vue.SelectOption.ValueTypeList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
     axios.post("/Dictionary/GetGroupItemList", { groupCode: "ChargeStatus" }).then(function (response) {
         $vue.SelectOption.ChargeStatusList = response.data;
     }).catch(function (error) {

@@ -223,18 +223,8 @@
                                 </el-select>
                             </el-form-item>
 
-                            <el-form-item label="估价方法" prop="ValuationMethods">
-                                <el-select v-model="AddFormData.ValuationMethods"
-                                           placeholder="请选择估价方法"
-                                           :clearable="true"
-                                           multiple
-                                           disabled>
-                                    <el-option v-for="item in SelectOption.ValuationMethodsList"
-                                               :key="item.Id"
-                                               :label="item.ItemDesc"
-                                               :value="item.Id">
-                                    </el-option>
-                                </el-select>
+                            <el-form-item label="评估范围" prop="AssessmentScope">
+                                <el-input readonly v-model="AddFormData.AssessmentScope" placeholder="请输入报告使用方"></el-input>
                             </el-form-item>
 
 
@@ -489,7 +479,11 @@
                 ValuationMethodsList: [],
                 ChargeStatusList:[],
                 DepList: [],
-                EmpList:[]
+                EmpList: [],
+                AssessmentObjectList: [],
+                AssetsNatureList: [],
+                ValueTypeList:[]
+
             },
             PaginationData: {
                 pageSizes: [10, 20, 50, 100],
@@ -679,6 +673,21 @@
     }).catch(function (error) {
         console.log(error);
         });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "AssessmentObject" }).then(function (response) {
+        $vue.SelectOption.AssessmentObjectList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+        });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "AssetsNature" }).then(function (response) {
+        $vue.SelectOption.AssetsNatureList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+        });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "ValueType" }).then(function (response) {
+        $vue.SelectOption.ValueTypeList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
     axios.post("/Dictionary/GetGroupItemList", { groupCode: "ChargeStatus" }).then(function (response) {
         $vue.SelectOption.ChargeStatusList = response.data;
     }).catch(function (error) {
