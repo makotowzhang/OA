@@ -29,11 +29,22 @@ namespace Business.RMBusiness
                 using (DataProvider dp = new DataProvider())
                 { 
                     HouseReportModel model = Mapper.Map<HouseReportModel>(data.GetEntity(dp,id));
+                    if (model == null)
+                    {
+                        return null;
+                    }
                     model.ReportStatusString = model.ReportStatus.ToString();
                     var dicValue = dp.RM_ReportDicItem.Where(m => m.ReportId == model.Id).ToList();
+                    //估价目的
                     model.ValuationObjective = dicValue.Where(m => m.DicGroupCode == DicGroupCode.ValuationObjective.ToString()).Select(m => m.DicItemId).ToList();
+                    model.ValuationObjectiveStr = dp.System_DicItem.Where(m => model.ValuationObjective.Contains(m.Id)).Select(m => m.ItemDesc).ToList();
+                    //估价方法
                     model.ValuationMethods = dicValue.Where(m => m.DicGroupCode == DicGroupCode.ValuationMethods.ToString()).Select(m => m.DicItemId).ToList();
+                    model.ValuationMethodsStr = dp.System_DicItem.Where(m => model.ValuationMethods.Contains(m.Id)).Select(m => m.ItemDesc).ToList();
+                    //签字估价师
                     model.SignAppraiser = dicValue.Where(m => m.DicGroupCode == "SignAppraiser").Select(m => m.DicItemId).ToList();
+                    model.SignAppraiserName= dp.System_User.Where(m => model.SignAppraiser.Contains(m.Id)).Select(m => m.TrueName).ToList();
+
                     model.AuditDep = dp.PM_Department.Where(m => !m.IsDel &&
                                                           dp.RM_ReportAudit.Where(x => x.ReportId == model.Id).Select(x => x.AuditId).Contains(m.Id))
                                                         .Select(m => m.Id).ToList();

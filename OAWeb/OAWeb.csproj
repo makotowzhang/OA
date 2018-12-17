@@ -167,6 +167,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DataLibraryController.cs" />
     <Compile Include="Controllers\AreaReportController.cs" />
+    <Compile Include="Controllers\AssetsReportController.cs" />
     <Compile Include="Controllers\HouseReportController.cs" />
     <Compile Include="Controllers\MaterielApplyController.cs" />
     <Compile Include="Controllers\LeaseController.cs" />
@@ -209,6 +210,7 @@
     <Content Include="Content\iconfont\iconfont.svg" />
     <Content Include="Content\Images\login-img.png" />
     <Content Include="Content\Images\login_logo.png" />
+    <Content Include="Content\Images\logo.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="ApplicationInsights.config">
@@ -681,6 +683,11 @@
     <Content Include="Views\HouseReport\ReportAudit.cshtml" />
     <Content Include="Views\AreaReport\ReportAudit.cshtml" />
     <Content Include="Views\AreaReport\ReportCreate.cshtml" />
+    <Content Include="Views\HouseReport\ReportMobileDetail.cshtml" />
+    <Content Include="Views\AreaReport\ReportMobileDetail.cshtml" />
+    <Content Include="Views\AssetsReport\ReportAudit.cshtml" />
+    <Content Include="Views\AssetsReport\ReportCreate.cshtml" />
+    <Content Include="Views\AssetsReport\ReportMobileDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">

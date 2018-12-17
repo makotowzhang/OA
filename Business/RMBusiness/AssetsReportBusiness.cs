@@ -14,11 +14,11 @@ using System.IO;
 
 namespace Business.RMBusiness
 {
-    public class AreaReportBusiness
+    public class AssetsReportBusiness
     {
-        AreaReportData data = new AreaReportData();
+        AssetsReportData data = new AssetsReportData();
 
-        public AreaReportModel GetModel(Guid? id)
+        public AssetsReportModel GetModel(Guid? id)
         {
             if (!id.HasValue)
             {
@@ -28,7 +28,7 @@ namespace Business.RMBusiness
             {
                 using (DataProvider dp = new DataProvider())
                 { 
-                    AreaReportModel model = Mapper.Map<AreaReportModel>(data.GetEntity(dp,id));
+                    AssetsReportModel model = Mapper.Map<AssetsReportModel>(data.GetEntity(dp,id));
                     if (model == null)
                     {
                         return null;
@@ -43,7 +43,12 @@ namespace Business.RMBusiness
                     model.ValuationMethodsStr = dp.System_DicItem.Where(m => model.ValuationMethods.Contains(m.Id)).Select(m => m.ItemDesc).ToList();
                     //签字估价师
                     model.SignAppraiser = dicValue.Where(m => m.DicGroupCode == "SignAppraiser").Select(m => m.DicItemId).ToList();
-                    model.SignAppraiserName = dp.System_User.Where(m => model.SignAppraiser.Contains(m.Id)).Select(m => m.TrueName).ToList();
+                    model.SignAppraiserName= dp.System_User.Where(m => model.SignAppraiser.Contains(m.Id)).Select(m => m.TrueName).ToList();
+
+                    model.AssessmentObjectStr = dp.System_DicItem.Where(m => m.Id == model.AssessmentObject).FirstOrDefault()?.ItemDesc;
+                    model.AssetsNatureStr = dp.System_DicItem.Where(m => m.Id == model.AssetsNature).FirstOrDefault()?.ItemDesc;
+                    model.ValueTypeStr = dp.System_DicItem.Where(m => m.Id == model.ValueType).FirstOrDefault()?.ItemDesc;
+
 
                     model.AuditDep = dp.PM_Department.Where(m => !m.IsDel &&
                                                           dp.RM_ReportAudit.Where(x => x.ReportId == model.Id).Select(x => x.AuditId).Contains(m.Id))
@@ -57,26 +62,26 @@ namespace Business.RMBusiness
             }
         }
 
-        public AreaReportModel GetOrCreateModel(Guid createUserId)
+        public AssetsReportModel GetOrCreateModel(Guid createUserId)
         {
             Guid? modelId = null;
             using (DataProvider dp = new DataProvider())
             {
                 string reportStatus = ReportStatus.WaitSubmit.ToString();
-                if (dp.RM_AreaReport.Count(m => m.CreateUser == createUserId && !m.IsDel && m.ReportStatus == reportStatus) > 0)
+                if (dp.RM_AssetsReport.Count(m => m.CreateUser == createUserId && !m.IsDel && m.ReportStatus == reportStatus) > 0)
                 {
-                    modelId = dp.RM_AreaReport.Where(m => m.CreateUser == createUserId && !m.IsDel && m.ReportStatus == reportStatus).Select(m => m.Id).FirstOrDefault();
+                    modelId = dp.RM_AssetsReport.Where(m => m.CreateUser == createUserId && !m.IsDel && m.ReportStatus == reportStatus).Select(m => m.Id).FirstOrDefault();
                 }
                 else
                 {
-                    AreaReportModel model = new AreaReportModel()
+                    AssetsReportModel model = new AssetsReportModel()
                     {
                         Id = Guid.NewGuid(),
                         IsDel = false,
                         CreateUser = createUserId,
                         CreateTime = DateTime.Now
                     };
-                    dp.RM_AreaReport.Add(Mapper.Map<RM_AreaReport>(model));
+                    dp.RM_AssetsReport.Add(Mapper.Map<RM_AssetsReport>(model));
                     dp.SaveChanges();
                     return model;
                 }
@@ -84,7 +89,7 @@ namespace Business.RMBusiness
             return GetModel(modelId);
         }
 
-        public bool SaveReport(AreaReportModel model,bool isSubmit=false)
+        public bool SaveReport(AssetsReportModel model,bool isSubmit=false)
         {
             using (DataProvider dp = new DataProvider())
             {
@@ -93,21 +98,11 @@ namespace Business.RMBusiness
                 entity.ReportName = model.ReportName;
                 entity.ReportEntruster = model.ReportEntruster;
                 entity.ReportUser = model.ReportUser;
-                entity.Obligee = model.Obligee;
-                entity.LocationAddress = model.LocationAddress;
-                entity.AreaNumber = model.AreaNumber;
-                entity.AreaRegLand = model.AreaRegLand;
-                entity.AreaValuationLand = model.AreaValuationLand;
-                entity.AreaEndTime = model.AreaEndTime;
-                entity.LiftUseYear = model.LiftUseYear;
-                entity.AreaPurpose = model.AreaPurpose;
-                entity.SetFloorAreaRatio = model.SetFloorAreaRatio;
-                entity.SetLevelDev = model.SetLevelDev;
-                entity.ActualDevelopmentLevel = model.ActualDevelopmentLevel;
-                entity.ValuationPrice = model.ValuationPrice;
+                entity.AssessmentObject = model.AssessmentObject;
+                entity.AssessmentScope = model.AssessmentScope;
+                entity.AssetsNature = model.AssetsNature;
+                entity.ValueType = model.ValueType;
                 entity.ValuationValue = model.ValuationValue;
-                entity.ValuationPurpose = model.ValuationPurpose;
-                entity.ValuationStruct = model.ValuationStruct;
                 entity.ValueTime = model.ValueTime;
                 entity.ReportTime = model.ReportTime;
                 entity.ReportDesc = model.ReportDesc;
@@ -198,7 +193,7 @@ namespace Business.RMBusiness
             }
         }
 
-        public List<AreaReportModel> GetReportList(AreaReportFilter filter, out int total, bool isPage = true)
+        public List<AssetsReportModel> GetReportList(AssetsReportFilter filter, out int total, bool isPage = true)
         {
             using (DataProvider dp = new DataProvider())
             {
@@ -207,7 +202,7 @@ namespace Business.RMBusiness
             }
         }
 
-        public bool Audit(AreaReportModel model)
+        public bool Audit(AssetsReportModel model)
         {
             if (model == null || !model.Id.HasValue)
             {
@@ -234,18 +229,18 @@ namespace Business.RMBusiness
             }
         }
 
-        public byte[] DownloadReportFile(Guid reportId, string rootPath, out string fileName)
+        public byte[] DownloadReportFile(Guid reportId,string rootPath,out string fileName)
         {
-            AreaReportModel hr;
+            AssetsReportModel hr;
             using (DataProvider dp = new DataProvider())
             {
-                hr = dp.RM_AreaReport.Where(m => m.Id == reportId).Select(m => new AreaReportModel()
+                hr = dp.RM_AssetsReport.Where(m => m.Id == reportId).Select(m => new AssetsReportModel()
                 {
-                    ReportName = m.ReportName,
+                    ReportName=m.ReportName,
                     EnclosureName = m.EnclosureName,
                     EnclusurePath = m.EnclusurePath,
-                    AuditFileName = m.AuditFileName,
-                    AuditFilePath = m.AuditFilePath
+                    AuditFileName=m.AuditFileName,
+                    AuditFilePath=m.AuditFilePath
                 }).FirstOrDefault();
             }
             if (hr == null)
@@ -253,11 +248,11 @@ namespace Business.RMBusiness
                 fileName = "";
                 return null;
             }
-            fileName = hr.ReportName + ".zip";
+            fileName = hr.ReportName+".zip";
             using (ZipFile zips = new ZipFile(Encoding.UTF8))
             {
                 if (File.Exists(rootPath.TrimEnd('\\') + "\\" + hr.EnclusurePath?.TrimStart('\\')))
-                {
+                { 
                     ZipEntry entry = zips.AddFile(rootPath.TrimEnd('\\') + "\\" + hr.EnclusurePath?.TrimStart('\\'));
                     entry.FileName = $"（工作文件）{hr.EnclosureName}";
                 }

@@ -19,9 +19,12 @@ namespace Model.RMModel
         public string ReportUser { get; set; } 
 
         public Guid? AssessmentObject { get; set; }
+        public string AssessmentObjectStr { get; set; }
         public string AssessmentScope { get; set; }
         public Guid? AssetsNature { get; set; }
+        public string AssetsNatureStr { get; set; }
         public Guid? ValueType { get; set; }
+        public string ValueTypeStr { get; set; }
         public decimal? ValuationValue { get; set; }
         public DateTime? ValueTime { get; set; }
         public DateTime? ReportTime { get; set; }
@@ -55,7 +58,11 @@ namespace Model.RMModel
 
         public List<Guid> ValuationObjective { get; set; } = new List<Guid>();
 
+        public List<string> ValuationObjectiveStr { get; set; } = new List<string>();
+
         public List<Guid> ValuationMethods { get; set; } = new List<Guid>();
+
+        public List<string> ValuationMethodsStr { get; set; } = new List<string>();
 
         public List<Guid> SignAppraiser { get; set; } = new List<Guid>();
 

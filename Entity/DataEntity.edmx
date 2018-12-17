@@ -229,7 +229,7 @@
           <Property Name="AssessmentScope" Type="varchar" MaxLength="50" />
           <Property Name="AssetsNature" Type="uniqueidentifier" />
           <Property Name="ValueType" Type="uniqueidentifier" />
-          <Property Name="ValuationValue" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="ValuationValue" Type="numeric" Precision="18" Scale="2" />
           <Property Name="ValueTime" Type="datetime" />
           <Property Name="ReportTime" Type="datetime" />
           <Property Name="ReportDesc" Type="varchar" MaxLength="500" />
@@ -922,7 +922,7 @@
           <Property Name="AssessmentScope" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="AssetsNature" Type="Guid" />
           <Property Name="ValueType" Type="Guid" />
-          <Property Name="ValuationValue" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="ValuationValue" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="ValueTime" Type="DateTime" Precision="3" />
           <Property Name="ReportTime" Type="DateTime" Precision="3" />
           <Property Name="ReportDesc" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />

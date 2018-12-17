@@ -371,7 +371,7 @@
                                 <el-input v-model="AddFormData.AuditReason" type="textarea" placeholder="请输入审核理由"></el-input>
                             </el-form-item>
                         </el-tab-pane>
-                        <el-tab-pane label="二维码" :style="{height:panelHeight+'px',overflow:'auto'}">
+                        <el-tab-pane label="二维码" v-if="AddFormData.ReportStatus=='Passed'" :style="{height:panelHeight+'px',overflow:'auto'}">
                             <div style="text-align:center;padding-top:20px;">
                                 <img :src="'/Base/GetReportQRCode?ReportId='+AddFormData.Id+'&ControllerName=AreaReport'" />
                             </div>

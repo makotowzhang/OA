@@ -23,7 +23,7 @@ namespace Entity
         public string AssessmentScope { get; set; }
         public Nullable<System.Guid> AssetsNature { get; set; }
         public Nullable<System.Guid> ValueType { get; set; }
-        public decimal ValuationValue { get; set; }
+        public Nullable<decimal> ValuationValue { get; set; }
         public Nullable<System.DateTime> ValueTime { get; set; }
         public Nullable<System.DateTime> ReportTime { get; set; }
         public string ReportDesc { get; set; }

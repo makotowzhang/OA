@@ -1,0 +1,150 @@
+﻿
+@{
+    Layout = null;
+}
+@using Model.RMModel
+@model AreaReportModel
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <title>报告内容</title>
+    <link href="~/Scripts/ElementUI/css/index.css" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft YaHei'
+        }
+
+        table {
+            background-color: #ffffff;
+            width: 100%;
+            text-align: left;
+        }
+
+            table tr {
+                background-color: #ffffff;
+            }
+
+                table tr td {
+                    padding: 10px;
+                    background-color: #ffffff;
+                    text-align: left;
+                }
+
+                    table tr td:first-child {
+                        font-size: 18px;
+                        width: 120px;
+                        text-align: right;
+                        vertical-align: top;
+                    }
+    </style>
+</head>
+<body>
+    <div style="background-color:#333333;text-align:center;">
+        <img src="~/Content/Images/logo.png" style="height:60px;padding-top:10px;padding-bottom:10px;" />
+    </div>
+    <div style="background-color:#F2F2F2;padding:15px;">
+        <table>
+            <tr>
+                <td>报告编号:</td>
+                <td>@Model.ReportCode</td>
+            </tr>
+            <tr>
+                <td>项目名称:</td>
+                <td>@Model.ReportName</td>
+            </tr>
+            <tr>
+                <td>报告委托方:</td>
+                <td>@Model.ReportEntruster</td>
+            </tr>
+            <tr>
+                <td>报告使用方:</td>
+                <td>@Model.ReportUser</td>
+            </tr>
+            <tr>
+                <td>权利人:</td>
+                <td>@Model.Obligee</td>
+            </tr>
+            <tr>
+                <td>坐落地址:</td>
+                <td>@Model.LocationAddress</td>
+            </tr>
+            <tr>
+                <td>土地证号:</td>
+                <td>@Model.AreaNumber</td>
+            </tr>
+            <tr>
+                <td>土地登记面积:</td>
+                <td>@Model.AreaRegLand m²</td>
+            </tr>
+            <tr>
+                <td>土地评估面积:</td>
+                <td>@Model.AreaValuationLand m²</td>
+            </tr>
+            <tr>
+                <td>土地终止日期:</td>
+                <td>@Model.AreaEndTime</td>
+            </tr>
+            <tr>
+                <td>剩余使用年限:</td>
+                <td>@Model.LiftUseYear 年</td>
+            </tr>
+            <tr>
+                <td>土地用途:</td>
+                <td>@Model.AreaPurpose</td>
+            </tr>
+            <tr>
+                <td>设定容积率:</td>
+                <td>@Model.SetFloorAreaRatio</td>
+            </tr>
+            <tr>
+                <td>设定开发程度:</td>
+                <td>@Model.SetLevelDev</td>
+            </tr>
+            <tr>
+                <td>实际开发程度:</td>
+                <td>@Model.ActualDevelopmentLevel</td>
+            </tr>
+            <tr>
+                <td>评估单价:</td>
+                <td>@Model.ValuationPrice 元/m²</td>
+            </tr>
+            <tr>
+                <td>评估价值:</td>
+                <td>@Model.ValuationValue 万元</td>
+            </tr>
+            <tr>
+                <td>估价目的:</td>
+                <td>@string.Join(", ", Model.ValuationObjectiveStr) </td>
+            </tr>
+            <tr>
+                <td>估价方法:</td>
+                <td>@string.Join(", ", Model.ValuationMethodsStr) </td>
+            </tr>
+            <tr>
+                <td>价值时点:</td>
+                <td>@Model.ValueTime </td>
+            </tr>
+            <tr>
+                <td>报告日期:</td>
+                <td>@Model.ReportTime </td>
+            </tr>
+            <tr>
+                <td>签字估价师:</td>
+                <td>@string.Join(", ", Model.SignAppraiserName) </td>
+            </tr>
+            <tr>
+                <td>报告描述:</td>
+                <td>@Model.ReportDesc </td>
+            </tr>
+        </table>
+    </div>
+    <div style="background-color:#333333;text-align:center;color:#ffffff;font-size:18px;padding:10px;">
+        若您存在疑问，可致电 <i class="el-icon-phone"></i> <span style="color:red;">025-68035618/68035699</span><br/>
+        寻求天元客服帮助！
+    </div>
+</body>
+</html>

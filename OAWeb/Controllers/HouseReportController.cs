@@ -14,6 +14,7 @@ namespace OAWeb.Controllers
     {
         HouseReportBusiness service = new HouseReportBusiness();
         // GET: HouseReport
+        [PageAuthorizeFilter]
         public ActionResult Index()
         {
             return View();
@@ -91,6 +92,15 @@ namespace OAWeb.Controllers
                 return Content("报告不存在");
             }
             return File(file, "application/octet-stream", fileName);
+        }
+
+        public ActionResult ReportMobileDetail(Guid? reportId)
+        {
+            if (!reportId.HasValue)
+            {
+                return Content("参数错误");
+            }
+            return View(service.GetModel(reportId)??new HouseReportModel());
         }
     }
 }

@@ -10,10 +10,10 @@ using Model.EnumModel;
 
 namespace OAWeb.Controllers
 {
-    public class AreaReportController : BaseController
+    public class AssetsReportController : BaseController
     {
-        AreaReportBusiness service = new AreaReportBusiness();
-        // GET: AreaReport
+        AssetsReportBusiness service = new AssetsReportBusiness();
+        // GET: AssetsReport
         [PageAuthorizeFilter]
         public ActionResult Index()
         {
@@ -40,19 +40,19 @@ namespace OAWeb.Controllers
             return EnumJson(service.GetModel(id));
         }
 
-        public ActionResult SaveReport(AreaReportModel model)
+        public ActionResult SaveReport(AssetsReportModel model)
         {
             model.UpdateUser = CurrentUser.Id;
             return Json(new JsonMessage(service.SaveReport(model)));
         }
 
-        public ActionResult SubmitReport(AreaReportModel model)
+        public ActionResult SubmitReport(AssetsReportModel model)
         {
             model.UpdateUser = CurrentUser.Id;
             return Json(new JsonMessage(service.SaveReport(model,true)));
         }
 
-        public ActionResult Audit(AreaReportModel model)
+        public ActionResult Audit(AssetsReportModel model)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace OAWeb.Controllers
             }
         }
 
-        public ActionResult GetList(AreaReportFilter filter)
+        public ActionResult GetList(AssetsReportFilter filter)
         {
             if (filter.ListType == ListType.Personal)
             {
@@ -78,6 +78,7 @@ namespace OAWeb.Controllers
             var data = service.GetReportList(filter, out int total);
             return Json(new TableDataModel(0, data));
         }
+
 
         public ActionResult DownloadReportFile(Guid? reportId)
         {
@@ -99,7 +100,7 @@ namespace OAWeb.Controllers
             {
                 return Content("参数错误");
             }
-            return View(service.GetModel(reportId)??new AreaReportModel());
+            return View(service.GetModel(reportId)??new AssetsReportModel());
         }
     }
 }

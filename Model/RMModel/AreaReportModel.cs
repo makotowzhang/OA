@@ -67,9 +67,9 @@ namespace Model.RMModel
         public DateTime? SubmitTime { get; set; }
 
         public List<Guid> ValuationObjective { get; set; } = new List<Guid>();
-
+        public List<string> ValuationObjectiveStr { get; set; } = new List<string>();
         public List<Guid> ValuationMethods { get; set; } = new List<Guid>();
-
+        public List<string> ValuationMethodsStr { get; set; } = new List<string>();
         public List<Guid> SignAppraiser { get; set; } = new List<Guid>();
 
         public List<string> SignAppraiserName { get; set; } = new List<string>();
