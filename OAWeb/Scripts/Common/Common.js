@@ -268,18 +268,18 @@ function AddTabPage(title, url, iconfont) {
 }
 
 //通过URL获取菜单
-function GetMenuByUrl(menuList,url) {
+function GetMenuByUrl(menuList, url) {
     var menu;
     for (var i = 0; i < menuList.length; i++) {
         var m = menuList[i];
         if (menu != null) {
             break;
         }
-        if (m.MenuUrl.toUpperCase() == url.toUpperCase()) {
+        if (m.MenuUrl != null&& m.MenuUrl.toUpperCase() == url.toUpperCase()) {
             menu = m;
         }
         if (menu == null && m.Children != null && m.Children.length > 0) {
-            menu = getMenu(m.Children, navId);
+            menu = GetMenuByUrl(m.Children, url);
         }
     }
     return menu;

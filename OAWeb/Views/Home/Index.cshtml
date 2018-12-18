@@ -211,7 +211,7 @@
                                 </el-tooltip>
                             </template>
                             <div style="text-align:center;padding:0;line-height:30px;" >
-                                <el-button type="text" @@click="addTab('C61BA937-ACF9-48D0-8957-BC021B9605F7')">查看更多</el-button>
+                                <el-button type="text" @@click="AddCommonTab('','/SysMessage/Index')">查看更多</el-button>
                             </div>
 
                         </el-card>
@@ -498,7 +498,8 @@
                     return title;
                 }
              
-            }
+            },
+            AddCommonTab: AddTabPage
         }
     });
 

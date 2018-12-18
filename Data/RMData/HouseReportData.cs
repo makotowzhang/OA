@@ -127,13 +127,6 @@ namespace Data.RMData
             if (temp.IsNotNullAndCountGtZero())
             {
                 var reportIdList = temp.Select(m => m.Id);
-                var aaa = (from a in dp.RM_ReportDicItem.Where(m => reportIdList.Contains(m.ReportId) && m.DicGroupCode == "SignAppraiser")
-                           join b in dp.System_User on a.DicItemId equals b.Id
-                           select new
-                           {
-                               a.ReportId,
-                               SignAppraiserName = b.TrueName
-                           });
                 var signAppraiserCollect = (from a in dp.RM_ReportDicItem.Where(m => reportIdList.Contains(m.ReportId) && m.DicGroupCode == "SignAppraiser")
                                            join b in dp.System_User on a.DicItemId equals b.Id
                                            select new

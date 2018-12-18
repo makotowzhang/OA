@@ -27,12 +27,60 @@
             top: -138px;
             position: relative;
         }
+
+        #calenderRight {
+            float: left;
+            width: calc(100% - 538px);
+            height: 370px;
+        }
+        .msg-card {
+            width: calc(40% - 8px);
+            float: left;
+            height: 368px;
+            margin-left:5px;
+        }
+
+        .things-card {
+            width: calc(60% - 15px);
+            float: left;
+            height: 368px;
+            margin-left: 5px;
+        }
+        #noticeDiv {
+            width: 100%;
+            height: calc(100% - 375px);
+            float: left;
+            margin-top:5px;
+        }
+        .notice-card {
+            height: calc(100% - 8px);
+            width: calc(100% - 11px);
+        }
     </style>
 </head>
 <body>
     <div id="App">
         <div id="calendarDiv">
-            <iframe id="calendar" ref="Calendar"  scrolling="no" src="https://www.baidu.com/s?wd=%E6%97%A5%E5%8E%86"></iframe>
+            <iframe id="calendar" ref="Calendar" scrolling="no" src="https://www.baidu.com/s?wd=%E6%97%A5%E5%8E%86"></iframe>
+        </div>
+        <div id="calenderRight">
+            <el-card class="msg-card">
+                <div slot="header" class="clearfix">
+                    <span>消息列表</span>
+                </div>
+            </el-card>
+            <el-card class="things-card">
+                <div slot="header" class="clearfix">
+                    <span>代办事项</span>
+                </div>
+            </el-card>
+        </div>
+        <div id="noticeDiv">
+            <el-card class="notice-card">
+                <div slot="header" class="clearfix">
+                    <span>公司公告</span>
+                </div>
+            </el-card>
         </div>
     </div>
 </body>
