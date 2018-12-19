@@ -402,11 +402,22 @@
           <Property Name="MsgContent" Type="varchar" MaxLength="500" />
           <Property Name="MsgType" Type="varchar" MaxLength="50" />
           <Property Name="Url" Type="varchar" MaxLength="500" />
-          <Property Name="IsRead" Type="bit" Nullable="false" />
+          <Property Name="IsRead" Type="bit" />
           <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="ToUser" Type="uniqueidentifier" />
+          <Property Name="CreateUser" Type="uniqueidentifier" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="System_MessageReceiver">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="MessageId" Type="int" Nullable="false" />
           <Property Name="ToUser" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="CreateUser" Type="varchar" MaxLength="50" />
-          <Property Name="CreateTime" Type="datetime" />
+          <Property Name="IsRead" Type="bit" Nullable="false" />
+          <Property Name="FirstReadTime" Type="datetime" />
+          <Property Name="LastReadTime" Type="datetime" />
         </EntityType>
         <EntityType Name="System_Role">
           <Key>
@@ -472,6 +483,7 @@
           <EntitySet Name="System_Log" EntityType="Self.System_Log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_Menu" EntityType="Self.System_Menu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_Message" EntityType="Self.System_Message" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="System_MessageReceiver" EntityType="Self.System_MessageReceiver" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_Role" EntityType="Self.System_Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_User" EntityType="Self.System_User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_UserRole" EntityType="Self.System_UserRole" Schema="dbo" store:Type="Tables" />
@@ -487,7 +499,6 @@
           <EntitySet Name="System_Menu" EntityType="Entity.System_Menu" />
           <EntitySet Name="System_Authorize" EntityType="Entity.System_Authorize" />
           <EntitySet Name="System_Log" EntityType="Entity.System_Log" />
-          <EntitySet Name="System_Message" EntityType="Entity.System_Message" />
           <EntitySet Name="System_DicGroup" EntityType="Entity.System_DicGroup" />
           <EntitySet Name="System_DicItem" EntityType="Entity.System_DicItem" />
           <EntitySet Name="PM_Employee" EntityType="Entity.PM_Employee" />
@@ -505,6 +516,8 @@
           <EntitySet Name="RM_HouseReport" EntityType="Entity.RM_HouseReport" />
           <EntitySet Name="RM_AreaReport" EntityType="Entity.RM_AreaReport" />
           <EntitySet Name="RM_AssetsReport" EntityType="Entity.RM_AssetsReport" />
+          <EntitySet Name="System_MessageReceiver" EntityType="Entity.System_MessageReceiver" />
+          <EntitySet Name="System_Message" EntityType="Entity.System_Message" />
         </EntityContainer>
         <EntityType Name="System_User">
           <Key>
@@ -590,21 +603,6 @@
           <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="DoUser" Type="Guid" />
           <Property Name="DoTime" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="System_Message">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MsgTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="MsgContent" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="MsgType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Url" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="ToUser" Type="Guid" Nullable="false" />
-          <Property Name="CreateUser" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CreateTime" Type="DateTime" Precision="3" />
-          <Property Name="IsRead" Type="Boolean" Nullable="false" />
-          <Property Name="IsDel" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="System_DicGroup">
           <Key>
@@ -951,6 +949,32 @@
           <Property Name="UpdateUser" Type="Guid" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="System_MessageReceiver">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="MessageId" Type="Int32" Nullable="false" />
+          <Property Name="ToUser" Type="Guid" Nullable="false" />
+          <Property Name="IsRead" Type="Boolean" Nullable="false" />
+          <Property Name="FirstReadTime" Type="DateTime" Precision="3" />
+          <Property Name="LastReadTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="System_Message">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MsgTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MsgContent" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="MsgType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Url" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="IsRead" Type="Boolean" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
+          <Property Name="ToUser" Type="Guid" />
+          <Property Name="CreateUser" Type="Guid" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1044,22 +1068,6 @@
                 <ScalarProperty Name="IpAddress" ColumnName="IpAddress" />
                 <ScalarProperty Name="MenuName" ColumnName="MenuName" />
                 <ScalarProperty Name="ActionName" ColumnName="ActionName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="System_Message">
-            <EntityTypeMapping TypeName="Entity.System_Message">
-              <MappingFragment StoreEntitySet="System_Message">
-                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
-                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
-                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
-                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
-                <ScalarProperty Name="ToUser" ColumnName="ToUser" />
-                <ScalarProperty Name="Url" ColumnName="Url" />
-                <ScalarProperty Name="MsgType" ColumnName="MsgType" />
-                <ScalarProperty Name="MsgContent" ColumnName="MsgContent" />
-                <ScalarProperty Name="MsgTitle" ColumnName="MsgTitle" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1422,6 +1430,34 @@
                 <ScalarProperty Name="ReportEntruster" ColumnName="ReportEntruster" />
                 <ScalarProperty Name="ReportName" ColumnName="ReportName" />
                 <ScalarProperty Name="ReportCode" ColumnName="ReportCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="System_MessageReceiver">
+            <EntityTypeMapping TypeName="Entity.System_MessageReceiver">
+              <MappingFragment StoreEntitySet="System_MessageReceiver">
+                <ScalarProperty Name="LastReadTime" ColumnName="LastReadTime" />
+                <ScalarProperty Name="FirstReadTime" ColumnName="FirstReadTime" />
+                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+                <ScalarProperty Name="ToUser" ColumnName="ToUser" />
+                <ScalarProperty Name="MessageId" ColumnName="MessageId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="System_Message">
+            <EntityTypeMapping TypeName="Entity.System_Message">
+              <MappingFragment StoreEntitySet="System_Message">
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="ToUser" ColumnName="ToUser" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="MsgType" ColumnName="MsgType" />
+                <ScalarProperty Name="MsgContent" ColumnName="MsgContent" />
+                <ScalarProperty Name="MsgTitle" ColumnName="MsgTitle" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -14,7 +14,7 @@ namespace Model.SystemModel
         public string MsgType { get; set; }
         public string Url { get; set; }
         public Guid ToUser { get; set; }
-        public string CreateUser { get; set; }
+        public Guid? CreateUser { get; set; }
         public DateTime? CreateTime { get; set; }
         public bool IsRead { get; set; }
         public bool IsDel { get; set; }

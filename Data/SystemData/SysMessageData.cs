@@ -13,20 +13,21 @@ namespace Data.SystemData
         public List<SysMessageModel> GetSysMessageList(DataProvider dp, SysMessageFilter filter, out int total)
         {
             var view = from msg in dp.System_Message
-                       join user in dp.System_User on msg.ToUser equals user.Id
-                       where !msg.IsDel && msg.ToUser ==filter.ToUser
+                       join rec in dp.System_MessageReceiver on msg.Id equals rec.MessageId
+                       join user in dp.System_User on msg.CreateUser equals user.Id
+                       where !msg.IsDel && rec.ToUser ==filter.ToUser
                        select
                        new SysMessageModel()
                        {
                            Id=msg.Id,
                            CreateTime=msg.CreateTime,
                            CreateUser=msg.CreateUser,
-                           IsRead=msg.IsRead,
+                           IsRead= rec.IsRead,
                            MsgContent=msg.MsgContent,
                            SendUserName=user.TrueName,
                            MsgTitle=msg.MsgTitle,
                            MsgType=msg.MsgType,
-                           ToUser=msg.ToUser,
+                           ToUser= rec.ToUser,
                            Url=msg.Url
                        };
             if (!string.IsNullOrWhiteSpace(filter.MsgTitle))
@@ -55,7 +56,31 @@ namespace Data.SystemData
 
         public int GetNotReadCount(DataProvider dp, Guid userId)
         {
-            return dp.System_Message.Count(m => !m.IsDel && !m.IsRead && m.ToUser == userId);
+            return dp.System_Message.Count(m => !m.IsDel && dp.System_MessageReceiver.Any(x=>x.MessageId==m.Id&&!x.IsRead&&x.ToUser==userId));
+        }
+
+
+        public bool SendMessage(DataProvider dp, System_Message msg, List<Guid> toUsers)
+        {
+            dp.System_Message.Add(msg);
+            foreach (Guid userId in toUsers)
+            {
+                dp.System_MessageReceiver.Add(new System_MessageReceiver()
+                {
+                    MessageId=msg.Id,
+                    IsRead=false,
+                    ToUser=userId
+                });
+            }
+            try
+            {
+                dp.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

@@ -12,17 +12,13 @@ namespace Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class System_Message
+    public partial class System_MessageReceiver
     {
         public int Id { get; set; }
-        public string MsgTitle { get; set; }
-        public string MsgContent { get; set; }
-        public string MsgType { get; set; }
-        public string Url { get; set; }
-        public Nullable<bool> IsRead { get; set; }
-        public bool IsDel { get; set; }
-        public Nullable<System.Guid> ToUser { get; set; }
-        public Nullable<System.Guid> CreateUser { get; set; }
-        public System.DateTime CreateTime { get; set; }
+        public int MessageId { get; set; }
+        public System.Guid ToUser { get; set; }
+        public bool IsRead { get; set; }
+        public Nullable<System.DateTime> FirstReadTime { get; set; }
+        public Nullable<System.DateTime> LastReadTime { get; set; }
     }
 }

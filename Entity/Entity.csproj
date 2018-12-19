@@ -129,6 +129,9 @@
     <Compile Include="System_Message.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
+    <Compile Include="System_MessageReceiver.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="System_Role.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>

@@ -231,7 +231,7 @@ function AddTabPage(title, url, iconfont) {
     if (iconfont == null) {
         iconfont = "icon iconfont icon-eye";
     }
-    var item = GetMenuByUrl(top.$app.MenuList, url);
+    var item = GetMenuByUrl(top.$app.MenuList, removePara(url));
     if (item == null) {
         var tabName = Math.random().toString();
         top.$app.editableTabs.push({
@@ -255,12 +255,18 @@ function AddTabPage(title, url, iconfont) {
             $app.editableTabsValue = temp.name;
             return;
         }
-
+        var tempContent = item.MenuUrl;
+        if (item.MenuUrl.indexOf("?") > -1) {
+            tempContent = tempContent + "&MenuId=" + item.Id;
+        }
+        else {
+            tempContent = tempContent + "?MenuId=" + item.Id
+        }
         top.$app.editableTabs.push({
             title: item.MenuName,
             name: item.Id,
             IconClass: item.IconClass,
-            content: item.MenuUrl + "?MenuId=" + item.Id,
+            content: tempContent,
             url: item.MenuUrl
         });
         $app.editableTabsValue = item.Id;
@@ -296,6 +302,13 @@ function checkNumber(rule, value, callback) {
     else {
         callback();
     }
+}
+
+function removePara(url) {
+    if (url.indexOf("?") > -1) {
+        return url.substring(0, url.indexOf("?"));
+    }
+    return url;
 }
 
 //页面左击右击事件监听，去除Tab的菜单
