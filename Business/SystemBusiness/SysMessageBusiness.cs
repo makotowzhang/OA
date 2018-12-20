@@ -27,5 +27,31 @@ namespace Business.SystemBusiness
                 return Data.GetNotReadCount(dp, userId);
             }
         }
+
+        public bool MarkRead(List<int> messageId,Guid markUser)
+        {
+            using (DataProvider dp = new DataProvider())
+            {
+                DateTime now = DateTime.Now;
+                foreach (var mk in dp.System_MessageReceiver.Where(m => messageId.Contains(m.MessageId) && m.ToUser == markUser))
+                {
+                    if (!mk.IsRead)
+                    {
+                        mk.FirstReadTime = now;
+                    }
+                    mk.LastReadTime = now;
+                    mk.IsRead = true;
+                }
+                try
+                {
+                    dp.SaveChanges();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
     }
 }

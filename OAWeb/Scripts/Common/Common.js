@@ -252,7 +252,7 @@ function AddTabPage(title, url, iconfont) {
             }
         })
         if (temp != null) {
-            $app.editableTabsValue = temp.name;
+            top.$app.editableTabsValue = temp.name;
             return;
         }
         var tempContent = item.MenuUrl;
@@ -269,7 +269,7 @@ function AddTabPage(title, url, iconfont) {
             content: tempContent,
             url: item.MenuUrl
         });
-        $app.editableTabsValue = item.Id;
+        top.$app.editableTabsValue = item.Id;
     }
 }
 

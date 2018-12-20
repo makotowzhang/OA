@@ -56,6 +56,23 @@
             height: calc(100% - 8px);
             width: calc(100% - 11px);
         }
+        .NotDiv {
+            padding-left: 40px;
+            padding-right: 40px;
+            margin-top: 15px;
+            cursor:pointer;
+        }
+            .NotDiv:hover {
+                color: #409EFF;
+            }
+        .More {
+            float: right;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+            .More:hover {
+                color: #409EFF;
+            }
     </style>
 </head>
 <body>
@@ -79,19 +96,35 @@
             <el-card class="notice-card">
                 <div slot="header" class="clearfix">
                     <span>公司公告</span>
+                    <div class="More" @@click="OpenTab('','/Notice/Index')">更多>></div>
                 </div>
+                <template v-for="not in NoticeList">
+                    <div class="NotDiv" @@click="OpenTab('公告详情','/Notice/NoticeDetail?id='+not.Id)">
+                        <div style="float:left">{{not.NoticeTitle}}</div>
+                        <div style="float:right">{{DateFormat(not.CreateTime,'yyyy-MM-dd HH:mm:ss')}}</div>
+                        <div style="clear:both;"></div>
+                    </div>
+                  
+                    <hr style="margin-top:5px;" />
+                </template>
             </el-card>
         </div>
     </div>
 </body>
 </html>
 <script>
-    new Vue({
+    var $vue= new Vue({
         el: "#App",
         data: {
-            value1: ""
+            NoticeList: []
         },
         methods: {
+            OpenTab: AddTabPage,
+            DateFormat: DateFormat
         }
     })
+
+    axios.post("/Notice/GetNotList", { Page: 1, PageSize: 5 }).then(function (response) {
+            $vue.NoticeList=response.data.List;
+    });
 </script>

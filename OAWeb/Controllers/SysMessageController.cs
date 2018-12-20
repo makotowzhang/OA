@@ -29,5 +29,17 @@ namespace OAWeb.Controllers
         {
             return Json(business.GetNotReadCount(CurrentUser.Id));
         }
+
+        public ActionResult MarkRead(List<int> messageId)
+        {
+            try
+            {
+                return Json(new JsonMessage(business.MarkRead(messageId,CurrentUser.Id)));
+            }
+            catch (Exception e)
+            {
+                return Json(new JsonMessage(false, e.Message));
+            }
+        }
     }
 }

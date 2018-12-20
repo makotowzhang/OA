@@ -351,15 +351,15 @@
                                 <el-input v-model="AddFormData.ContactsPhone" :readonly="Dialog.IsDetail" placeholder="请输入联系电话"></el-input>
                             </el-form-item>
                             <el-form-item label="收费状态" prop="ChargeStatus">
-                                <el-radio v-model="AddFormData.ChargeStatus" :label="true" :disabled="!AddFormData.ChargeStatus" border>已收费</el-radio>
-                                <el-radio v-model="AddFormData.ChargeStatus" :label="false" :disabled="AddFormData.ChargeStatus" border>未收费</el-radio>
+                                <el-radio v-model="AddFormData.ChargeStatus" :label="true" :disabled="!AddFormData.ChargeStatus!Dialog.IsAdd" border>已收费</el-radio>
+                                <el-radio v-model="AddFormData.ChargeStatus" :label="false" :disabled="AddFormData.ChargeStatus!Dialog.IsAdd" border>未收费</el-radio>
                             </el-form-item>
-                            <el-form-item label="收费金额" prop="ChargeAmount">
+                            <el-form-item label="收费金额" prop="ChargeAmount" v-if="AddFormData.ChargeStatus">
                                 <el-input v-model="AddFormData.ChargeAmount" :readonly="Dialog.IsDetail" placeholder="请输入收费金额"></el-input>
                             </el-form-item>
-                            <el-form-item label="是否开票" prop="IsInvoice">
-                                <el-radio v-model="AddFormData.IsInvoice" :label="true" :disabled="!AddFormData.IsInvoice" border>是</el-radio>
-                                <el-radio v-model="AddFormData.IsInvoice" :label="false" :disabled="AddFormData.IsInvoice" border>否</el-radio>
+                            <el-form-item label="是否开票" prop="IsInvoice" v-if="AddFormData.ChargeStatus">
+                                <el-radio v-model="AddFormData.IsInvoice" :label="true" :disabled="!AddFormData.IsInvoice!Dialog.IsAdd" border>是</el-radio>
+                                <el-radio v-model="AddFormData.IsInvoice" :label="false" :disabled="AddFormData.IsInvoice!Dialog.IsAdd" border>否</el-radio>
                             </el-form-item>
                         </el-tab-pane>
                         <el-tab-pane label="审核信息" :style="{height:panelHeight+'px',overflow:'auto',paddingRight:'10px'}">
