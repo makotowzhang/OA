@@ -164,6 +164,18 @@
           <Property Name="UpdateUser" Type="uniqueidentifier" />
           <Property Name="UpdateTime" Type="datetime" />
         </EntityType>
+        <EntityType Name="PM_ThingsTodo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TodoDate" Type="date" Nullable="false" />
+          <Property Name="TodoThings" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+          <Property Name="UpdateTime" Type="datetime" />
+        </EntityType>
         <EntityType Name="RM_AreaReport">
           <Key>
             <PropertyRef Name="Id" />
@@ -472,6 +484,7 @@
           <EntitySet Name="PM_MaterielApply" EntityType="Self.PM_MaterielApply" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_MoneyApply" EntityType="Self.PM_MoneyApply" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_Notice" EntityType="Self.PM_Notice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PM_ThingsTodo" EntityType="Self.PM_ThingsTodo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RM_AreaReport" EntityType="Self.RM_AreaReport" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RM_AssetsReport" EntityType="Self.RM_AssetsReport" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RM_HouseReport" EntityType="Self.RM_HouseReport" Schema="dbo" store:Type="Tables" />
@@ -518,6 +531,7 @@
           <EntitySet Name="RM_AssetsReport" EntityType="Entity.RM_AssetsReport" />
           <EntitySet Name="System_MessageReceiver" EntityType="Entity.System_MessageReceiver" />
           <EntitySet Name="System_Message" EntityType="Entity.System_Message" />
+          <EntitySet Name="PM_ThingsTodo" EntityType="Entity.PM_ThingsTodo" />
         </EntityContainer>
         <EntityType Name="System_User">
           <Key>
@@ -974,6 +988,18 @@
           <Property Name="ToUser" Type="Guid" />
           <Property Name="CreateUser" Type="Guid" />
           <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="PM_ThingsTodo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TodoDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="TodoThings" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1458,6 +1484,19 @@
                 <ScalarProperty Name="MsgType" ColumnName="MsgType" />
                 <ScalarProperty Name="MsgContent" ColumnName="MsgContent" />
                 <ScalarProperty Name="MsgTitle" ColumnName="MsgTitle" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PM_ThingsTodo">
+            <EntityTypeMapping TypeName="Entity.PM_ThingsTodo">
+              <MappingFragment StoreEntitySet="PM_ThingsTodo">
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="TodoThings" ColumnName="TodoThings" />
+                <ScalarProperty Name="TodoDate" ColumnName="TodoDate" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -50,5 +50,6 @@ namespace Entity
         public virtual DbSet<RM_AssetsReport> RM_AssetsReport { get; set; }
         public virtual DbSet<System_MessageReceiver> System_MessageReceiver { get; set; }
         public virtual DbSet<System_Message> System_Message { get; set; }
+        public virtual DbSet<PM_ThingsTodo> PM_ThingsTodo { get; set; }
     }
 }
