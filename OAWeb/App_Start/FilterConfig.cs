@@ -32,18 +32,18 @@ namespace OAWeb
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            base.OnActionExecuted(filterContext);
-            Log.IpAddress = HttpContextHelp.GetClientIp(filterContext.HttpContext.Request);
-            string user = filterContext.RequestContext.HttpContext.User.Identity.Name;
-            if (string.IsNullOrWhiteSpace(user))
-            {
-                Log.DoUser = Guid.Empty;
-            }
-            else
-            {
-                Log.DoUser = Guid.Parse(user);
-            }
-            new Business.SystemBusiness.LogBusiness().AddLog(Log);
+            //base.OnActionExecuted(filterContext);
+            //Log.IpAddress = HttpContextHelp.GetClientIp(filterContext.HttpContext.Request);
+            //string user = filterContext.RequestContext.HttpContext.User.Identity.Name;
+            //if (string.IsNullOrWhiteSpace(user))
+            //{
+            //    Log.DoUser = Guid.Empty;
+            //}
+            //else
+            //{
+            //    Log.DoUser = Guid.Parse(user);
+            //}
+            //new Business.SystemBusiness.LogBusiness().AddLog(Log);
         }
     }
 

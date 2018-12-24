@@ -171,6 +171,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TodoDate" Type="date" Nullable="false" />
           <Property Name="TodoThings" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="IsAlert" Type="bit" Nullable="false" />
           <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
           <Property Name="UpdateUser" Type="uniqueidentifier" />
@@ -1000,6 +1001,7 @@
           <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdateUser" Type="Guid" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="IsAlert" Type="Boolean" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1491,6 +1493,7 @@
           <EntitySetMapping Name="PM_ThingsTodo">
             <EntityTypeMapping TypeName="Entity.PM_ThingsTodo">
               <MappingFragment StoreEntitySet="PM_ThingsTodo">
+                <ScalarProperty Name="IsAlert" ColumnName="IsAlert" />
                 <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
                 <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />

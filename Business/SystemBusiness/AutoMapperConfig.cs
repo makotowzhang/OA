@@ -68,6 +68,9 @@ namespace Business.SystemBusiness
 
                 m.CreateMap<RM_AssetsReport, AssetsReportModel>();
                 m.CreateMap<AssetsReportModel, RM_AssetsReport>();
+
+                m.CreateMap<PM_ThingsTodo, ThingsTodoModel>();
+                m.CreateMap<ThingsTodoModel, PM_ThingsTodo>();
             });
         }
     }

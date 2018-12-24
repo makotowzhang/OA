@@ -11,9 +11,9 @@ using Model.SystemModel;
 
 namespace OAWeb.Controllers
 {
-    public class LeaseController : BaseController
+    public class ThingsTodoController : BaseController
     {
-        private LeaseBusiness business = new LeaseBusiness();
+        private ThingsTodoBusiness business = new ThingsTodoBusiness();
 
         // GET: Employee
         [PageAuthorizeFilter]
@@ -22,31 +22,32 @@ namespace OAWeb.Controllers
             return View();
         }
 
-        public ActionResult GetLeaList(LeaseFilter filter)
+        public ActionResult GetList(ThingsTodoFilter filter)
         {
-            var data = business.GetLeaList(filter, out int total);
+            filter.CreateUser = CurrentUser.Id;
+            var data = business.GetList(filter, out int total);
             return Json(new TableDataModel(total, data));
         }
 
-        public ActionResult GetLeaModel(int? id)
+        public ActionResult GetModel(int? id)
         {
             return Json(business.GetModel(id));
         }
 
-        [LogFilter("编辑", "借物管理", LogActionType.Operation)]
-        public ActionResult Save(LeaseModel lea)
+        [LogFilter("编辑", "代办事项", LogActionType.Operation)]
+        public ActionResult Save(ThingsTodoModel mod)
         {
             try
             {
-                if (!lea.Id.HasValue)
+                if (!mod.Id.HasValue)
                 {
-                    lea.CreateUser = CurrentUser.Id;
+                    mod.CreateUser = CurrentUser.Id;
                 }
                 else
                 {
-                    lea.UpdateUser = CurrentUser.Id;
+                    mod.UpdateUser = CurrentUser.Id;
                 }
-                return Json(new JsonMessage(business.Save(lea)));
+                return Json(new JsonMessage(business.Save(mod)));
             }
             catch (Exception e)
             {
@@ -55,13 +56,12 @@ namespace OAWeb.Controllers
         }
 
 
-        [LogFilter("删除", "借物管理", LogActionType.Operation)]
-        public ActionResult Delete(List<LeaseModel> lea)
+        [LogFilter("删除", "代办事项", LogActionType.Operation)]
+        public ActionResult Delete(List<ThingsTodoModel> mod)
         {
             try
             {
-                lea.ForEach(m => m.UpdateUser = CurrentUser.Id);
-                return Json(new JsonMessage(business.Delete(lea)));
+                return Json(new JsonMessage(business.Delete(mod)));
             }
             catch (Exception e)
             {
@@ -69,10 +69,6 @@ namespace OAWeb.Controllers
             }
         }
 
-        public ActionResult GetAllLease()
-        {
-            return Json(business.GetAllLease());
-        }
 
     }
 }

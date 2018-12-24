@@ -21,5 +21,6 @@ namespace Entity
         public System.DateTime CreateTime { get; set; }
         public Nullable<System.Guid> UpdateUser { get; set; }
         public Nullable<System.DateTime> UpdateTime { get; set; }
+        public bool IsAlert { get; set; }
     }
 }

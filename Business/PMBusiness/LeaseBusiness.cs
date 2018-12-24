@@ -82,7 +82,7 @@ namespace Business.PMBusiness
             {
                 foreach (var lea in list)
                 {
-                    if (lea.Id!=0)
+                    if (lea.Id==0)
                     {
                         continue;
                     }
