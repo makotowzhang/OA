@@ -74,13 +74,60 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            &nbsp;
+                            <el-form-item label="项目状态" prop="AuditStatus">
+                                <el-select v-model="QueryFormData.AuditStatus"
+                                           placeholder="请选择项目状态"
+                                           :clearable="true"
+                                           multiple
+                                           collapse-tags>
+                                    <el-option v-for="item in SelectOption.AuditStatus"
+                                               :key="item.Value"
+                                               :label="item.Text"
+                                               :value="item.Value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="估价师" prop="SignAppraiser">
+                                <el-select v-model="QueryFormData.SignAppraiser"
+                                           placeholder="请选择签字估价师"
+                                           :clearable="true"
+                                           multiple
+                                           collapse-tags>
+                                    <el-option v-for="item in SelectOption.EmpList"
+                                               :key="item.RelateUserId"
+                                               :label="item.EmpName"
+                                               :value="item.RelateUserId">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="开始时间" prop="CreateBeginTime">
+                                <el-date-picker v-model="QueryFormData.CreateBeginTime"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="结束时间" prop="CreateEndTime">
+                                <el-date-picker v-model="QueryFormData.CreateEndTime"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-button type="primary" @@click="onQuery" icon="el-icon-search">查询</el-button>
                             <el-button type="primary" @@click="resetQueryForm" icon="el-icon-refresh">重置</el-button>
                         </el-col>
-
                     </el-row>
                 </el-form>
                 <el-row class="Table_Button_Row">
@@ -469,10 +516,10 @@
             },
             SelectOption: {
                 AuditStatus: [
-                    { Value: "WaitAudit", Text: "待审核" },
-                    { Value: "Passed", Text: "审核通过" },
-                    { Value: "Reject", Text: "驳回" },
-                    { Value: "Revoke", Text: "撤销" }
+                    { Value: "WaitAudit", Text: "审核中" },
+                    { Value: "Passed", Text: "已结审" },
+                    { Value: "Reject", Text: "未通过" },
+                    { Value: "Revoke", Text: "已撤销" }
                 ],
                 ValuationObjectiveList: [],
                 ValuationMethodsList: [],
@@ -493,10 +540,10 @@
             modifyTitle: "",
             Dic: {
                 AuditStatus: {
-                    WaitAudit: "待审核",
-                    Passed: "审核通过",
-                    Reject: "驳回",
-                    Revoke: "撤销"
+                    WaitAudit: "审核中",
+                    Passed: "已结审",
+                    Reject: "未通过",
+                    Revoke: "已撤销"
                 },
                 ReportType: {
                     Formal: "正式",
@@ -584,7 +631,7 @@
                 }
                 else {
                     this.ButtonState.btnAudit = true;
-                    this.ButtonState.btnReturn = true;
+                    this.ButtonState.btnDetail = true;
                 }
             },
             rowClick: function (row, event, column) {

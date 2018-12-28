@@ -94,6 +94,8 @@ namespace Model.RMModel
         public List<bool> ChargeStatus { get; set; }
         public List<string> AuditStatus { get; set; }
 
+        public List<Guid> SignAppraiser { get; set; }
+
         public string CreateUserName { get; set; }
 
         public string AuditUserName { get; set; }

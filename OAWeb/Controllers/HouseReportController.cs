@@ -19,12 +19,12 @@ namespace OAWeb.Controllers
         {
             return View();
         }
-
+        [PageAuthorizeFilter]
         public ActionResult ReportCreate()
         {
             return View();
         }
-
+        [PageAuthorizeFilter]
         public ActionResult ReportAudit()
         {
             return View();

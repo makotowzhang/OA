@@ -690,6 +690,9 @@
     <Content Include="Views\AssetsReport\ReportCreate.cshtml" />
     <Content Include="Views\AssetsReport\ReportMobileDetail.cshtml" />
     <Content Include="Views\ThingsTodo\Index.cshtml" />
+    <Content Include="Views\HouseReport\Index.cshtml" />
+    <Content Include="Views\AreaReport\Index.cshtml" />
+    <Content Include="Views\AssetsReport\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">

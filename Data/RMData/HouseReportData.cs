@@ -58,6 +58,13 @@ namespace Data.RMData
             {
                 list = list.Where(m => filter.ReportType.Contains(m.ReportTypeString));
             }
+            if (filter.SignAppraiser.IsNotNullAndCountGtZero())
+            {
+                list = list.Where(m => dp.RM_ReportDicItem
+                                                   .Where(x => x.DicGroupCode == "SignAppraiser" && x.ReportId == m.Id)
+                                                   .Select(x => x.DicItemId)
+                                                   .Any(x => filter.SignAppraiser.Contains(x)));
+            }
             if (filter.ReportCode.IsNotNullOrWhiteSpace())
             {
                 list = list.Where(m => m.ReportCode.Contains(filter.ReportCode));
@@ -99,11 +106,11 @@ namespace Data.RMData
             }
             if (filter.CreateBeginTime.HasValue)
             {
-                list = list.Where(m => m.CreateTime >= filter.CreateBeginTime.Value);
+                list = list.Where(m => m.SubmitTime >= filter.CreateBeginTime.Value);
             }
             if (filter.CreateEndTime.HasValue)
             {
-                list = list.Where(m => m.CreateTime <= filter.CreateEndTime.Value);
+                list = list.Where(m => m.SubmitTime <= filter.CreateEndTime.Value);
             }
             if (filter.AuditBeginTime.HasValue)
             {
