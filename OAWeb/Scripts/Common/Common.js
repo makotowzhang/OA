@@ -80,7 +80,7 @@ function GetActionAuthorize(vueEx) {
                 }
             }
         }
-        setTimeout(window.onresize, 0);
+        setTimeout(window.onresize, 100);
     });
 }
 
@@ -339,7 +339,7 @@ axios.interceptors.request.use(function (request) {
 
 
 axios.interceptors.response.use(function (response) {
-    if (response.request.responseURL.indexOf("Login/Index") != -1) {
+    if (response.request.responseURL!=null&&response.request.responseURL.indexOf("Login/Index") != -1) {
         new Vue().$alert('登录会话过期请重新登录', '提示', {
             confirmButtonText: '确定',
             callback: function () {

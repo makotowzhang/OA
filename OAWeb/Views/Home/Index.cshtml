@@ -375,7 +375,7 @@
             //选择菜单项触发
             addTab: function (index, indexPath) {
                 axios.get("/Home/Test").then(function (response) {
-                    if (response.request.responseURL.indexOf("Login/Index") != -1) {
+                    if (response.request.responseURL!=null&&response.request.responseURL.indexOf("Login/Index") != -1) {
                         return;
                     }
                     let item = getMenu($app.MenuList, index);
@@ -505,7 +505,7 @@
 
       
     axios.post("/Home/GetMenu").then(function (response) {
-        if (response.request.responseURL.indexOf("Login/Index") != -1) {
+        if (response.request.responseURL!=null&&response.request.responseURL.indexOf("Login/Index") != -1) {
             return;
         }
         $app.MenuList = response.data;
