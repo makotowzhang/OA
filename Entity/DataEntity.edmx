@@ -474,6 +474,29 @@
           <Property Name="UpdateUser" Type="uniqueidentifier" />
           <Property Name="UpdateTime" Type="datetime" />
         </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“Te.dbo.View_Achievements”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="View_Achievements">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="ReportType" />
+            <PropertyRef Name="ReportStatus" />
+            <PropertyRef Name="CreateUser" />
+            <PropertyRef Name="ChargeStatus" />
+            <PropertyRef Name="ReportFlag" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ReportCode" Type="varchar" MaxLength="50" />
+          <Property Name="ReportName" Type="varchar" MaxLength="50" />
+          <Property Name="ChargeAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ReportType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ReportStatus" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="SubmitTime" Type="datetime" />
+          <Property Name="AuditTime" Type="datetime" />
+          <Property Name="ChargeStatus" Type="bit" Nullable="false" />
+          <Property Name="ReportFlag" Type="varchar" MaxLength="12" Nullable="false" />
+        </EntityType>
         <EntityContainer Name="FrameworkModelStoreContainer">
           <EntitySet Name="PM_AuditUser" EntityType="Self.PM_AuditUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_DataLibrary" EntityType="Self.PM_DataLibrary" Schema="dbo" store:Type="Tables" />
@@ -501,6 +524,21 @@
           <EntitySet Name="System_Role" EntityType="Self.System_Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_User" EntityType="Self.System_User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="System_UserRole" EntityType="Self.System_UserRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="View_Achievements" EntityType="Self.View_Achievements" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [View_Achievements].[Id] AS [Id], 
+    [View_Achievements].[ReportCode] AS [ReportCode], 
+    [View_Achievements].[ReportName] AS [ReportName], 
+    [View_Achievements].[ChargeAmount] AS [ChargeAmount], 
+    [View_Achievements].[ReportType] AS [ReportType], 
+    [View_Achievements].[ReportStatus] AS [ReportStatus], 
+    [View_Achievements].[CreateUser] AS [CreateUser], 
+    [View_Achievements].[SubmitTime] AS [SubmitTime], 
+    [View_Achievements].[AuditTime] AS [AuditTime], 
+    [View_Achievements].[ChargeStatus] AS [ChargeStatus], 
+    [View_Achievements].[ReportFlag] AS [ReportFlag]
+    FROM [dbo].[View_Achievements] AS [View_Achievements]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -533,6 +571,7 @@
           <EntitySet Name="System_MessageReceiver" EntityType="Entity.System_MessageReceiver" />
           <EntitySet Name="System_Message" EntityType="Entity.System_Message" />
           <EntitySet Name="PM_ThingsTodo" EntityType="Entity.PM_ThingsTodo" />
+          <EntitySet Name="View_Achievements" EntityType="Entity.View_Achievements" />
         </EntityContainer>
         <EntityType Name="System_User">
           <Key>
@@ -1002,6 +1041,27 @@
           <Property Name="UpdateUser" Type="Guid" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
           <Property Name="IsAlert" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="View_Achievements">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="ReportType" />
+            <PropertyRef Name="ReportStatus" />
+            <PropertyRef Name="CreateUser" />
+            <PropertyRef Name="ChargeStatus" />
+            <PropertyRef Name="ReportFlag" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="ReportCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ChargeAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ReportType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportStatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="SubmitTime" Type="DateTime" Precision="3" />
+          <Property Name="AuditTime" Type="DateTime" Precision="3" />
+          <Property Name="ChargeStatus" Type="Boolean" Nullable="false" />
+          <Property Name="ReportFlag" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1500,6 +1560,23 @@
                 <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
                 <ScalarProperty Name="TodoThings" ColumnName="TodoThings" />
                 <ScalarProperty Name="TodoDate" ColumnName="TodoDate" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="View_Achievements">
+            <EntityTypeMapping TypeName="Entity.View_Achievements">
+              <MappingFragment StoreEntitySet="View_Achievements">
+                <ScalarProperty Name="ReportFlag" ColumnName="ReportFlag" />
+                <ScalarProperty Name="ChargeStatus" ColumnName="ChargeStatus" />
+                <ScalarProperty Name="AuditTime" ColumnName="AuditTime" />
+                <ScalarProperty Name="SubmitTime" ColumnName="SubmitTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="ReportStatus" ColumnName="ReportStatus" />
+                <ScalarProperty Name="ReportType" ColumnName="ReportType" />
+                <ScalarProperty Name="ChargeAmount" ColumnName="ChargeAmount" />
+                <ScalarProperty Name="ReportName" ColumnName="ReportName" />
+                <ScalarProperty Name="ReportCode" ColumnName="ReportCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

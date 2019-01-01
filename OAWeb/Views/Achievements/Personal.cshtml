@@ -1,0 +1,240 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>个人绩效考核</title>
+    @Html.Partial("~/Views/Shared/_Head.cshtml")
+    <script src="~/Scripts/Echarts/echarts.min.js"></script>
+    <style>
+        .ChartRow {
+            padding: 20px;
+            padding-right: 10px;
+            float: left;
+            width: 50%;
+            box-sizing: border-box;
+        }
+
+        .TableRow {
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <div id="App" ref="App" v-loading="Loading.bodyLoading">
+        <template>
+            <div ref="QueryFormDiv">
+                <el-form :model="QueryFormData" :inline="true" class="Query_Form" ref="QueryForm" @@submit.native.prevent>
+                    <el-row class="Table_Button_Row">
+                        <el-col :span="6">
+                            <el-form-item label="开始时间" prop="TimeBegin">
+                                <el-date-picker v-model="QueryFormData.TimeBegin"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="结束时间" prop="TimeEnd">
+                                <el-date-picker v-model="QueryFormData.TimeEnd"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+
+                            <el-form-item label="维度" prop="TimeCycle">
+                                <el-select v-model="QueryFormData.TimeCycle"
+                                           placeholder="请选择维度"
+                                           :clearable="true">
+                                    <el-option key="Week"
+                                               label="周"
+                                               value="Week">
+                                    </el-option>
+                                    <el-option key="Month"
+                                               label="月"
+                                               value="Month">
+                                    </el-option>
+                                    <el-option key="Annual"
+                                               label="年"
+                                               value="Annual">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item>
+                                <el-button type="primary" @@click="onQuery" icon="el-icon-search">查询</el-button>
+                                <el-button type="primary" @@click="resetQueryForm" icon="el-icon-refresh">重置</el-button>
+                            </el-form-item>
+                        </el-col>
+
+                    </el-row>
+                </el-form>
+                <el-row class="Table_Button_Row">
+                    <el-col :span="24">
+                        <el-button type="primary" v-if="ActionPermission.Export" ref="btnExport" @@click="openAddDialog" icon="el-icon-download">导出</el-button>
+                    </el-col>
+                </el-row>
+            </div>
+            <div>
+                <div class="ChartRow">
+                    <el-card style="width:100%;height:300px;">
+
+
+                    </el-card>
+                </div>
+                <div class="ChartRow">
+                    <el-card style="width:100%;height:300px;">
+
+
+                    </el-card>
+                </div>
+            </div>
+            <div class="TableRow">
+                <el-table ref="dataTable"
+                          :data="tableData"
+                          :border="true"
+                          :height="tableHeight"
+                          style="width: 100%;margin-top:20px;"
+                          element-loading-text="拼命加载中"
+                          element-loading-spinner="el-icon-loading"
+                          element-loading-background="rgba(200, 200,200, 0.5)"
+                          v-loading="Loading.tableLoading">
+                    <el-table-column type="index"
+                                     :index="showidex"
+                                     label=" ">
+                    </el-table-column>
+                    <el-table-column type="selection"
+                                     width="50">
+                    </el-table-column>
+                    <el-table-column prop="username"
+                                     label="用户名"
+                                     width="180">
+                    </el-table-column>
+
+                </el-table>
+                <div ref="Pagination">
+                    <el-pagination @@size-change="handleSizeChange"
+                                   @@current-change="handleCurrentChange"
+                                   :current-page.sync="QueryFormData.Page"
+                                   :page-size.sync="QueryFormData.PageSize"
+                                   :page-sizes="PaginationData.pageSizes"
+                                   layout="total, sizes, prev, pager, next, jumper"
+                                   :total="PaginationData.total"
+                                   style="width:100%;padding-left:20px;box-sizing:border-box">
+                    </el-pagination>
+                </div>
+            </div>
+
+        </template>
+    </div>
+</body>
+</html>
+<script>
+    $vue = new Vue({
+        el: "#App",
+        data: {
+            QueryFormData: {
+                UserName: "",
+                Page: 1,
+                PageSize: 10,
+            },
+            tableData: [],
+            tableHeight: 500,
+            ButtonState: {
+                btnEdit: true,
+                btnDelete: true
+            },
+            Dialog: {
+                addDialog: false,
+                editDialog: false
+            },
+            Loading: {
+                bodyLoading: false,
+                tableLoading: false
+            },
+            PaginationData: {
+                pageSizes: [10, 20, 50, 100],
+                total: 0
+            },
+            PaginationFilter: {
+            },
+            ActionPermission: {
+                Add: false,
+                Edit: false,
+                Delete: false
+            }
+        },
+        methods: {
+            onQuery: function () {
+                this.QueryFormData.Page = 1;
+                this.PaginationFilter = JSON.parse(JSON.stringify(this.QueryFormData));
+                getList();
+            },
+            showIdex: function (index) {
+                return (this.QueryFormData.Page - 1) * this.QueryFormData.PageSize + 1 + index;
+            },
+            resetQueryForm: function () {
+                this.$refs.QueryForm.resetFields();
+            },
+            openAddDialog: function () {
+                this.Dialog.addDialog = true;
+                this.$refs.AddForm.resetFields();
+            },
+            handleSizeChange: function (val) {
+                if (this.QueryFormData.Page > (this.PaginationData.total / val + 1)) {
+                    return;
+                }
+                this.PaginationFilter.Page = this.QueryFormData.Page;
+                this.PaginationFilter.PageSize = val;
+                getList(this.PaginationFilter);
+            },
+            handleCurrentChange: function (val) {
+                this.PaginationFilter.Page = val;
+                this.PaginationFilter.PageSize = this.QueryFormData.PageSize;
+                getList(this.PaginationFilter);
+            }
+        }
+
+    });
+
+    function getList(filter) {
+        if (filter == null) {
+            filter = $vue.QueryFormData;
+        }
+        $vue.$refs.dataTable.clearSelection();
+        $vue.ButtonState.btnEdit = true;
+        $vue.ButtonState.btnDelete = true;
+        $vue.Loading.tableLoading = true;
+        axios.post("GetUserList", filter).then(function (response) {
+            $vue.Loading.tableLoading = false;
+            $vue.tableData = response.data.List;
+            $vue.PaginationData.total = response.data.Total;
+        }).catch(function (error) {
+            $vue.Loading.tableLoading = false;
+            $vue.tableData = [];
+            $vue.PaginationData.total = 0;
+            $vue.$message({
+                type: 'error',
+                message: '服务器出错'
+            });
+        });
+    }
+
+    window.onresize = function () {
+        $vue.tableHeight = $vue.$refs.App.getBoundingClientRect().height -
+            $vue.$refs.QueryFormDiv.getBoundingClientRect().height -
+            $vue.$refs.Pagination.getBoundingClientRect().height - 345;
+    }
+    getList();
+    GetActionAuthorize($vue);
+</script>

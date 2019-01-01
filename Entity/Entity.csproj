@@ -144,6 +144,9 @@
     <Compile Include="System_UserRole.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
+    <Compile Include="View_Achievements.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

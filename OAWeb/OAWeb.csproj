@@ -163,6 +163,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AchievementsController.cs" />
     <Compile Include="Controllers\AuthorizeController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DataLibraryController.cs" />
@@ -220,6 +221,8 @@
     <Content Include="Scripts\Axios\axios.js" />
     <Content Include="Scripts\Axios\axios.min.js" />
     <Content Include="Scripts\Common\Common.js" />
+    <Content Include="Scripts\Echarts\echarts.js" />
+    <Content Include="Scripts\Echarts\echarts.min.js" />
     <Content Include="Scripts\ElementUI\css\index.css" />
     <Content Include="Scripts\ElementUI\index.js" />
     <Content Include="Scripts\PDFJS\build\pdf.js" />
@@ -693,6 +696,7 @@
     <Content Include="Views\HouseReport\Index.cshtml" />
     <Content Include="Views\AreaReport\Index.cshtml" />
     <Content Include="Views\AssetsReport\Index.cshtml" />
+    <Content Include="Views\Achievements\Personal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">

@@ -55,6 +55,8 @@
     <Compile Include="EnumModel\ReportStatus.cs" />
     <Compile Include="EnumModel\ReportType.cs" />
     <Compile Include="EnumModel\SysMessageType.cs" />
+    <Compile Include="EnumModel\TimeCycle.cs" />
+    <Compile Include="PMModel\AchievementsModel.cs" />
     <Compile Include="PMModel\DataLibraryModel.cs" />
     <Compile Include="PMModel\DepartmentModel.cs" />
     <Compile Include="PMModel\EmployeeModel.cs" />
