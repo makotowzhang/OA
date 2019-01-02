@@ -1,4 +1,5 @@
 ﻿using Model.EnumModel;
+using Model.SystemModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,12 +23,37 @@ namespace Model.PMModel
         public string ReportFlag { get; set; }
     }
 
-    public class AchievementsFilter
+    public class AchievementsFilter : PageModel
     {
         public DateTime? TimeBegin { get; set; }
 
         public DateTime? TimeEnd { get; set; }
 
-        public TimeCycle TimeCycle { get; set; }
+        public TimeCycle? TimeCycle { get; set; }
+
+        public Guid? CreateUser { get; set; }
     }
+
+    public class PieChart
+    {
+        public string name { get; set; }
+
+        public decimal value { get; set; }
+    }
+
+    public class LineChart
+    {
+        public List<string> xAxis { get; set; } = new List<string>();
+
+        public List<decimal> yAxis { get; set; } = new List<decimal>();
+    }
+
+    public class AchievementsChartData
+    {
+        public List<PieChart> PieChartData { get; set; } = new List<PieChart>();
+
+        public LineChart LineChartData { get; set; } = new LineChart();
+    }
+
+
 }

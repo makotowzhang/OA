@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PMData\DataLibraryData.cs" />
+    <Compile Include="PMData\AchievementsData.cs" />
     <Compile Include="PMData\DepartmentData.cs" />
     <Compile Include="PMData\LeaseData.cs" />
     <Compile Include="PMData\LeaseApplyData.cs" />

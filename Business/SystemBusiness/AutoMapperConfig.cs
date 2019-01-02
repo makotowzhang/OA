@@ -71,6 +71,9 @@ namespace Business.SystemBusiness
 
                 m.CreateMap<PM_ThingsTodo, ThingsTodoModel>();
                 m.CreateMap<ThingsTodoModel, PM_ThingsTodo>();
+
+                m.CreateMap<View_Achievements, AchievementsModel>();
+                m.CreateMap<AchievementsModel, View_Achievements>();
             });
         }
     }
