@@ -121,7 +121,7 @@
                           element-loading-background="rgba(200, 200,200, 0.5)"
                           v-loading="Loading.tableLoading">
                     <el-table-column type="index"
-                                     :index="showidex"
+                                     :index="showIdex"
                                      label=" ">
                     </el-table-column>
                     <el-table-column type="selection"
@@ -237,8 +237,8 @@
             }
         },
         mounted: function () {
-            this.pie = echarts.init(document.getElementById('pieCharts'));
-            this.pie.setOption({
+            this.Charts.pie = echarts.init(document.getElementById('pieCharts'));
+            this.Charts.pie.setOption({
                 title: {
                     text: '绩效比重',
                     x: 'center'
@@ -256,8 +256,8 @@
                     ]
                 }
             });
-            this.line = echarts.init(document.getElementById('lineCharts'));
-            this.line.setOption({
+            this.Charts.line = echarts.init(document.getElementById('lineCharts'));
+            this.Charts.line.setOption({
                 title: {
                     text: '收益走势'
                 },
@@ -326,8 +326,8 @@
         $vue.tableHeight = $vue.$refs.App.getBoundingClientRect().height -
             $vue.$refs.QueryFormDiv.getBoundingClientRect().height -
             $vue.$refs.Pagination.getBoundingClientRect().height - 345;
-        pie.resize();
-        line.resize();
+        $vue.Charts.pie.resize();
+        $vue.Charts.line.resize();
     }
     GetActionAuthorize($vue);
 </script>
