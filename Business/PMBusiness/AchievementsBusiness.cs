@@ -7,6 +7,8 @@ using Data.PMData;
 using Model.PMModel;
 using AutoMapper;
 using Entity;
+using Aspose.Cells;
+using System.IO;
 
 namespace Business.PMBusiness
 {
@@ -14,11 +16,11 @@ namespace Business.PMBusiness
     {
         private AchievementsData data = new AchievementsData();
 
-        public List<AchievementsModel> GetAchievementsList(AchievementsFilter filter, out int total)
+        public List<AchievementsModel> GetAchievementsList(AchievementsFilter filter, out int total,bool isPage=true)
         {
             using (DataProvider dp = new DataProvider())
             {
-                var list = data.GetAchievementsList(dp, filter, out total);
+                var list = data.GetAchievementsList(dp, filter, out total, isPage);
                 return Mapper.Map<List<AchievementsModel>>(list);
             }
         }
@@ -61,6 +63,7 @@ namespace Business.PMBusiness
                     name = "资产",
                     value = list.Where(m => m.ReportFlag == "AssetsReport").Sum(m => m.ChargeAmount ?? 0)
                 });
+                model.PieChartData = model.PieChartData.Where(m => m.value != 0).ToList();
                 if (!filter.TimeCycle.HasValue)
                 {
                     filter.TimeCycle = Model.EnumModel.TimeCycle.Week;
@@ -77,7 +80,7 @@ namespace Business.PMBusiness
                 if (filter.TimeCycle == Model.EnumModel.TimeCycle.Week)
                 {
                     DateTime tempTime = filter.TimeBegin.Value.Date;
-                    while (tempTime < filter.TimeEnd.Value.Date)
+                    while (tempTime <= filter.TimeEnd.Value.Date)
                     {
                         DateTime endTime = tempTime.AddDays(6).AddHours(23).AddMinutes(59).AddSeconds(59);
                         model.LineChartData.xAxis.Add(tempTime.ToString("yyyy.MM.dd") + "-" + endTime.ToString("yyyy.MM.dd"));
@@ -88,7 +91,7 @@ namespace Business.PMBusiness
                 if (filter.TimeCycle == Model.EnumModel.TimeCycle.Month)
                 {
                     DateTime tempTime = filter.TimeBegin.Value.Date.AddDays(0-filter.TimeBegin.Value.Day);
-                    while (tempTime < filter.TimeEnd.Value.Date)
+                    while (tempTime <= filter.TimeEnd.Value.Date)
                     {
                         DateTime endTime = tempTime.AddMonths(1).AddDays(-1).AddHours(23).AddMinutes(59).AddSeconds(59);
                         model.LineChartData.xAxis.Add(tempTime.ToString("yyyy.MM") + "-" + endTime.ToString("yyyy.MM"));
@@ -99,7 +102,7 @@ namespace Business.PMBusiness
                 if (filter.TimeCycle == Model.EnumModel.TimeCycle.Annual)
                 {
                     DateTime tempTime = new DateTime(filter.TimeBegin.Value.Year,1,1);
-                    while (tempTime < filter.TimeEnd.Value.Date)
+                    while (tempTime <= filter.TimeEnd.Value.Date)
                     {
                         DateTime endTime = tempTime.AddYears(1).AddDays(-1).AddHours(23).AddMinutes(59).AddSeconds(59);
                         model.LineChartData.xAxis.Add(tempTime.ToString("yyyy"));
@@ -111,6 +114,50 @@ namespace Business.PMBusiness
             }
         }
 
+        public byte[] ExportPersonalAchievementsList(AchievementsFilter filter)
+        {
+            using (DataProvider dp = new DataProvider())
+            {
+                var list = data.GetAchievementsList(dp, filter, out int total, false);
+                Dictionary<string, string> dic = new Dictionary<string, string>
+                {
+                    { "Formal", "正式" },
+                    { "PreAssessment", "预评" },
+                    { "Consultation", "咨询" },
 
+                    { "HouseReport", "房产报告" },
+                    { "AreaReport", "土地报告" },
+                    { "AssetsReport", "资产报告" }
+                };
+
+                Workbook wk = new Workbook();
+                Worksheet ws = wk.Worksheets[0];
+                ws.Name = "绩效考核";
+                Cells cells = ws.Cells;
+                cells[0, 0].PutValue("报告编号");
+                cells[0, 1].PutValue("报告名称");
+                cells[0, 2].PutValue("报告类型");
+                cells[0, 3].PutValue("所属类别");
+                cells[0, 4].PutValue("报告时间");
+                cells[0, 5].PutValue("审核通过时间");
+                cells[0, 6].PutValue("金额");
+                for (int i = 0; i < list.Count; i++)
+                {
+                    var model = list[i];
+                    cells[i + 1, 0].PutValue(model.ReportCode);
+                    cells[i + 1, 1].PutValue(model.ReportName);
+                    cells[i + 1, 2].PutValue(dic[model.ReportType]);
+                    cells[i + 1, 3].PutValue(dic[model.ReportFlag]);
+                    cells[i + 1, 4].PutValue(model.SubmitTime.HasValue?model.SubmitTime.Value.ToString("yyyy-MM-dd HH:mm:ss"):"");
+                    cells[i + 1, 5].PutValue(model.AuditTime.HasValue ? model.AuditTime.Value.ToString("yyyy-MM-dd HH:mm:ss") : "");
+                    cells[i + 1, 6].PutValue(model.ChargeAmount);
+                }
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    wk.Save(ms, SaveFormat.Xlsx);
+                    return ms.ToArray();
+                }
+            }
+        }
     }
 }

@@ -121,6 +121,7 @@ function ErrorCommonHandle(vueEx) {
 
 //日期格式化
 function DateFormat(date, format) {
+    if (date == "") return "";
     if (date == null) return "";
     if (date.constructor == String) {
         if (date.indexOf("T") > 1) {

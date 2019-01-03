@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+
 namespace OAWeb.Controllers
 {
     public class AchievementsController : BaseController
@@ -38,6 +39,12 @@ namespace OAWeb.Controllers
             filter.CreateUser = CurrentUser.Id;
             var data = service.GetChartData(filter);
             return Json( data);
+        }
+
+        public ActionResult ExportPersonalAchievementsList(AchievementsFilter filter)
+        {
+            filter.CreateUser = CurrentUser.Id;
+            return File(service.ExportPersonalAchievementsList(filter), "application/octet-stream", "绩效列表.xlsx");
         }
     }
 }

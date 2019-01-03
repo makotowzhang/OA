@@ -41,7 +41,7 @@
                         <el-col :span="6">
                             <el-form-item label="开始时间" prop="TimeBegin">
                                 <el-date-picker v-model="QueryFormData.TimeBegin"
-                                                type="datetime"
+                                                type="date"
                                                 placeholder="选择日期时间"
                                                 :clearable="true">
                                 </el-date-picker>
@@ -50,7 +50,7 @@
                         <el-col :span="6">
                             <el-form-item label="结束时间" prop="TimeEnd">
                                 <el-date-picker v-model="QueryFormData.TimeEnd"
-                                                type="datetime"
+                                                type="date"
                                                 placeholder="选择日期时间"
                                                 :clearable="true">
                                 </el-date-picker>
@@ -88,7 +88,7 @@
                 </el-form>
                 <el-row class="Table_Button_Row">
                     <el-col :span="24">
-                        <el-button type="primary" v-if="ActionPermission.Export" ref="btnExport" @@click="openAddDialog" icon="el-icon-download">导出</el-button>
+                        <el-button type="primary" @*v-if="ActionPermission.Export"*@ ref="btnExport" @@click="exportList" icon="el-icon-download">导出</el-button>
                     </el-col>
                 </el-row>
             </div>
@@ -124,11 +124,44 @@
                                      :index="showIdex"
                                      label=" ">
                     </el-table-column>
-                    <el-table-column type="selection"
-                                     width="50">
+                    <el-table-column prop="ReportCode"
+                                     label="报告编号"
+                                     width="180">
                     </el-table-column>
-                    <el-table-column prop="username"
-                                     label="用户名"
+                    <el-table-column prop="ReportName"
+                                     label="报告名称"
+                                     width="180">
+                    </el-table-column>
+                    <el-table-column prop="ReportType"
+                                     label="报告类型"
+                                     width="180">
+                        <template slot-scope="scope">
+                            {{ Dic.ReportType[scope.row.ReportType] }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="ReportFlag"
+                                     label="所属类别"
+                                     width="180">
+                        <template slot-scope="scope">
+                            {{ Dic.ReportFlag[scope.row.ReportFlag] }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="SubmitTime"
+                                     label="报告时间"
+                                     width="200">
+                        <template slot-scope="scope">
+                            {{ DateFormat(scope.row.SubmitTime,'yyyy-MM-dd HH:mm:ss') }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="AuditTime"
+                                     label="审核通过时间"
+                                     width="200">
+                        <template slot-scope="scope">
+                            {{ DateFormat(scope.row.AuditTime,'yyyy-MM-dd HH:mm:ss') }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="ChargeAmount"
+                                     label="金额"
                                      width="180">
                     </el-table-column>
 
@@ -145,7 +178,6 @@
                     </el-pagination>
                 </div>
             </div>
-
         </template>
     </div>
 </body>
@@ -185,6 +217,18 @@
             Charts: {
                 pie: {},
                 line: {}
+            },
+            Dic: {
+                ReportType: {
+                    Formal: "正式",
+                    PreAssessment: "预评",
+                    Consultation: "咨询",
+                },
+                ReportFlag: {
+                    HouseReport: "房产报告",
+                    AreaReport: "土地报告",
+                    AssetsReport:"资产报告"
+                }
             }
         },
         methods: {
@@ -195,18 +239,18 @@
                 axios.post("GetPersonalChartData", this.QueryFormData).then(function (res) {
                     $vue.Charts.pie.setOption({
                         series: {
-                            data: res.PieChartData
+                            data: res.data.PieChartData
                         }
                     });
                     $vue.Charts.line.setOption({
                         xAxis: [
                             {
-                                data: res.LineChartData.xAxis
+                                data: res.data.LineChartData.xAxis
                             }
                         ],
                         series: [
                             {
-                                data: res.LineChartData.yAxis
+                                data: res.data.LineChartData.yAxis
                             }
                         ]
                     });
@@ -217,10 +261,6 @@
             },
             resetQueryForm: function () {
                 this.$refs.QueryForm.resetFields();
-            },
-            openAddDialog: function () {
-                this.Dialog.addDialog = true;
-                this.$refs.AddForm.resetFields();
             },
             handleSizeChange: function (val) {
                 if (this.QueryFormData.Page > (this.PaginationData.total / val + 1)) {
@@ -234,7 +274,12 @@
                 this.PaginationFilter.Page = val;
                 this.PaginationFilter.PageSize = this.QueryFormData.PageSize;
                 getList(this.PaginationFilter);
-            }
+            },
+            exportList: function () {
+                window.open("ExportPersonalAchievementsList?TimeBegin=" + DateFormat(this.QueryFormData.TimeBegin,"yyyy-MM-dd")
+                    + "&TimeEnd=" + DateFormat(this.QueryFormData.TimeEnd, "yyyy-MM-dd") + "&TimeCycle=" + this.QueryFormData.TimeCycle);
+            },
+            DateFormat: DateFormat
         },
         mounted: function () {
             this.Charts.pie = echarts.init(document.getElementById('pieCharts'));
@@ -250,9 +295,7 @@
                 series: {
                     type: 'pie',
                     data: [
-                        { name: '房产', value: 1212 },
-                        { name: '土地', value: 2323 },
-                        { name: '资产', value: 1919 }
+                       
                     ]
                 }
             });
@@ -275,7 +318,7 @@
                     {
                         type: 'category',
                         boundaryGap: false,
-                        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                        data: []
                     }
                 ],
                 yAxis: [
@@ -290,7 +333,7 @@
                     {
                         name: '收费金额',
                         type: 'line',
-                        data: [11, 11, 15, 13, 12, 13, 10]
+                        data: []
                     }
                 ]
             });
