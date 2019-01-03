@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>个人绩效考核</title>
+    <title>公司考核绩效</title>
     @Html.Partial("~/Views/Shared/_Head.cshtml")
     <script src="~/Scripts/Echarts/echarts.min.js"></script>
     <style>
@@ -16,7 +16,6 @@
             padding: 20px;
             padding-right: 10px;
             float: left;
-            width: 50%;
             box-sizing: border-box;
         }
 
@@ -27,8 +26,8 @@
         .el-card__body {
             padding: 0;
             padding-top: 20px;
-            padding-left: 20px;
-            padding-right: 20px;
+            padding-left: 5px;
+            padding-right: 5px;
         }
     </style>
 </head>
@@ -93,17 +92,25 @@
                 </el-row>
             </div>
             <div>
-                <div class="ChartRow">
+                <div class="ChartRow" style="width:37%">
                     <el-card style="width:100%;height:300px">
+                        <div id="personalLineCharts" style="width:100%;height:260px;">
+
+                        </div>
+
+                    </el-card>
+                </div>
+                <div class="ChartRow" style="width:26%">
+                    <el-card style="width:100%;height:300px;">
                         <div id="pieCharts" style="width:100%;height:260px;">
 
                         </div>
 
                     </el-card>
                 </div>
-                <div class="ChartRow">
+                <div class="ChartRow" style="width:37%">
                     <el-card style="width:100%;height:300px;">
-                        <div id="lineCharts" style="width:100%;height:260px;">
+                        <div id="allLineCharts" style="width:100%;height:260px;">
 
                         </div>
 
@@ -164,7 +171,10 @@
                                      label="金额"
                                      width="180">
                     </el-table-column>
-
+                    <el-table-column prop="CreateUserName"
+                                     label="所属人"
+                                     width="180">
+                    </el-table-column>
                 </el-table>
                 <div ref="Pagination">
                     <el-pagination @@size-change="handleSizeChange"
@@ -214,7 +224,8 @@
             },
             Charts: {
                 pie: {},
-                line: {}
+                personalLine: {},
+                allLine: {}
             },
             Dic: {
                 ReportType: {
@@ -234,23 +245,27 @@
                 this.QueryFormData.Page = 1;
                 this.PaginationFilter = JSON.parse(JSON.stringify(this.QueryFormData));
                 getList();
-                axios.post("GetPersonalChartData", this.QueryFormData).then(function (res) {
+                axios.post("GetAllChartData", this.QueryFormData).then(function (res) {
                     $vue.Charts.pie.setOption({
                         series: {
                             data: res.data.PieChartData
                         }
                     });
-                    $vue.Charts.line.setOption({
+                    $vue.Charts.allLine.setOption({
                         xAxis: [
                             {
-                                data: res.data.LineChartData.xAxis
+                                data: res.data.AllLineChartData.xAxis
                             }
                         ],
-                        series: [
+                        series:  res.data.AllLineChartData.series 
+                    });
+                    $vue.Charts.personalLine.setOption({
+                        xAxis: [
                             {
-                                data: res.data.LineChartData.yAxis
+                                data: res.data.PersonalLineChartData.xAxis
                             }
-                        ]
+                        ],
+                        series: res.data.PersonalLineChartData.series
                     });
                 });
             },
@@ -274,7 +289,7 @@
                 getList(this.PaginationFilter);
             },
             exportList: function () {
-                window.open("ExportPersonalAchievementsList?TimeBegin=" + DateFormat(this.QueryFormData.TimeBegin,"yyyy-MM-dd")
+                window.open("ExportAllAchievementsList?TimeBegin=" + DateFormat(this.QueryFormData.TimeBegin,"yyyy-MM-dd")
                     + "&TimeEnd=" + DateFormat(this.QueryFormData.TimeEnd, "yyyy-MM-dd") + "&TimeCycle=" + this.QueryFormData.TimeCycle);
             },
             DateFormat: DateFormat
@@ -293,12 +308,50 @@
                 series: {
                     type: 'pie',
                     data: [
-                       
+
                     ]
                 }
             });
-            this.Charts.line = echarts.init(document.getElementById('lineCharts'));
-            this.Charts.line.setOption({
+            this.Charts.personalLine = echarts.init(document.getElementById('personalLineCharts'));
+            this.Charts.personalLine.setOption({
+                title: {
+                    //text: '收益走势'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        magicType: { show: true, type: ['bar', 'line'] }
+                    }
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: []
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: '收费金额',
+                        type: 'line',
+                        data: []
+                    }
+                ]
+            });
+            this.Charts.allLine = echarts.init(document.getElementById('allLineCharts'));
+            this.Charts.allLine.setOption({
                 title: {
                     //text: '收益走势'
                 },
@@ -337,7 +390,7 @@
             });
         }
     });
- 
+
 
 
     function getList(filter) {
@@ -346,7 +399,7 @@
         }
         $vue.$refs.dataTable.clearSelection();
         $vue.Loading.tableLoading = true;
-        axios.post("GetPersonalAchievementsList", filter).then(function (response) {
+        axios.post("GetAllAchievementsList", filter).then(function (response) {
             $vue.Loading.tableLoading = false;
             $vue.tableData = response.data.List;
             $vue.PaginationData.total = response.data.Total;
@@ -360,15 +413,16 @@
             });
         });
     }
-  
-   
-    
+
+
+
     window.onresize = function () {
         $vue.tableHeight = $vue.$refs.App.getBoundingClientRect().height -
             $vue.$refs.QueryFormDiv.getBoundingClientRect().height -
             $vue.$refs.Pagination.getBoundingClientRect().height - 345;
         $vue.Charts.pie.resize();
-        $vue.Charts.line.resize();
+        $vue.Charts.personalLine.resize();
+        $vue.Charts.allLine.resize();
     }
     GetActionAuthorize($vue);
 </script>

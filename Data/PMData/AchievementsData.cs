@@ -56,7 +56,23 @@ namespace Data.PMData
 
         public List<AchievementsModel> GetChartData(DataProvider dp, AchievementsFilter filter)
         {
-            var list = dp.View_Achievements.Where(m => true);
+            var list = from a in dp.View_Achievements
+                       join b in dp.System_User on a.CreateUser equals b.Id
+                       select new AchievementsModel()
+                       {
+                           Id = a.Id,
+                           ReportCode = a.ReportCode,
+                           ReportName = a.ReportName,
+                           ChargeAmount = a.ChargeAmount,
+                           ReportType = a.ReportType,
+                           ReportStatus = a.ReportStatus,
+                           CreateUser = a.CreateUser,
+                           SubmitTime = a.SubmitTime,
+                           AuditTime = a.AuditTime,
+                           ChargeStatus = a.ChargeStatus,
+                           ReportFlag = a.ReportFlag,
+                           CreateUserName = b.TrueName
+                       };
             if (filter.TimeBegin.HasValue)
             {
                 list = list.Where(m => m.AuditTime >= filter.TimeBegin.Value);
@@ -70,13 +86,7 @@ namespace Data.PMData
                 list = list.Where(m => m.CreateUser == filter.CreateUser.Value);
             }
 
-            return list.Select(m => new AchievementsModel()
-            {
-                ChargeAmount = m.ChargeAmount,
-                ReportFlag = m.ReportFlag,
-                CreateUser = m.CreateUser,
-                AuditTime = m.AuditTime
-            }).ToList();
+            return list.ToList();
 
         }
     }

@@ -90,7 +90,7 @@ namespace Business.PMBusiness
                 }
                 if (filter.TimeCycle == Model.EnumModel.TimeCycle.Month)
                 {
-                    DateTime tempTime = filter.TimeBegin.Value.Date.AddDays(0-filter.TimeBegin.Value.Day);
+                    DateTime tempTime = filter.TimeBegin.Value.Date.AddDays(1-filter.TimeBegin.Value.Day);
                     while (tempTime <= filter.TimeEnd.Value.Date)
                     {
                         DateTime endTime = tempTime.AddMonths(1).AddDays(-1).AddHours(23).AddMinutes(59).AddSeconds(59);
@@ -114,7 +114,134 @@ namespace Business.PMBusiness
             }
         }
 
-        public byte[] ExportPersonalAchievementsList(AchievementsFilter filter)
+        public SummaryAchievementsChartData GetSummaryChartData(AchievementsFilter filter)
+        {
+            using (DataProvider dp = new DataProvider())
+            {
+
+                var list = data.GetChartData(dp, filter);
+                if (list.Count() == 0)
+                {
+                    return new SummaryAchievementsChartData();
+                }
+                if (!filter.TimeBegin.HasValue)
+                {
+                    filter.TimeBegin = list.Min(m => m.AuditTime);
+                }
+                if (!filter.TimeEnd.HasValue)
+                {
+                    filter.TimeEnd = list.Max(m => m.AuditTime);
+                }
+                if (filter.TimeEnd < filter.TimeBegin)
+                {
+                    return new SummaryAchievementsChartData();
+                }
+                SummaryAchievementsChartData model = new SummaryAchievementsChartData();
+                foreach (var userid in list.Select(x => x.CreateUser).Distinct())
+                {
+                    var userTrueName = list.Where(m => m.CreateUser == userid).Select(m => m.CreateUserName).FirstOrDefault();
+                    model.PieChartData.Add(new PieChart()
+                    {
+                        name= userTrueName,
+                        value= list.Where(m => m.CreateUser == userid).Sum(m => m.ChargeAmount ?? 0)
+                    });
+                    model.PersonalLineChartData.series.Add(new AllLineChartSeries()
+                    {
+                        name = userTrueName,
+                        keyFilter = userid
+                    });
+                }
+                model.PieChartData = model.PieChartData.Where(m => m.value != 0).ToList();
+                if (!filter.TimeCycle.HasValue)
+                {
+                    filter.TimeCycle = Model.EnumModel.TimeCycle.Week;
+                    TimeSpan ts = filter.TimeEnd.Value - filter.TimeBegin.Value;
+                    if (ts.Days >= 90)
+                    {
+                        filter.TimeCycle = Model.EnumModel.TimeCycle.Month;
+                    }
+                    if (ts.Days >= 500)
+                    {
+                        filter.TimeCycle = Model.EnumModel.TimeCycle.Annual;
+                    }
+                }
+                model.AllLineChartData.series.Add(new AllLineChartSeries()
+                {
+                    name="房产",
+                    keyFilter= "HouseReport"
+                });
+                model.AllLineChartData.series.Add(new AllLineChartSeries()
+                {
+                    name = "土地",
+                    keyFilter = "AreaReport"
+                });
+                model.AllLineChartData.series.Add(new AllLineChartSeries()
+                {
+                    name = "资产",
+                    keyFilter = "AssetsReport"
+                });
+                if (filter.TimeCycle == Model.EnumModel.TimeCycle.Week)
+                {
+                    DateTime tempTime = filter.TimeBegin.Value.Date;
+                    while (tempTime <= filter.TimeEnd.Value.Date)
+                    {
+                        DateTime endTime = tempTime.AddDays(6).AddHours(23).AddMinutes(59).AddSeconds(59);
+                        model.AllLineChartData.xAxis.Add(tempTime.ToString("yyyy.MM.dd") + "-" + endTime.ToString("yyyy.MM.dd"));
+                        foreach (var ser in model.AllLineChartData.series)
+                        {
+                            ser.data.Add(list.Where(m => m.AuditTime >= tempTime && m.AuditTime <= endTime && m.ReportFlag == ser.keyFilter).Sum(m => m.ChargeAmount ?? 0));
+                        }
+                        model.PersonalLineChartData.xAxis.Add(tempTime.ToString("yyyy.MM.dd") + "-" + endTime.ToString("yyyy.MM.dd"));
+                        foreach (var ser in model.PersonalLineChartData.series)
+                        {
+                            ser.data.Add(list.Where(m => m.AuditTime >= tempTime && m.AuditTime <= endTime && m.CreateUser == ser.keyFilter).Sum(m => m.ChargeAmount ?? 0));
+                        }
+                        tempTime = tempTime.AddDays(7);
+                    }
+                }
+                if (filter.TimeCycle == Model.EnumModel.TimeCycle.Month)
+                {
+                    DateTime tempTime = filter.TimeBegin.Value.Date.AddDays(1 - filter.TimeBegin.Value.Day);
+                    while (tempTime <= filter.TimeEnd.Value.Date)
+                    {
+                        DateTime endTime = tempTime.AddMonths(1).AddDays(-1).AddHours(23).AddMinutes(59).AddSeconds(59);
+                        model.AllLineChartData.xAxis.Add(tempTime.ToString("yyyy.MM.dd") + "-" + endTime.ToString("yyyy.MM.dd"));
+                        foreach (var ser in model.AllLineChartData.series)
+                        {
+                            ser.data.Add(list.Where(m => m.AuditTime >= tempTime && m.AuditTime <= endTime && m.ReportFlag == ser.keyFilter).Sum(m => m.ChargeAmount ?? 0));
+                        }
+                        model.PersonalLineChartData.xAxis.Add(tempTime.ToString("yyyy.MM.dd") + "-" + endTime.ToString("yyyy.MM.dd"));
+                        foreach (var ser in model.PersonalLineChartData.series)
+                        {
+                            ser.data.Add(list.Where(m => m.AuditTime >= tempTime && m.AuditTime <= endTime && m.CreateUser == ser.keyFilter).Sum(m => m.ChargeAmount ?? 0));
+                        }
+                        tempTime = tempTime.AddMonths(1);
+                    }
+                }
+                if (filter.TimeCycle == Model.EnumModel.TimeCycle.Annual)
+                {
+                    DateTime tempTime = new DateTime(filter.TimeBegin.Value.Year, 1, 1);
+                    while (tempTime <= filter.TimeEnd.Value.Date)
+                    {
+                        DateTime endTime = tempTime.AddYears(1).AddDays(-1).AddHours(23).AddMinutes(59).AddSeconds(59);
+                        model.AllLineChartData.xAxis.Add(tempTime.ToString("yyyy.MM.dd") + "-" + endTime.ToString("yyyy.MM.dd"));
+                        foreach (var ser in model.AllLineChartData.series)
+                        {
+                            ser.data.Add(list.Where(m => m.AuditTime >= tempTime && m.AuditTime <= endTime && m.ReportFlag == ser.keyFilter).Sum(m => m.ChargeAmount ?? 0));
+                        }
+                        model.PersonalLineChartData.xAxis.Add(tempTime.ToString("yyyy.MM.dd") + "-" + endTime.ToString("yyyy.MM.dd"));
+                        foreach (var ser in model.PersonalLineChartData.series)
+                        {
+                            ser.data.Add(list.Where(m => m.AuditTime >= tempTime && m.AuditTime <= endTime && m.CreateUser == ser.keyFilter).Sum(m => m.ChargeAmount ?? 0));
+                        }
+                        tempTime = tempTime.AddYears(1);
+                    }
+                }
+                return model;
+            }
+        }
+
+        public byte[] ExportPersonalAchievementsList(AchievementsFilter filter,bool IsAll=false)
         {
             using (DataProvider dp = new DataProvider())
             {
@@ -141,6 +268,10 @@ namespace Business.PMBusiness
                 cells[0, 4].PutValue("报告时间");
                 cells[0, 5].PutValue("审核通过时间");
                 cells[0, 6].PutValue("金额");
+                if (IsAll)
+                {
+                    cells[0, 7].PutValue("所属人");
+                }
                 for (int i = 0; i < list.Count; i++)
                 {
                     var model = list[i];
@@ -151,6 +282,10 @@ namespace Business.PMBusiness
                     cells[i + 1, 4].PutValue(model.SubmitTime.HasValue?model.SubmitTime.Value.ToString("yyyy-MM-dd HH:mm:ss"):"");
                     cells[i + 1, 5].PutValue(model.AuditTime.HasValue ? model.AuditTime.Value.ToString("yyyy-MM-dd HH:mm:ss") : "");
                     cells[i + 1, 6].PutValue(model.ChargeAmount);
+                    if (IsAll)
+                    {
+                        cells[i + 1, 7].PutValue(model.CreateUserName);
+                    }
                 }
                 using (MemoryStream ms = new MemoryStream())
                 {

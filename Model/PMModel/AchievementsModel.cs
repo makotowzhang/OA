@@ -48,6 +48,8 @@ namespace Model.PMModel
         public List<string> xAxis { get; set; } = new List<string>();
 
         public List<decimal> yAxis { get; set; } = new List<decimal>();
+
+        public List<AllLineChartSeries> series { get; set; } = new List<AllLineChartSeries>();
     }
 
     public class AchievementsChartData
@@ -55,7 +57,29 @@ namespace Model.PMModel
         public List<PieChart> PieChartData { get; set; } = new List<PieChart>();
 
         public LineChart LineChartData { get; set; } = new LineChart();
+
     }
 
+    public class SummaryAchievementsChartData
+    {
+        public List<PieChart> PieChartData { get; set; } = new List<PieChart>();
+
+        public LineChart AllLineChartData { get; set; } = new LineChart();
+
+        public LineChart PersonalLineChartData { get; set; } = new LineChart();
+
+    }
+
+
+    public class AllLineChartSeries
+    {
+        public string name { get; set; }
+
+        public dynamic keyFilter { get; set; }
+
+        public string type { get; set; } = "line";
+
+        public List<decimal> data { get; set; } = new List<decimal>();
+    }
 
 }
