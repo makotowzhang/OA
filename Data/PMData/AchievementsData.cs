@@ -11,9 +11,25 @@ namespace Data.PMData
     public class AchievementsData
     {
 
-        public List<View_Achievements> GetAchievementsList(DataProvider dp, AchievementsFilter filter, out int total, bool IsPage = true)
+        public List<AchievementsModel> GetAchievementsList(DataProvider dp, AchievementsFilter filter, out int total, bool IsPage = true)
         {
-            var list = dp.View_Achievements.Where(m=>true);
+            var list = from a in dp.View_Achievements
+                       join b in dp.System_User on a.CreateUser equals b.Id
+                       select new AchievementsModel()
+                       {
+                           Id = a.Id,
+                           ReportCode = a.ReportCode,
+                           ReportName = a.ReportName,
+                           ChargeAmount = a.ChargeAmount,
+                           ReportType = a.ReportType,
+                           ReportStatus = a.ReportStatus,
+                           CreateUser = a.CreateUser,
+                           SubmitTime = a.SubmitTime,
+                           AuditTime = a.AuditTime,
+                           ChargeStatus = a.ChargeStatus,
+                           ReportFlag = a.ReportFlag,
+                           CreateUserName = b.TrueName
+                       };
             if (filter.TimeBegin.HasValue)
             {
                 list = list.Where(m => m.AuditTime>= filter.TimeBegin.Value);

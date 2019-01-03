@@ -21,6 +21,8 @@ namespace Model.PMModel
         public DateTime? AuditTime { get; set; }
         public bool ChargeStatus { get; set; }
         public string ReportFlag { get; set; }
+
+        public string CreateUserName { get; set; }
     }
 
     public class AchievementsFilter : PageModel
