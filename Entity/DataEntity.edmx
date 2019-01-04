@@ -425,7 +425,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MessageId" Type="int" Nullable="false" />
           <Property Name="ToUser" Type="uniqueidentifier" Nullable="false" />
           <Property Name="IsRead" Type="bit" Nullable="false" />
@@ -568,10 +568,10 @@
           <EntitySet Name="RM_HouseReport" EntityType="Entity.RM_HouseReport" />
           <EntitySet Name="RM_AreaReport" EntityType="Entity.RM_AreaReport" />
           <EntitySet Name="RM_AssetsReport" EntityType="Entity.RM_AssetsReport" />
-          <EntitySet Name="System_MessageReceiver" EntityType="Entity.System_MessageReceiver" />
           <EntitySet Name="System_Message" EntityType="Entity.System_Message" />
           <EntitySet Name="PM_ThingsTodo" EntityType="Entity.PM_ThingsTodo" />
           <EntitySet Name="View_Achievements" EntityType="Entity.View_Achievements" />
+          <EntitySet Name="System_MessageReceiver" EntityType="Entity.System_MessageReceiver" />
         </EntityContainer>
         <EntityType Name="System_User">
           <Key>
@@ -1003,17 +1003,6 @@
           <Property Name="UpdateUser" Type="Guid" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="System_MessageReceiver">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="MessageId" Type="Int32" Nullable="false" />
-          <Property Name="ToUser" Type="Guid" Nullable="false" />
-          <Property Name="IsRead" Type="Boolean" Nullable="false" />
-          <Property Name="FirstReadTime" Type="DateTime" Precision="3" />
-          <Property Name="LastReadTime" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="System_Message">
           <Key>
             <PropertyRef Name="Id" />
@@ -1062,6 +1051,17 @@
           <Property Name="AuditTime" Type="DateTime" Precision="3" />
           <Property Name="ChargeStatus" Type="Boolean" Nullable="false" />
           <Property Name="ReportFlag" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="System_MessageReceiver">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MessageId" Type="Int32" Nullable="false" />
+          <Property Name="ToUser" Type="Guid" Nullable="false" />
+          <Property Name="IsRead" Type="Boolean" Nullable="false" />
+          <Property Name="FirstReadTime" Type="DateTime" Precision="3" />
+          <Property Name="LastReadTime" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1522,18 +1522,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="System_MessageReceiver">
-            <EntityTypeMapping TypeName="Entity.System_MessageReceiver">
-              <MappingFragment StoreEntitySet="System_MessageReceiver">
-                <ScalarProperty Name="LastReadTime" ColumnName="LastReadTime" />
-                <ScalarProperty Name="FirstReadTime" ColumnName="FirstReadTime" />
-                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
-                <ScalarProperty Name="ToUser" ColumnName="ToUser" />
-                <ScalarProperty Name="MessageId" ColumnName="MessageId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="System_Message">
             <EntityTypeMapping TypeName="Entity.System_Message">
               <MappingFragment StoreEntitySet="System_Message">
@@ -1577,6 +1565,18 @@
                 <ScalarProperty Name="ChargeAmount" ColumnName="ChargeAmount" />
                 <ScalarProperty Name="ReportName" ColumnName="ReportName" />
                 <ScalarProperty Name="ReportCode" ColumnName="ReportCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="System_MessageReceiver">
+            <EntityTypeMapping TypeName="Entity.System_MessageReceiver">
+              <MappingFragment StoreEntitySet="System_MessageReceiver">
+                <ScalarProperty Name="LastReadTime" ColumnName="LastReadTime" />
+                <ScalarProperty Name="FirstReadTime" ColumnName="FirstReadTime" />
+                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+                <ScalarProperty Name="ToUser" ColumnName="ToUser" />
+                <ScalarProperty Name="MessageId" ColumnName="MessageId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

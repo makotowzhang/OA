@@ -28,10 +28,10 @@
         <EntityTypeShape EntityType="Entity.RM_HouseReport" Width="1.5" PointX="7.375" PointY="13.75" />
         <EntityTypeShape EntityType="Entity.RM_AreaReport" Width="1.5" PointX="13.375" PointY="8.75" />
         <EntityTypeShape EntityType="Entity.RM_AssetsReport" Width="1.5" PointX="15.375" PointY="0.75" />
-        <EntityTypeShape EntityType="Entity.System_MessageReceiver" Width="1.5" PointX="15.375" PointY="9.75" />
         <EntityTypeShape EntityType="Entity.System_Message" Width="1.5" PointX="9.375" PointY="15.75" />
         <EntityTypeShape EntityType="Entity.PM_ThingsTodo" Width="1.5" PointX="15.375" PointY="12.75" />
         <EntityTypeShape EntityType="Entity.View_Achievements" Width="1.5" PointX="0.75" PointY="16.75" />
+        <EntityTypeShape EntityType="Entity.System_MessageReceiver" Width="1.5" PointX="15.375" PointY="9.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
