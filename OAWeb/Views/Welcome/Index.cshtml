@@ -57,13 +57,23 @@
             width: calc(100% - 11px);
         }
         .NotDiv {
-            padding-left: 40px;
+            padding-left: 15px;
             padding-right: 40px;
             margin-top: 15px;
             cursor:pointer;
         }
-            .NotDiv:hover {
-                color: #409EFF;
+       
+        .NotDiv:hover {
+            color: #409EFF;
+        }
+        .MsgDiv {
+            padding-left: 15px;
+            padding-right: 5px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+            .MsgDiv:hover {
+                
             }
         .More {
             float: right;
@@ -93,7 +103,18 @@
             <el-card class="msg-card">
                 <div slot="header" class="clearfix">
                     <span>消息列表</span>
+                    <div class="More" @@click="OpenTab('','/SysMessage/Index')">更多>></div>
                 </div>
+                <template>
+                    <template v-for="(msg,index) in MessageData">
+                        <div class="MsgDiv">
+                            <div style="float:left">{{index+1+'.'}}&nbsp;{{getMessageShortTitle(msg.MsgTitle)}}</div>
+                            <div style="float:right">{{DateFormat(msg.CreateTime,'yyyy-MM-dd HH:mm:ss')}}</div>
+                            <div style="clear:both;"></div>
+                        </div>
+                        <div style="margin-top:5px;border-top:1px solid #999999"></div>
+                    </template>
+                </template>
             </el-card>
             <el-card class="things-card">
                 <div slot="header" class="clearfix">
@@ -118,14 +139,13 @@
                     <span>公司公告</span>
                     <div class="More" @@click="OpenTab('','/Notice/Index')">更多>></div>
                 </div>
-                <template v-for="not in NoticeList">
+                <template v-for="(not,index) in NoticeList">
                     <div class="NotDiv" @@click="OpenTab('公告详情','/Notice/NoticeDetail?id='+not.Id)">
-                        <div style="float:left">{{not.NoticeTitle}}</div>
+                        <div style="float:left">{{index+1+'.'}}&nbsp;{{not.NoticeTitle}}</div>
                         <div style="float:right">{{DateFormat(not.CreateTime,'yyyy-MM-dd HH:mm:ss')}}</div>
                         <div style="clear:both;"></div>
                     </div>
-                  
-                    <hr style="margin-top:5px;" />
+                  <div style="margin-top:5px;border-top:1px solid #999999"></div>
                 </template>
             </el-card>
         </div>
@@ -137,9 +157,19 @@
         el: "#App",
         data: {
             NoticeList: [],
-            WeekThingsTodo:[]
+            WeekThingsTodo: [],
+            MessageData: []
         },
         methods: {
+            getMessageShortTitle: function (title) {
+                if (title.length > 9) {
+                    return title.substr(0, 8) + "...";
+                }
+                else {
+                    return title;
+                }
+
+            },
             OpenTab: AddTabPage,
             DateFormat: DateFormat
         }
@@ -163,5 +193,9 @@
                 axios.post("DailyAlert", { id:v.Id});
             }, 0);
         });
+    });
+
+    axios.post("/SysMessage/GetMsgList", { Page: 1, PageSize: 10 }).then(function (response) {
+        $vue.MessageData = response.data.List;
     });
 </script>

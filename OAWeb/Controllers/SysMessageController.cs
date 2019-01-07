@@ -30,7 +30,7 @@ namespace OAWeb.Controllers
             return Json(business.GetNotReadCount(CurrentUser.Id));
         }
 
-        public ActionResult MarkRead(List<int> messageId)
+        public ActionResult MarkRead(List<Guid> messageId)
         {
             try
             {

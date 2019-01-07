@@ -64,6 +64,20 @@ namespace Business.PMBusiness
                             AuditId = m
                         }));
                     }
+                    List<Guid> msgUserList = dp.System_User.Where(m => model.AuditUserIds.Contains(m.Id) ||
+                    dp.PM_Employee.Where(emp => model.AuditDep.Contains(emp.DepartmentId.Value)).Select(emp => emp.RelateUserId).Contains(m.Id)
+                   ).Select(m => m.Id).ToList();
+                    new Data.SystemData.SysMessageData().SendMessage(dp, new System_Message
+                    {
+                        CreateTime = DateTime.Now,
+                        CreateUser = Guid.Empty,
+                        IsDel = false,
+                        MsgTitle = "物料申请待审批",
+                        MsgType = SysMessageType.Audit.ToString(),
+                        MsgContent = dp.System_User.Where(m => m.Id == entity.CreateUser).Select(m => m.TrueName).FirstOrDefault() +
+                                   $"申请物料{dp.PM_Materiel.FirstOrDefault(m=>m.Id== model.MaterielId)?.MaterielName }，数量：{model.Quantity},待您审批。",
+                        Url = "/MaterielApply/AuditorIndex"
+                    }, msgUserList);
                 }
                 else
                 {
@@ -159,6 +173,18 @@ namespace Business.PMBusiness
                 entity.AuditReason = model.AuditReason;
                 entity.AuditTime = DateTime.Now;
                 entity.AuditUser = model.AuditUser;
+                string auditTxt = model.AuditStatus == AuditStatus.Passed.ToString() ? "通过" : "驳回";
+                string auditContentTxt= model.AuditStatus == AuditStatus.Passed.ToString() ? "已通过审核" : $"已被驳回,原因：{model.AuditReason}";
+                new Data.SystemData.SysMessageData().SendMessage(dp, new System_Message
+                {
+                    CreateTime = DateTime.Now,
+                    CreateUser = Guid.Empty,
+                    IsDel = false,
+                    MsgTitle = $"物料申请{auditTxt}",
+                    MsgType = SysMessageType.Audit.ToString(),
+                    MsgContent = $@"{auditTxt}：您申请的{dp.PM_Materiel.FirstOrDefault(m => m.Id == model.MaterielId)?.MaterielName }{auditContentTxt}",
+                    Url = "/MaterielApply/PersonalIndex"
+                }, new List<Guid>() { entity.CreateUser });
                 try
                 {
                     dp.SaveChanges();

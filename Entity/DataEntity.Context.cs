@@ -48,9 +48,9 @@ namespace Entity
         public virtual DbSet<RM_HouseReport> RM_HouseReport { get; set; }
         public virtual DbSet<RM_AreaReport> RM_AreaReport { get; set; }
         public virtual DbSet<RM_AssetsReport> RM_AssetsReport { get; set; }
-        public virtual DbSet<System_Message> System_Message { get; set; }
         public virtual DbSet<PM_ThingsTodo> PM_ThingsTodo { get; set; }
         public virtual DbSet<View_Achievements> View_Achievements { get; set; }
+        public virtual DbSet<System_Message> System_Message { get; set; }
         public virtual DbSet<System_MessageReceiver> System_MessageReceiver { get; set; }
     }
 }

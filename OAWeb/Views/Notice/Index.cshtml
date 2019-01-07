@@ -134,7 +134,7 @@
             </div>
             <el-dialog :close-on-click-modal="false" :title="modifyTitle"
                        :visible.sync="Dialog.addDialog"
-                       width="650px">
+                       width="80%">
                 <el-form :model="AddFormData" :rules="AddFormRule" label-width="80px" ref="AddForm" @@submit.native.prevent>
                     <el-form-item label="公告标题" prop="NoticeTitle">
                         <el-input v-model="AddFormData.NoticeTitle" placeholder="请输入公告标题"></el-input>
@@ -153,7 +153,7 @@
                         <quill-editor ref="queditor"
                                       :content.sync="AddFormData.NoticeContent"
                                       placeholder="请输入公告内容"
-                                      style="height:350px;"
+                                      style="height:450px;"
                                       ></quill-editor>
                     </el-form-item>
                     <el-form-item label="优先级" prop="Priority">

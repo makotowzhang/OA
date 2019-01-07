@@ -28,7 +28,7 @@ namespace Business.SystemBusiness
             }
         }
 
-        public bool MarkRead(List<int> messageId,Guid markUser)
+        public bool MarkRead(List<Guid> messageId,Guid markUser)
         {
             using (DataProvider dp = new DataProvider())
             {

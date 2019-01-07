@@ -15,7 +15,7 @@ namespace Entity
     public partial class System_MessageReceiver
     {
         public int Id { get; set; }
-        public int MessageId { get; set; }
+        public System.Guid MessageId { get; set; }
         public System.Guid ToUser { get; set; }
         public bool IsRead { get; set; }
         public Nullable<System.DateTime> FirstReadTime { get; set; }

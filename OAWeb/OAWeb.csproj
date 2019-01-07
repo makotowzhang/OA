@@ -698,6 +698,9 @@
     <Content Include="Views\AssetsReport\Index.cshtml" />
     <Content Include="Views\Achievements\Personal.cshtml" />
     <Content Include="Views\Achievements\Summary.cshtml" />
+    <Content Include="Views\HouseReport\ReportDetail.cshtml" />
+    <Content Include="Views\AreaReport\ReportDetail.cshtml" />
+    <Content Include="Views\AssetsReport\ReportDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">

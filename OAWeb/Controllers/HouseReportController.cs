@@ -102,5 +102,10 @@ namespace OAWeb.Controllers
             }
             return View(service.GetModel(reportId)??new HouseReportModel());
         }
+
+        public ActionResult ReportDetail()
+        {
+            return View();
+        }
     }
 }

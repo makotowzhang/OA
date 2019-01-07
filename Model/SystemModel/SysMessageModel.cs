@@ -8,7 +8,7 @@ namespace Model.SystemModel
 {
     public class SysMessageModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string MsgTitle { get; set; }
         public string MsgContent { get; set; }
         public string MsgType { get; set; }

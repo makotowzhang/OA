@@ -14,7 +14,7 @@ namespace Entity
     
     public partial class System_Message
     {
-        public int Id { get; set; }
+        public System.Guid Id { get; set; }
         public string MsgTitle { get; set; }
         public string MsgContent { get; set; }
         public string MsgType { get; set; }

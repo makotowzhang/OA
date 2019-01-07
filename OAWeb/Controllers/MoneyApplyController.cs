@@ -48,7 +48,7 @@ namespace OAWeb.Controllers
             return Json(business.GetModel(id));
         }
 
-        [LogFilter("申请", "物料申请", LogActionType.Apply)]
+        [LogFilter("申请", "费用申请", LogActionType.Apply)]
         public ActionResult Apply(MoneyApplyModel model)
         {
             try
@@ -62,7 +62,7 @@ namespace OAWeb.Controllers
             }
         }
 
-        [LogFilter("修改", "物料申请", LogActionType.Operation)]
+        [LogFilter("修改", "费用申请", LogActionType.Operation)]
         public ActionResult Update(MoneyApplyModel model)
         {
             try
@@ -76,7 +76,7 @@ namespace OAWeb.Controllers
             }
         }
 
-        [LogFilter("删除", "物料申请", LogActionType.Operation)]
+        [LogFilter("删除", "费用申请", LogActionType.Operation)]
         public ActionResult Delete(List<MoneyApplyModel> list)
         {
             try
@@ -91,7 +91,7 @@ namespace OAWeb.Controllers
         }
 
 
-        [LogFilter("审核", "物料审核", LogActionType.Operation)]
+        [LogFilter("审核", "费用审核", LogActionType.Operation)]
         public ActionResult Audit(MoneyApplyModel model)
         {
             try

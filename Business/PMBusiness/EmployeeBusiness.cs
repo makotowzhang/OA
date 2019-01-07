@@ -71,6 +71,11 @@ namespace Business.PMBusiness
                     entity.DepartmentId = model.DepartmentId;
                     entity.UpdateUser = model.UpdateUser;
                     entity.UpdateTime = DateTime.Now;
+                    var user = dp.System_User.FirstOrDefault(m => m.Id == entity.RelateUserId);
+                    if (user != null)
+                    {
+                        user.TrueName = entity.EmpName;
+                    }
                 }
                 try
                 {
@@ -115,6 +120,13 @@ namespace Business.PMBusiness
                     entity.IsDel = true;
                     entity.UpdateUser = dep.UpdateUser;
                     entity.UpdateTime = DateTime.Now;
+                    var user = dp.System_User.FirstOrDefault(m => m.Id == entity.RelateUserId);
+                    if (user != null)
+                    {
+                        user.IsDel = true;
+                        user.UpdateUser = dep.UpdateUser;
+                        user.UpdateTime = DateTime.Now;
+                    }
                 }
                 try
                 {

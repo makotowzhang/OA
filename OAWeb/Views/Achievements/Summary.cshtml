@@ -29,6 +29,10 @@
             padding-left: 5px;
             padding-right: 5px;
         }
+        .ReportCode {
+        cursor:pointer;
+        color:#0094ff;
+        }
     </style>
 </head>
 <body>
@@ -134,6 +138,9 @@
                     <el-table-column prop="ReportCode"
                                      label="报告编号"
                                      width="180">
+                        <template slot-scope="scope">
+                            <span class="ReportCode"  @@click="OpenTab('报告详情','/'+scope.row.ReportFlag+'/ReportDetail?id='+scope.row.Id)"> {{ scope.row.ReportCode }} </span>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="ReportName"
                                      label="报告名称"
@@ -292,13 +299,14 @@
                 window.open("ExportAllAchievementsList?TimeBegin=" + DateFormat(this.QueryFormData.TimeBegin,"yyyy-MM-dd")
                     + "&TimeEnd=" + DateFormat(this.QueryFormData.TimeEnd, "yyyy-MM-dd") + "&TimeCycle=" + this.QueryFormData.TimeCycle);
             },
+            OpenTab: AddTabPage,
             DateFormat: DateFormat
         },
         mounted: function () {
             this.Charts.pie = echarts.init(document.getElementById('pieCharts'));
             this.Charts.pie.setOption({
                 title: {
-                    //text: '绩效比重',
+                    text: '个人收益占比',
                     x: 'center'
                 },
                 tooltip: {
@@ -315,7 +323,7 @@
             this.Charts.personalLine = echarts.init(document.getElementById('personalLineCharts'));
             this.Charts.personalLine.setOption({
                 title: {
-                    //text: '收益走势'
+                    text: '个人收益'
                 },
                 tooltip: {
                     trigger: 'axis'
@@ -353,7 +361,7 @@
             this.Charts.allLine = echarts.init(document.getElementById('allLineCharts'));
             this.Charts.allLine.setOption({
                 title: {
-                    //text: '收益走势'
+                    text: '公司收益'
                 },
                 tooltip: {
                     trigger: 'axis'

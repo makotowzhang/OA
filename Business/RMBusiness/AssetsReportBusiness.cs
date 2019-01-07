@@ -124,6 +124,20 @@ namespace Business.RMBusiness
                     entity.SubmitTime = DateTime.Now;
                     entity.AuditFileName = null;
                     entity.AuditFilePath = null;
+                    List<Guid> msgUserList = dp.System_User.Where(m => model.AuditUserIds.Contains(m.Id) ||
+                   dp.PM_Employee.Where(emp => model.AuditDep.Contains(emp.DepartmentId.Value)).Select(emp => emp.RelateUserId).Contains(m.Id)
+                   ).Select(m => m.Id).ToList();
+                    new Data.SystemData.SysMessageData().SendMessage(dp, new System_Message
+                    {
+                        CreateTime = DateTime.Now,
+                        CreateUser = Guid.Empty,
+                        IsDel = false,
+                        MsgTitle = "资产报告待审批",
+                        MsgType = SysMessageType.Audit.ToString(),
+                        MsgContent = dp.System_User.Where(m => m.Id == entity.CreateUser).Select(m => m.TrueName).FirstOrDefault() +
+                                   $"的报告{entity.ReportName},需要您的审核。",
+                        Url = "/AssetsReport/ReportAudit"
+                    }, msgUserList);
                 }
                 entity.UpdateTime = DateTime.Now;
                 entity.UpdateUser = model.UpdateUser;
@@ -217,6 +231,17 @@ namespace Business.RMBusiness
                 entity.AuditFilePath = model.AuditFilePath;
                 entity.AuditTime = DateTime.Now;
                 entity.AuditUser = model.AuditUser;
+                string auditTxt = model.ReportStatus == ReportStatus.Passed ? "审核通过" : "被驳回";
+                new Data.SystemData.SysMessageData().SendMessage(dp, new System_Message
+                {
+                    CreateTime = DateTime.Now,
+                    CreateUser = Guid.Empty,
+                    IsDel = false,
+                    MsgTitle = $"资产报告{auditTxt}",
+                    MsgType = SysMessageType.Audit.ToString(),
+                    MsgContent = $@"您的报告：{entity.ReportName}，{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}{auditTxt}",
+                    Url = "/HouseReport/ReportCreate"
+                }, new List<Guid>() { entity.CreateUser });
                 try
                 {
                     dp.SaveChanges();

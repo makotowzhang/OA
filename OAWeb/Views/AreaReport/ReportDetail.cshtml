@@ -1,0 +1,334 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @Html.Partial("~/Views/Shared/_Head.cshtml")
+    @Html.Partial("~/Views/Shared/SingleFileUploader.cshtml")
+    <title>土地评估报告详细</title>
+    <style>
+        #App {
+            padding-left:10px;
+            padding-top:20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="App" ref="App">
+        <template>
+            <el-form :model="AddFormData"  label-width="120px" ref="AddForm" @@submit.native.prevent>
+                <el-tabs>
+                    <el-tab-pane label="报告信息">
+                        <el-form-item label="报告类型" prop="ReportType">
+                            <el-radio v-model="AddFormData.ReportType" label="Formal" v-if="AddFormData.ReportType=='Formal'" border>正式</el-radio>
+                            <el-radio v-model="AddFormData.ReportType" label="PreAssessment" v-if="AddFormData.ReportType=='PreAssessment'" border>预评</el-radio>
+                            <el-radio v-model="AddFormData.ReportType" label="Consultation" v-if="AddFormData.ReportType=='Consultation'" border>咨询</el-radio>
+                        </el-form-item>
+                        <el-form-item label="报告编号" prop="ReportCode">
+                            <el-input v-model="AddFormData.ReportCode" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="项目名称" prop="ReportName">
+                            <el-input v-model="AddFormData.ReportName" readonly></el-input>
+                        </el-form-item>
+                        <div style="margin-bottom:20px;border-top:1px solid #dcdfe6;"></div>
+                        <el-form-item label="报告委托方" prop="ReportEntruster">
+                            <el-input v-model="AddFormData.ReportEntruster" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="报告使用方" prop="ReportUser">
+                            <el-input v-model="AddFormData.ReportUser" readonly></el-input>
+                        </el-form-item>
+                        <div style="margin-bottom:20px;border-top:1px solid #dcdfe6;"></div>
+                        <el-form-item label="权利人" prop="Obligee">
+                            <el-input v-model="AddFormData.Obligee" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="坐落地址" prop="LocationAddress">
+                            <el-input v-model="AddFormData.LocationAddress" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="土地证号" prop="AreaNumber">
+                            <el-input v-model="AddFormData.AreaNumber" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="土地登记面积" prop="AreaRegLand">
+                            <el-input v-model="AddFormData.AreaRegLand" readonly>
+                                <template slot="append">
+                                    m²
+                                </template>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="土地评估面积" prop="AreaValuationLand">
+                            <el-input v-model="AddFormData.AreaValuationLand" readonly>
+                                <template slot="append">
+                                    m²
+                                </template>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="土地终止日期" prop="AreaEndTime">
+                            <el-date-picker v-model="AddFormData.AreaEndTime"
+                                            type="datetime"
+                                            readonly>
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item label="剩余使用年限" prop="LiftUseYear">
+                            <el-input v-model="AddFormData.LiftUseYear" readonly>
+                                <template slot="append">
+                                    年
+                                </template>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="土地用途" prop="AreaPurpose">
+                            <el-input v-model="AddFormData.AreaPurpose" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="设定容积率" prop="SetFloorAreaRatio">
+                            <el-input v-model="AddFormData.SetFloorAreaRatio" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="设定开发程度" prop="SetLevelDev">
+                            <el-input v-model="AddFormData.SetLevelDev" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="实际开发程度" prop="ActualDevelopmentLevel">
+                            <el-input v-model="AddFormData.ActualDevelopmentLevel" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="评估单价" prop="ValuationPrice">
+                            <el-input v-model="AddFormData.ValuationPrice" readonly>
+                                <template slot="append">
+                                    元/m²
+                                </template>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="评估价值" prop="ValuationValue">
+                            <el-input v-model="AddFormData.ValuationValue" readonly>
+                                <template slot="append">
+                                    万元
+                                </template>
+                            </el-input>
+                        </el-form-item>
+                        <el-form-item label="估价目的" prop="ValuationObjective">
+                            <el-select v-model="AddFormData.ValuationObjective"
+                                       multiple
+                                       disabled>
+                                <el-option v-for="item in SelectOption.ValuationObjectiveList"
+                                           :key="item.Id"
+                                           :label="item.ItemDesc"
+                                           :value="item.Id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="估价方法" prop="ValuationMethods">
+                            <el-select v-model="AddFormData.ValuationMethods"
+                                       multiple
+                                       disabled>
+                                <el-option v-for="item in SelectOption.ValuationMethodsList"
+                                           :key="item.Id"
+                                           :label="item.ItemDesc"
+                                           :value="item.Id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="价值时点" prop="ValueTime">
+                            <el-date-picker v-model="AddFormData.ValueTime"
+                                            type="datetime"
+                                            readonly>
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item label="报告日期" prop="ReportTime">
+                            <el-date-picker v-model="AddFormData.ReportTime"
+                                            type="datetime"
+                                            readonly>
+                            </el-date-picker>
+                        </el-form-item>
+                        <el-form-item label="签字估价师" prop="SignAppraiser">
+                            <el-select v-model="AddFormData.SignAppraiser"
+                                       multiple
+                                       collapse-tags
+                                       disabled>
+                                <el-option v-for="item in SelectOption.EmpList"
+                                           :key="item.RelateUserId"
+                                           :label="item.EmpName"
+                                           :value="item.RelateUserId">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="报告描述" prop="ReportDesc">
+                            <el-input v-model="AddFormData.ReportDesc" type="textarea" readonly></el-input>
+                        </el-form-item>
+                    </el-tab-pane>
+                    <el-tab-pane label="工作内容">
+                        <el-form-item label="工作名称" prop="WorkName">
+                            <el-input v-model="AddFormData.WorkName" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="工作描述" prop="WorkDesc">
+                            <el-input v-model="AddFormData.WorkDesc" type="textarea" readonl></el-input>
+                        </el-form-item>
+                        <el-form-item label="附件" prop="EnclosureName">
+                            <single-file-uploader :filename.sync="AddFormData.EnclosureName"
+                                                  :filepath.sync="AddFormData.EnclusurePath"
+                                                  :isread="true"></single-file-uploader>
+                        </el-form-item>
+                    </el-tab-pane>
+                    <el-tab-pane label="业务信息">
+                        <el-form-item label="经办人" prop="Operator">
+                            <el-input v-model="AddFormData.Operator" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="业务员" prop="Salesman">
+                            <el-input v-model="AddFormData.Salesman" readonly></el-input>
+                        </el-form-item>
+                        <div style="margin-bottom:20px;border-top:1px solid #dcdfe6;"></div>
+                        <el-form-item label="联系人" prop="Contacts">
+                            <el-input v-model="AddFormData.Contacts" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="联系电话" prop="ContactsPhone">
+                            <el-input v-model="AddFormData.ContactsPhone" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="收费状态" prop="ChargeStatus">
+                            <el-radio v-model="AddFormData.ChargeStatus" :label="true" v-if="AddFormData.ChargeStatus" border>已收费</el-radio>
+                            <el-radio v-model="AddFormData.ChargeStatus" :label="false" v-if="!AddFormData.ChargeStatus" border>未收费</el-radio>
+                        </el-form-item>
+                        <el-form-item label="收费金额" prop="ChargeAmount" v-if="AddFormData.ChargeStatus">
+                            <el-input v-model="AddFormData.ChargeAmount" readonly></el-input>
+                        </el-form-item>
+                        <el-form-item label="是否开票" prop="IsInvoice" v-if="AddFormData.ChargeStatus">
+                            <el-radio v-model="AddFormData.IsInvoice" :label="true" v-if="AddFormData" border>是</el-radio>
+                            <el-radio v-model="AddFormData.IsInvoice" :label="false" v-if="!AddFormData.IsInvoice" border>否</el-radio>
+                        </el-form-item>
+                    </el-tab-pane>
+                    <el-tab-pane label="审核结果" >
+                        <el-form-item label="审核人" prop="AuditUserName">
+                            <el-input readonly v-model="AddFormData.AuditUserName"></el-input>
+                        </el-form-item>
+                        <el-form-item label="审核结果" prop="ReportStatus">
+                            <el-radio-group v-model="AddFormData.ReportStatus">
+                                <el-radio label="Passed" v-if="AddFormData.ReportStatus=='Passed'" border>通过</el-radio>
+                                <el-radio label="Reject" v-if="AddFormData.ReportStatus=='Reject'" border>驳回</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                        <el-form-item label="审核文件" prop="AuditFilePath">
+                            <single-file-uploader :filename.sync="AddFormData.AuditFileName"
+                                                  :filepath.sync="AddFormData.AuditFilePath"
+                                                  :isread="true"></single-file-uploader>
+                        </el-form-item>
+                        <el-form-item label="审核理由" prop="AuditReason">
+                            <el-input v-model="AddFormData.AuditReason" readonly type="textarea"></el-input>
+                        </el-form-item>
+                    </el-tab-pane>
+                    <el-tab-pane label="二维码" v-if="AddFormData.ReportStatus=='Passed'">
+                        <div style="text-align:center;padding-top:20px;">
+                            <img :src="'/Base/GetReportQRCode?ReportId='+AddFormData.Id+'&ControllerName=AreaReport'" />
+                        </div>
+                    </el-tab-pane>
+                </el-tabs>
+
+            </el-form>
+        </template>
+    </div>
+</body>
+
+</html>
+<script>
+   
+    $vue = new Vue({
+        el: "#App",
+        data: {
+            AddFormData: {
+                Id: null,
+                ReportCode: "",
+                ReportName: "",
+                ReportEntruster: "",
+                ReportUser: "",
+                Obligee: "",
+                LocationAddress: "",
+                AreaNumber: "",
+                AreaRegLand: "",
+                AreaValuationLand: "",
+                AreaEndTime: "",
+                LiftUseYear: "",
+                AreaPurpose: "",
+                SetFloorAreaRatio: "",
+                SetLevelDev: "",
+                ActualDevelopmentLevel: "",
+                ValuationPrice: "",
+                ValuationValue: "",
+                //ValuationPurpose: "",
+                //ValuationStruct: "",
+                ValueTime: "",
+                ReportTime: "",
+                ReportDesc: "",
+                WorkName: "",
+                WorkDesc: "",
+                EnclosureName: "",
+                EnclusurePath: "",
+                Operator: "",
+                Salesman: "",
+                Contacts: "",
+                ContactsPhone: "",
+                ChargeAmount: "",
+                ChargeStatus: true,
+                IsInvoice: true,
+                ReportType: "Formal",
+                ValuationObjective: [],
+                ValuationMethods: [],
+                SignAppraiser: [],
+                AuditDep: [],
+                AuditUserIds: [],
+                AuditUserName: "",
+                AuditReason: "",
+                AuditFileName: "",
+                AuditFilePath: "",
+                ReportStatus: "",
+                ReportStatusString: ""
+            },
+            SelectOption: {
+                AuditStatus: [
+                    { Value: "WaitAudit", Text: "审核中" },
+                    { Value: "Passed", Text: "已结审" },
+                    { Value: "Reject", Text: "未通过" },
+                    { Value: "Revoke", Text: "已撤销" }
+                ],
+                ValuationObjectiveList: [],
+                ValuationMethodsList: [],
+                ChargeStatusList: [],
+                DepList: [],
+                EmpList: []
+            }
+        }
+    });
+
+
+
+    axios.post("/Employee/GetUserEmp", {}).then(function (response) {
+        $vue.SelectOption.EmpList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+
+    axios.post("/Department/GetAllDep", {}).then(function (response) {
+        $vue.SelectOption.DepList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "ValuationObjective" }).then(function (response) {
+        $vue.SelectOption.ValuationObjectiveList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "ValuationMethods" }).then(function (response) {
+        $vue.SelectOption.ValuationMethodsList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "ChargeStatus" }).then(function (response) {
+        $vue.SelectOption.ChargeStatusList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+
+
+    axios.post("GetRoportModel", { id: GetUrlParameter("id") }).then(function (response) {
+        AutoMapper($vue.AddFormData, response.data);
+    }).catch(function (error) {
+        ErrorCommonHandle($vue);
+    }).finally(function () {
+    });
+</script>

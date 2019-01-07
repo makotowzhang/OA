@@ -104,5 +104,10 @@ namespace OAWeb.Controllers
             }
             return View(service.GetModel(reportId)??new AssetsReportModel());
         }
+
+        public ActionResult ReportDetail()
+        {
+            return View();
+        }
     }
 }

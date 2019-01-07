@@ -522,7 +522,7 @@
         $app.MessageDiv.messageNum = response.data;
     });
 
-    axios.post("/SysMessage/GetMsgList", {  Page: 1, PageSize: 5}).then(function (response) {
+    axios.post("/SysMessage/GetMsgList", {  Page: 1, PageSize: 10}).then(function (response) {
         $app.MessageData = response.data.List;
     });
 

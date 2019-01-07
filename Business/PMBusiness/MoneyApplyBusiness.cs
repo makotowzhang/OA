@@ -64,6 +64,20 @@ namespace Business.PMBusiness
                             AuditId = m
                         }));
                     }
+                    List<Guid> msgUserList = dp.System_User.Where(m => model.AuditUserIds.Contains(m.Id) ||
+                   dp.PM_Employee.Where(emp => model.AuditDep.Contains(emp.DepartmentId.Value)).Select(emp => emp.RelateUserId).Contains(m.Id)
+                   ).Select(m => m.Id).ToList();
+                    new Data.SystemData.SysMessageData().SendMessage(dp, new System_Message
+                    {
+                        CreateTime = DateTime.Now,
+                        CreateUser = Guid.Empty,
+                        IsDel = false,
+                        MsgTitle = "费用申请待审批",
+                        MsgType = SysMessageType.Audit.ToString(),
+                        MsgContent = dp.System_User.Where(m => m.Id == entity.CreateUser).Select(m => m.TrueName).FirstOrDefault() +
+                                   $"申请费用：{model.Amount},待您审批。",
+                        Url = "/MoneyApply/AuditorIndex"
+                    }, msgUserList);
                 }
                 else
                 {
@@ -158,6 +172,20 @@ namespace Business.PMBusiness
                 entity.AuditReason = model.AuditReason;
                 entity.AuditTime = DateTime.Now;
                 entity.AuditUser = model.AuditUser;
+                string auditTxt = model.AuditStatus == AuditStatus.Passed.ToString() ? "通过" : "驳回";
+                string auditContentTxt = model.AuditStatus == AuditStatus.Passed.ToString() ? 
+                    $"通过：您费用申请已通过审核，申请金额：{entity.Amount}，申请原因：{entity.ApplyReason}，申请时间{entity.CreateTime.ToString("yyyy-MM-dd HH:mm:ss")}，请点击查看"
+                  : $"失败：您费用申请已被驳回，申请金额：{entity.Amount}，申请原因：{entity.ApplyReason}，驳回原因：{model.AuditReason}，申请时间{entity.CreateTime.ToString("yyyy-MM-dd HH:mm:ss")}，请点击查看。";
+                new Data.SystemData.SysMessageData().SendMessage(dp, new System_Message
+                {
+                    CreateTime = DateTime.Now,
+                    CreateUser = Guid.Empty,
+                    IsDel = false,
+                    MsgTitle = $"费用申请{auditTxt}",
+                    MsgType = SysMessageType.Audit.ToString(),
+                    MsgContent = auditContentTxt,
+                    Url = "/MoneyApply/PersonalIndex"
+                }, new List<Guid>() { entity.CreateUser });
                 try
                 {
                     dp.SaveChanges();

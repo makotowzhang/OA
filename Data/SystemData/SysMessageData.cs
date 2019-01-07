@@ -62,6 +62,7 @@ namespace Data.SystemData
 
         public bool SendMessage(DataProvider dp, System_Message msg, List<Guid> toUsers)
         {
+            msg.Id = Guid.NewGuid();
             dp.System_Message.Add(msg);
             foreach (Guid userId in toUsers)
             {

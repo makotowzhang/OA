@@ -101,5 +101,9 @@ namespace OAWeb.Controllers
             }
             return View(service.GetModel(reportId)??new AreaReportModel());
         }
+        public ActionResult ReportDetail()
+        {
+            return View();
+        }
     }
 }
