@@ -203,8 +203,8 @@
                         <i class="icon iconfont icon-mail msgButton" @@click.stop="MessageDiv.visible=!MessageDiv.visible"></i>
                         <el-card class="box-card" v-show="MessageDiv.visible" shadow="always">
                             <template v-for="item in MessageData">
-                                <el-tooltip  effect="dark" :content="item.MsgContent" placement="left">
-                                    <div :style="{color:item.IsRead?'#909399':'#E6A23C'}" class="msgContent">
+                                <el-tooltip  effect="dark" :content="item.MsgContent" placement="left" >
+                                    <div :style="{color:item.IsRead?'#909399':'#E6A23C'}" class="msgContent" @@click="openMsgUrl(item)">
                                         <i :class="getMessageIcon(item.MsgType)"></i>
                                         {{getMessageShortTitle(item.MsgTitle)}}
                                     </div>
@@ -498,6 +498,16 @@
                     return title;
                 }
              
+            },
+            openMsgUrl: function (msg) {
+                debugger;
+                axios.post("/SysMessage/MarkRead", { messageId: [msg.Id] });
+                if (msg.Url != null && msg.Url != "") {
+                    AddTabPage("", msg.Url);
+                }
+                else {
+                    AddTabPage("", "/SysMessage/Index");
+                }
             },
             AddCommonTab: AddTabPage
         }
