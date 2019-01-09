@@ -22,9 +22,9 @@ namespace Model.PMModel
         public string CreateUserName { get; set; }
         public string AuditUserName { get; set; }
         public bool IsDel { get; set; }
-        public List<Guid> AuditDep { get; set; }
+        public List<Guid> AuditDep { get; set; } = new List<Guid>();
 
-        public List<Guid> AuditUserIds { get; set; }
+        public List<Guid> AuditUserIds { get; set; } = new List<Guid>();
     }
 
 

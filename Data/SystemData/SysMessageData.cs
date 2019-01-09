@@ -73,15 +73,8 @@ namespace Data.SystemData
                     ToUser=userId
                 });
             }
-            try
-            {
-                dp.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return true;
+            
         }
     }
 }

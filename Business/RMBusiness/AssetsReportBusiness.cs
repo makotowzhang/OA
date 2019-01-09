@@ -127,7 +127,7 @@ namespace Business.RMBusiness
                     List<Guid> msgUserList = dp.System_User.Where(m => model.AuditUserIds.Contains(m.Id) ||
                    dp.PM_Employee.Where(emp => model.AuditDep.Contains(emp.DepartmentId.Value)).Select(emp => emp.RelateUserId).Contains(m.Id)
                    ).Select(m => m.Id).ToList();
-                    new Data.SystemData.SysMessageData().SendMessage(dp, new System_Message
+                    new Data.SystemData.SysMessageData().SendMessage(dp, new System_Message()
                     {
                         CreateTime = DateTime.Now,
                         CreateUser = Guid.Empty,
@@ -232,7 +232,7 @@ namespace Business.RMBusiness
                 entity.AuditTime = DateTime.Now;
                 entity.AuditUser = model.AuditUser;
                 string auditTxt = model.ReportStatus == ReportStatus.Passed ? "审核通过" : "被驳回";
-                new Data.SystemData.SysMessageData().SendMessage(dp, new System_Message
+                new Data.SystemData.SysMessageData().SendMessage(dp, new System_Message()
                 {
                     CreateTime = DateTime.Now,
                     CreateUser = Guid.Empty,
