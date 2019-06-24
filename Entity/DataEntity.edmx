@@ -228,6 +228,7 @@
           <Property Name="SubmitTime" Type="datetime" />
           <Property Name="UpdateUser" Type="uniqueidentifier" />
           <Property Name="UpdateTime" Type="datetime" />
+          <Property Name="SignAppraiserText" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="RM_AssetsReport">
           <Key>
@@ -270,6 +271,7 @@
           <Property Name="SubmitTime" Type="datetime" />
           <Property Name="UpdateUser" Type="uniqueidentifier" />
           <Property Name="UpdateTime" Type="datetime" />
+          <Property Name="SignAppraiserText" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="RM_HouseReport">
           <Key>
@@ -317,6 +319,7 @@
           <Property Name="SubmitTime" Type="datetime" />
           <Property Name="UpdateUser" Type="uniqueidentifier" />
           <Property Name="UpdateTime" Type="datetime" />
+          <Property Name="SignAppraiserText" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="RM_ReportAudit">
           <Key>
@@ -908,6 +911,7 @@
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
           <Property Name="AuditFileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="AuditFilePath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="SignAppraiserText" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="RM_AreaReport">
           <Key>
@@ -960,6 +964,7 @@
           <Property Name="SubmitTime" Type="DateTime" Precision="3" />
           <Property Name="UpdateUser" Type="Guid" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="SignAppraiserText" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="RM_AssetsReport">
           <Key>
@@ -1002,6 +1007,7 @@
           <Property Name="SubmitTime" Type="DateTime" Precision="3" />
           <Property Name="UpdateUser" Type="Guid" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="SignAppraiserText" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PM_ThingsTodo">
           <Key>
@@ -1381,6 +1387,7 @@
           <EntitySetMapping Name="RM_HouseReport">
             <EntityTypeMapping TypeName="Entity.RM_HouseReport">
               <MappingFragment StoreEntitySet="RM_HouseReport">
+                <ScalarProperty Name="SignAppraiserText" ColumnName="SignAppraiserText" />
                 <ScalarProperty Name="AuditFilePath" ColumnName="AuditFilePath" />
                 <ScalarProperty Name="AuditFileName" ColumnName="AuditFileName" />
                 <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
@@ -1429,6 +1436,7 @@
           <EntitySetMapping Name="RM_AreaReport">
             <EntityTypeMapping TypeName="Entity.RM_AreaReport">
               <MappingFragment StoreEntitySet="RM_AreaReport">
+                <ScalarProperty Name="SignAppraiserText" ColumnName="SignAppraiserText" />
                 <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
                 <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
                 <ScalarProperty Name="SubmitTime" ColumnName="SubmitTime" />
@@ -1482,6 +1490,7 @@
           <EntitySetMapping Name="RM_AssetsReport">
             <EntityTypeMapping TypeName="Entity.RM_AssetsReport">
               <MappingFragment StoreEntitySet="RM_AssetsReport">
+                <ScalarProperty Name="SignAppraiserText" ColumnName="SignAppraiserText" />
                 <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
                 <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
                 <ScalarProperty Name="SubmitTime" ColumnName="SubmitTime" />

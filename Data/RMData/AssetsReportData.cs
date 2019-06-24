@@ -58,6 +58,10 @@ namespace Data.RMData
             {
                 list = list.Where(m => filter.ReportType.Contains(m.ReportTypeString));
             }
+            if (filter.SignAppraiserText.IsNotNullOrWhiteSpace())
+            {
+                list = list.Where(m => filter.SignAppraiserText.Contains(m.SignAppraiserText));
+            }
             if (filter.SignAppraiser.IsNotNullAndCountGtZero())
             {
                 list = list.Where(m => dp.RM_ReportDicItem

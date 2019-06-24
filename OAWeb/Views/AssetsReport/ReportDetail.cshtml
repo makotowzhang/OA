@@ -54,7 +54,7 @@
                         </el-form-item>
 
                         <el-form-item label="评估范围" prop="AssessmentScope">
-                            <el-input readonly v-model="AddFormData.AssessmentScope" ></el-input>
+                            <el-input readonly v-model="AddFormData.AssessmentScope"></el-input>
                         </el-form-item>
 
 
@@ -113,7 +113,10 @@
                                             readonly>
                             </el-date-picker>
                         </el-form-item>
-                        <el-form-item label="签字估价师" prop="SignAppraiser">
+                        <el-form-item label="签字估价师" prop="SignAppraiserText">
+                            <el-input v-model="AddFormData.SignAppraiserText" readonly></el-input>
+                        </el-form-item>
+                        @*<el-form-item label="签字估价师" prop="SignAppraiser">
                             <el-select v-model="AddFormData.SignAppraiser"
                                        multiple
                                        collapse-tags
@@ -124,7 +127,7 @@
                                            :value="item.RelateUserId">
                                 </el-option>
                             </el-select>
-                        </el-form-item>
+                        </el-form-item>*@
                         <el-form-item label="报告描述" prop="ReportDesc">
                             <el-input v-model="AddFormData.ReportDesc" type="textarea" readonly></el-input>
                         </el-form-item>
@@ -223,6 +226,7 @@
                 WorkDesc: "",
                 EnclosureName: "",
                 EnclusurePath: "",
+                SignAppraiserText:"",
                 Operator: "",
                 Salesman: "",
                 Contacts: "",

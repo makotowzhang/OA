@@ -23,7 +23,7 @@
         <template>
             <el-form :model="AddFormData"  label-width="120px" ref="AddForm" @@submit.native.prevent>
                 <el-tabs>
-                    <el-tab-pane  label="报告信息" >
+                    <el-tab-pane label="报告信息">
                         <el-form-item label="报告类型" prop="ReportType">
                             <el-radio v-model="AddFormData.ReportType" label="Formal" v-if="AddFormData.ReportType=='Formal'" border>正式</el-radio>
                             <el-radio v-model="AddFormData.ReportType" label="PreAssessment" v-if="AddFormData.ReportType=='PreAssessment'" border>预评</el-radio>
@@ -123,7 +123,10 @@
                                             readonly>
                             </el-date-picker>
                         </el-form-item>
-                        <el-form-item label="签字估价师" prop="SignAppraiser">
+                        <el-form-item label="签字估价师" prop="SignAppraiserText">
+                            <el-input v-model="AddFormData.SignAppraiserText" readonly></el-input>
+                        </el-form-item>
+                        @*<el-form-item label="签字估价师" prop="SignAppraiser">
                             <el-select v-model="AddFormData.SignAppraiser"
                                        multiple
                                        collapse-tags
@@ -134,7 +137,7 @@
                                            :value="item.RelateUserId">
                                 </el-option>
                             </el-select>
-                        </el-form-item>
+                        </el-form-item>*@
                         <el-form-item label="报告描述" prop="ReportDesc">
                             <el-input v-model="AddFormData.ReportDesc" type="textarea" readonly></el-input>
                         </el-form-item>

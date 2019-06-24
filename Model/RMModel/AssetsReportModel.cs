@@ -28,6 +28,7 @@ namespace Model.RMModel
         public decimal? ValuationValue { get; set; }
         public DateTime? ValueTime { get; set; }
         public DateTime? ReportTime { get; set; }
+        public string SignAppraiserText { get; set; }
         public string ReportDesc { get; set; }
         public string WorkName { get; set; }
         public string WorkDesc { get; set; }
@@ -106,5 +107,7 @@ namespace Model.RMModel
         public DateTime? AuditEndTime { get; set; }
 
         public ListType ListType { get; set; }
+
+        public string SignAppraiserText { get; set; }
     }
 }

@@ -139,18 +139,21 @@
                                             readonly>
                             </el-date-picker>
                         </el-form-item>
-                        <el-form-item label="签字估价师" prop="SignAppraiser">
-                            <el-select v-model="AddFormData.SignAppraiser"
-                                       multiple
-                                       collapse-tags
-                                       disabled>
-                                <el-option v-for="item in SelectOption.EmpList"
-                                           :key="item.RelateUserId"
-                                           :label="item.EmpName"
-                                           :value="item.RelateUserId">
-                                </el-option>
-                            </el-select>
+                        <el-form-item label="签字估价师" prop="SignAppraiserText">
+                            <el-input v-model="AddFormData.SignAppraiserText" readonly></el-input>
                         </el-form-item>
+                        @*<el-form-item label="签字估价师" prop="SignAppraiser">
+            <el-select v-model="AddFormData.SignAppraiser"
+                       multiple
+                       collapse-tags
+                       disabled>
+                <el-option v-for="item in SelectOption.EmpList"
+                           :key="item.RelateUserId"
+                           :label="item.EmpName"
+                           :value="item.RelateUserId">
+                </el-option>
+            </el-select>
+        </el-form-item>*@
                         <el-form-item label="报告描述" prop="ReportDesc">
                             <el-input v-model="AddFormData.ReportDesc" type="textarea" readonly></el-input>
                         </el-form-item>
@@ -254,6 +257,7 @@
                 //ValuationStruct: "",
                 ValueTime: "",
                 ReportTime: "",
+                SignAppraiserText: "",
                 ReportDesc: "",
                 WorkName: "",
                 WorkDesc: "",

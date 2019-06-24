@@ -89,7 +89,10 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="估价师" prop="SignAppraiser">
+                            <el-form-item label="估价师" prop="SignAppraiserText">
+                                <el-input v-model="QueryFormData.SignAppraiserText" placeholder="请输入估价师"></el-input>
+                            </el-form-item>
+                            @*<el-form-item label="估价师" prop="SignAppraiser">
                                 <el-select v-model="QueryFormData.SignAppraiser"
                                            placeholder="请选择签字估价师"
                                            :clearable="true"
@@ -101,7 +104,7 @@
                                                :value="item.RelateUserId">
                                     </el-option>
                                 </el-select>
-                            </el-form-item>
+                            </el-form-item>*@
                         </el-col>
 
                     </el-row>
@@ -178,13 +181,17 @@
                                  label="报告使用方"
                                  width="100">
                 </el-table-column>
-                <el-table-column prop="SignAppraiserName"
+                <el-table-column prop="SignAppraiserText"
+                                 label="签字估价师"
+                                 width="100">
+                </el-table-column>
+                @*<el-table-column prop="SignAppraiserName"
                                  label="签字估价师"
                                  width="300">
                     <template slot-scope="scope">
                         <el-tag style="margin-left:10px;" v-for="SName in scope.row.SignAppraiserName" :key="SName">{{SName}}</el-tag>
                     </template>
-                </el-table-column>
+                </el-table-column>*@
                 <el-table-column prop="Salesman"
                                  label="业务员"
                                  width="100">
@@ -345,7 +352,10 @@
                                                 readonly>
                                 </el-date-picker>
                             </el-form-item>
-                            <el-form-item label="签字估价师" prop="SignAppraiser">
+                            <el-form-item label="签字估价师" prop="SignAppraiserText">
+                                <el-input v-model="AddFormData.SignAppraiserText" readonly></el-input>
+                            </el-form-item>
+                            @*<el-form-item label="签字估价师" prop="SignAppraiser">
                                 <el-select v-model="AddFormData.SignAppraiser"
                                            placeholder="请选择签字估价师"
                                            :clearable="true"
@@ -357,7 +367,7 @@
                                                :value="item.RelateUserId">
                                     </el-option>
                                 </el-select>
-                            </el-form-item>
+                            </el-form-item>*@
                             <el-form-item label="报告描述" prop="ReportDesc">
                                 <el-input readonly v-model="AddFormData.ReportDesc" type="textarea" placeholder="请输入报告描述"></el-input>
                             </el-form-item>

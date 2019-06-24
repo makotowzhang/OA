@@ -108,6 +108,7 @@ namespace Business.RMBusiness
                 entity.ReportDesc = model.ReportDesc;
                 entity.WorkName = model.WorkName;
                 entity.WorkDesc = model.WorkDesc;
+                entity.SignAppraiserText = model.SignAppraiserText;
                 entity.EnclosureName = model.EnclosureName;
                 entity.EnclusurePath = model.EnclusurePath;
                 entity.Operator = model.Operator;
@@ -135,7 +136,7 @@ namespace Business.RMBusiness
                         MsgTitle = "资产报告待审批",
                         MsgType = SysMessageType.Audit.ToString(),
                         MsgContent = dp.System_User.Where(m => m.Id == entity.CreateUser).Select(m => m.TrueName).FirstOrDefault() +
-                                   $"的报告{entity.ReportName},需要您的审核。",
+                                   $"于{DateTime.Now.ToString("yyyy-MM-dd") }向您提交一个报告（{entity.ReportName}），请尽快查阅。",
                         Url = "/AssetsReport/ReportAudit"
                     }, msgUserList);
                 }

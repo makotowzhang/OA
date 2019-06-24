@@ -297,6 +297,19 @@
                 this.Dialog.editDialog = false;
             },
             deleteClick: function () {
+                var flag = false;
+                for (var i = 0; i < $vue.$refs.dataTable.selection.length; i++) {
+                    if ($vue.$refs.dataTable.selection[i].UserName == "admin") {
+                        flag = true;
+                    }
+                }
+                if (flag) {
+                    $vue.$message({
+                        type: 'info',
+                        message: '“admin”账户无法删除！'
+                    });
+                    return;
+                }
                 this.$confirm('是否确认删除这' + this.$refs.dataTable.selection.length + '行数据', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
@@ -304,6 +317,7 @@
                 }).then(function () {
                     $vue.Loading.bodyLoading = true;
                     axios.post("DeleteUser", $vue.$refs.dataTable.selection).then(function (response) {
+                       
                         $vue.Loading.bodyLoading = false;
                         ActionCommonHandle(response.data, $vue, "删除成功", "删除失败", getList());
                     }).catch(function (error) {

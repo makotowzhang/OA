@@ -51,5 +51,6 @@ namespace Entity
         public Nullable<System.DateTime> SubmitTime { get; set; }
         public Nullable<System.Guid> UpdateUser { get; set; }
         public Nullable<System.DateTime> UpdateTime { get; set; }
+        public string SignAppraiserText { get; set; }
     }
 }

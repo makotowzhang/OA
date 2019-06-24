@@ -110,6 +110,7 @@ namespace Business.RMBusiness
                 entity.ValuationStruct = model.ValuationStruct;
                 entity.ValueTime = model.ValueTime;
                 entity.ReportTime = model.ReportTime;
+                entity.SignAppraiserText = model.SignAppraiserText;
                 entity.ReportDesc = model.ReportDesc;
                 entity.WorkName = model.WorkName;
                 entity.WorkDesc = model.WorkDesc;
@@ -140,7 +141,7 @@ namespace Business.RMBusiness
                         MsgTitle = "土地报告待审批",
                         MsgType = SysMessageType.Audit.ToString(),
                         MsgContent = dp.System_User.Where(m => m.Id == model.CreateUser).Select(m => m.TrueName).FirstOrDefault() +
-                                   $"的报告{entity.ReportName},需要您的审核。",
+                                   $"于{DateTime.Now.ToString("yyyy-MM-dd") }向您提交一个报告（{entity.ReportName}），请尽快查阅。",
                         Url = "/AreaReport/ReportAudit"
                     }, msgUserList);
                 }

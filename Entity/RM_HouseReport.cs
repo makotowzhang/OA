@@ -56,5 +56,6 @@ namespace Entity
         public Nullable<System.DateTime> UpdateTime { get; set; }
         public string AuditFileName { get; set; }
         public string AuditFilePath { get; set; }
+        public string SignAppraiserText { get; set; }
     }
 }

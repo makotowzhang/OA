@@ -89,7 +89,10 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="估价师" prop="SignAppraiser">
+                            <el-form-item label="估价师" prop="SignAppraiserText">
+                                <el-input v-model="QueryFormData.SignAppraiserText" placeholder="请输入估价师"></el-input>
+                            </el-form-item>
+                            @*<el-form-item label="估价师" prop="SignAppraiser">
                                 <el-select v-model="QueryFormData.SignAppraiser"
                                            placeholder="请选择签字估价师"
                                            :clearable="true"
@@ -101,7 +104,7 @@
                                                :value="item.RelateUserId">
                                     </el-option>
                                 </el-select>
-                            </el-form-item>
+                            </el-form-item>*@
                         </el-col>
 
                     </el-row>
@@ -178,13 +181,17 @@
                                  label="报告使用方"
                                  width="100">
                 </el-table-column>
-                <el-table-column prop="SignAppraiserName"
+                <el-table-column prop="SignAppraiserText"
+                                 label="签字估价师"
+                                 width="100">
+                </el-table-column>
+                @*<el-table-column prop="SignAppraiserName"
                                  label="签字估价师"
                                  width="300">
                     <template slot-scope="scope">
                         <el-tag style="margin-left:10px;" v-for="SName in scope.row.SignAppraiserName" :key="SName">{{SName}}</el-tag>
                     </template>
-                </el-table-column>
+                </el-table-column>*@
                 <el-table-column prop="Salesman"
                                  label="业务员"
                                  width="100">
@@ -240,7 +247,7 @@
                             <el-form-item label="报告类型" prop="ReportType">
                                 <el-radio v-model="AddFormData.ReportType" label="Formal" :disabled="AddFormData.ReportType!='Formal'&&!Dialog.IsAdd" border>正式</el-radio>
                                 <el-radio v-model="AddFormData.ReportType" label="PreAssessment" :disabled="AddFormData.ReportType!='PreAssessment'&&!Dialog.IsAdd" border>预评</el-radio>
-                                <el-radio v-model="AddFormData.ReportType" label="Consultation" :disabled="AddFormData.ReportType!='Consultation'&&!Dialog.IsAdd" border>咨询</el-radio>
+                                @*<el-radio v-model="AddFormData.ReportType" label="Consultation" :disabled="AddFormData.ReportType!='Consultation'&&!Dialog.IsAdd" border>咨询</el-radio>*@
                             </el-form-item>
                             <el-form-item label="报告编号" prop="ReportCode">
                                 <el-input v-model="AddFormData.ReportCode" :readonly="Dialog.IsDetail" placeholder="请输入报告编号" @@blur="ReportCodeBlur"></el-input>
@@ -351,20 +358,23 @@
                                                 :readonly="Dialog.IsDetail">
                                 </el-date-picker>
                             </el-form-item>
-                            <el-form-item label="签字估价师" prop="SignAppraiser">
-                                <el-select v-model="AddFormData.SignAppraiser"
-                                           placeholder="请选择签字估价师"
-                                           :clearable="true"
-                                           multiple
-                                           :collapse-tags="!Dialog.IsDetail"
-                                           :disabled="Dialog.IsDetail">
-                                    <el-option v-for="item in SelectOption.EmpList"
-                                               :key="item.RelateUserId"
-                                               :label="item.EmpName"
-                                               :value="item.RelateUserId">
-                                    </el-option>
-                                </el-select>
+                            <el-form-item label="签字估价师" prop="SignAppraiserText">
+                                <el-input v-model="AddFormData.SignAppraiserText" :readonly="Dialog.IsDetail" placeholder="请输入签字估价师"></el-input>
                             </el-form-item>
+                            @*<el-form-item label="签字估价师" prop="SignAppraiser">
+            <el-select v-model="AddFormData.SignAppraiser"
+                       placeholder="请选择签字估价师"
+                       :clearable="true"
+                       multiple
+                       :collapse-tags="!Dialog.IsDetail"
+                       :disabled="Dialog.IsDetail">
+                <el-option v-for="item in SelectOption.EmpList"
+                           :key="item.RelateUserId"
+                           :label="item.EmpName"
+                           :value="item.RelateUserId">
+                </el-option>
+            </el-select>
+        </el-form-item>*@
                             <el-form-item label="报告描述" prop="ReportDesc">
                                 <el-input v-model="AddFormData.ReportDesc" type="textarea" :readonly="Dialog.IsDetail" placeholder="请输入报告描述"></el-input>
                             </el-form-item>
@@ -526,6 +536,7 @@
                 ReportDesc: "",
                 WorkName: "",
                 WorkDesc: "",
+                SignAppraiserText: "",
                 EnclosureName: "",
                 EnclusurePath: "",
                 Operator: "",
@@ -571,7 +582,9 @@
                 ValuationValue: [
                     { validator: checkNumber, trigger: 'change' }
                 ],
-               
+                SignAppraiserText: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
                 ReportDesc: [
                     { max: 250, message: '长度不能超过250个字符', trigger: 'change' }
                 ],
