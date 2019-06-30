@@ -52,5 +52,6 @@ namespace Entity
         public virtual DbSet<View_Achievements> View_Achievements { get; set; }
         public virtual DbSet<System_Message> System_Message { get; set; }
         public virtual DbSet<System_MessageReceiver> System_MessageReceiver { get; set; }
+        public virtual DbSet<PM_SysWork> PM_SysWork { get; set; }
     }
 }

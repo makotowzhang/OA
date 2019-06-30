@@ -71,6 +71,7 @@
     <Compile Include="PMBusiness\AchievementsBusiness.cs" />
     <Compile Include="PMBusiness\DepartmentBusiness.cs" />
     <Compile Include="PMBusiness\EmployeeBusiness.cs" />
+    <Compile Include="PMBusiness\SysWorkBusiness.cs" />
     <Compile Include="PMBusiness\ThingsTodoBusiness.cs" />
     <Compile Include="PMBusiness\LeaseBusiness.cs" />
     <Compile Include="PMBusiness\LeaseApplyBusiness.cs" />

@@ -170,6 +170,7 @@
     <Compile Include="Controllers\AreaReportController.cs" />
     <Compile Include="Controllers\AssetsReportController.cs" />
     <Compile Include="Controllers\HouseReportController.cs" />
+    <Compile Include="Controllers\SysWorkController.cs" />
     <Compile Include="Controllers\ThingsTodoController.cs" />
     <Compile Include="Controllers\MaterielApplyController.cs" />
     <Compile Include="Controllers\LeaseController.cs" />
@@ -701,6 +702,7 @@
     <Content Include="Views\HouseReport\ReportDetail.cshtml" />
     <Content Include="Views\AreaReport\ReportDetail.cshtml" />
     <Content Include="Views\AssetsReport\ReportDetail.cshtml" />
+    <Content Include="Views\SysWork\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">

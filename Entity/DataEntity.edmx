@@ -164,6 +164,23 @@
           <Property Name="UpdateUser" Type="uniqueidentifier" />
           <Property Name="UpdateTime" Type="datetime" />
         </EntityType>
+        <EntityType Name="PM_SysWork">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WorkNo" Type="varchar" MaxLength="50" />
+          <Property Name="WorkName" Type="varchar" MaxLength="50" />
+          <Property Name="Principal" Type="varchar" MaxLength="50" />
+          <Property Name="WorkType" Type="varchar" MaxLength="50" />
+          <Property Name="ProjectLeader" Type="varchar" MaxLength="50" />
+          <Property Name="SpecialConsultant" Type="varchar" MaxLength="50" />
+          <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UpdateTime" Type="datetime" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+        </EntityType>
         <EntityType Name="PM_ThingsTodo">
           <Key>
             <PropertyRef Name="Id" />
@@ -511,6 +528,7 @@
           <EntitySet Name="PM_MaterielApply" EntityType="Self.PM_MaterielApply" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_MoneyApply" EntityType="Self.PM_MoneyApply" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_Notice" EntityType="Self.PM_Notice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PM_SysWork" EntityType="Self.PM_SysWork" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_ThingsTodo" EntityType="Self.PM_ThingsTodo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RM_AreaReport" EntityType="Self.RM_AreaReport" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RM_AssetsReport" EntityType="Self.RM_AssetsReport" Schema="dbo" store:Type="Tables" />
@@ -575,6 +593,7 @@
           <EntitySet Name="View_Achievements" EntityType="Entity.View_Achievements" />
           <EntitySet Name="System_Message" EntityType="Entity.System_Message" />
           <EntitySet Name="System_MessageReceiver" EntityType="Entity.System_MessageReceiver" />
+          <EntitySet Name="PM_SysWork" EntityType="Entity.PM_SysWork" />
         </EntityContainer>
         <EntityType Name="System_User">
           <Key>
@@ -1068,6 +1087,23 @@
           <Property Name="IsRead" Type="Boolean" Nullable="false" />
           <Property Name="FirstReadTime" Type="DateTime" Precision="3" />
           <Property Name="LastReadTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="PM_SysWork">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WorkNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="WorkName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Principal" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="WorkType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProjectLeader" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SpecialConsultant" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1586,6 +1622,24 @@
                 <ScalarProperty Name="IsRead" ColumnName="IsRead" />
                 <ScalarProperty Name="ToUser" ColumnName="ToUser" />
                 <ScalarProperty Name="MessageId" ColumnName="MessageId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PM_SysWork">
+            <EntityTypeMapping TypeName="Entity.PM_SysWork">
+              <MappingFragment StoreEntitySet="PM_SysWork">
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="SpecialConsultant" ColumnName="SpecialConsultant" />
+                <ScalarProperty Name="ProjectLeader" ColumnName="ProjectLeader" />
+                <ScalarProperty Name="WorkType" ColumnName="WorkType" />
+                <ScalarProperty Name="Principal" ColumnName="Principal" />
+                <ScalarProperty Name="WorkName" ColumnName="WorkName" />
+                <ScalarProperty Name="WorkNo" ColumnName="WorkNo" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -95,6 +95,9 @@
     <Compile Include="PM_Notice.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
+    <Compile Include="PM_SysWork.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="PM_ThingsTodo.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
