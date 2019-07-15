@@ -27,7 +27,7 @@ namespace Business.PMBusiness
         {
             using (DataProvider dp = new DataProvider())
             {
-                if (model.Id.HasValue)
+                if (!model.Id.HasValue)
                 {
                     return dp.PM_SysWork.Count(m => m.WorkNo == model.WorkNo) > 0;
                 }
@@ -61,6 +61,8 @@ namespace Business.PMBusiness
                     entity.WorkType = model.WorkType;
                     entity.ProjectLeader = model.ProjectLeader;
                     entity.SpecialConsultant = model.SpecialConsultant;
+                    entity.FileName = model.FileName;
+                    entity.FilePath = model.FilePath;
                     entity.UpdateUser = model.UpdateUser;
                     entity.UpdateTime = DateTime.Now;
                 }

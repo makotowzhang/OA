@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width" />
     <title>协同办公管理</title>
     @Html.Partial("~/Views/Shared/_Head.cshtml")
+    @Html.Partial("~/Views/Shared/SingleFileUploader.cshtml")
     <style>
     </style>
 </head>
@@ -101,6 +102,17 @@
                                  label="专业咨询员"
                                  width="150">
                 </el-table-column>
+                <el-table-column prop="ext"
+                                 label="附件"
+                                 width="100">
+                    <template slot-scope="scope">
+                        <el-button v-if="scope.row.FileName!=null&&scope.row.FileName!=''" type="success" @@click="DownloadFile(scope.row.Id)" round>下载</el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="CreateUserName"
+                                 label="创建人"
+                                 width="100">
+                </el-table-column>
                 <el-table-column prop="CreateTime"
                                  label="创建时间"
                                  width="200">
@@ -150,6 +162,12 @@
                     <el-form-item label="专业咨询员" prop="SpecialConsultant">
                         <el-input v-model="AddFormData.SpecialConsultant" placeholder="请输入专业咨询员"></el-input>
                     </el-form-item>
+                    <el-form-item label="附件" prop="FileName">
+                        <single-file-uploader :filename.sync="AddFormData.FileName"
+                                              :filepath.sync="AddFormData.FilePath"
+                                              placeholder="请选择附件"
+                                              :isread="false"></single-file-uploader>
+                    </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                     <el-button type="primary" @@click="submitAddForm">保 存</el-button>
@@ -188,7 +206,9 @@
                 Principal: "",
                 WorkType: "",
                 ProjectLeader: "",
-                SpecialConsultant: ""
+                SpecialConsultant: "",
+                FileName: "",
+                FilePath:""
             },
             AddFormRule: {
                 WorkNo: [
@@ -347,7 +367,10 @@
             closeAddDialog: function (done) {
                 done();
             },
-            DateFormat: DateFormat
+            DateFormat: DateFormat,
+            DownloadFile: function (id) {
+                window.open("DownloadFile?id=" + id);
+            }
         }
 
     });

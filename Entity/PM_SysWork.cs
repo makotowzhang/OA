@@ -21,10 +21,12 @@ namespace Entity
         public string WorkType { get; set; }
         public string ProjectLeader { get; set; }
         public string SpecialConsultant { get; set; }
+        public string FilePath { get; set; }
+        public string FileName { get; set; }
+        public bool IsDel { get; set; }
         public System.DateTime CreateTime { get; set; }
         public System.Guid CreateUser { get; set; }
         public Nullable<System.DateTime> UpdateTime { get; set; }
         public Nullable<System.Guid> UpdateUser { get; set; }
-        public bool IsDel { get; set; }
     }
 }

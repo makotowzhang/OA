@@ -175,6 +175,8 @@
           <Property Name="WorkType" Type="varchar" MaxLength="50" />
           <Property Name="ProjectLeader" Type="varchar" MaxLength="50" />
           <Property Name="SpecialConsultant" Type="varchar" MaxLength="50" />
+          <Property Name="FilePath" Type="varchar" MaxLength="500" />
+          <Property Name="FileName" Type="varchar" MaxLength="100" />
           <Property Name="IsDel" Type="bit" Nullable="false" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
           <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
@@ -1099,11 +1101,13 @@
           <Property Name="WorkType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ProjectLeader" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="SpecialConsultant" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FilePath" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="FileName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
           <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreateUser" Type="Guid" Nullable="false" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
           <Property Name="UpdateUser" Type="Guid" />
-          <Property Name="IsDel" Type="Boolean" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1629,11 +1633,13 @@
           <EntitySetMapping Name="PM_SysWork">
             <EntityTypeMapping TypeName="Entity.PM_SysWork">
               <MappingFragment StoreEntitySet="PM_SysWork">
-                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
                 <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
                 <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
                 <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
                 <ScalarProperty Name="SpecialConsultant" ColumnName="SpecialConsultant" />
                 <ScalarProperty Name="ProjectLeader" ColumnName="ProjectLeader" />
                 <ScalarProperty Name="WorkType" ColumnName="WorkType" />
