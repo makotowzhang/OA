@@ -68,9 +68,9 @@ namespace OAWeb.Controllers
             }
         }
 
-        public ActionResult CheckEmpCode(string empCode)
+        public ActionResult CheckEmpCode(string empCode,Guid? id)
         {
-            return Json(new JsonMessage(business.CheckEmpCode(empCode)));
+            return Json(new JsonMessage(business.CheckEmpCode(empCode, id)));
         }
 
         public ActionResult GetUserEmp()

@@ -140,11 +140,11 @@ namespace Business.PMBusiness
             }
         }
 
-        public bool CheckEmpCode(string empCode)
+        public bool CheckEmpCode(string empCode,Guid? id)
         {
             using (DataProvider dp = new DataProvider())
             {
-                return dp.PM_Employee.Count(m => m.EmpCode == empCode && !m.IsDel) > 0;
+                return dp.PM_Employee.Count(m => m.EmpCode == empCode && !m.IsDel && m.Id!=id) > 0;
             }
         }
 

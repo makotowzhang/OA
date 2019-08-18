@@ -394,7 +394,7 @@
     }
 
     function checkEmpCode(rule, value, callback) {
-        axios.post("CheckEmpCode", { empCode: value}).then(function (response) {
+        axios.post("CheckEmpCode", { empCode: value, id: $vue.AddFormData.Id }).then(function (response) {
             if (response.data.success) {
                 callback(new Error("工号已存在！"));
             }
