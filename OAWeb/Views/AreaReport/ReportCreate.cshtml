@@ -165,7 +165,7 @@
                 </el-table-column>
                 <el-table-column prop="ReportName"
                                  label="项目名称"
-                                 width="150">
+                                 width="300">
                 </el-table-column>
                 <el-table-column prop="ReportTypeString"
                                  label="报告类型"
@@ -422,7 +422,7 @@
                                 <el-input v-model="AddFormData.Salesman" :readonly="Dialog.IsDetail" placeholder="请输入业务员"></el-input>
                             </el-form-item>
                             <div style="margin-bottom:20px;border-top:1px solid #dcdfe6;"></div>
-                            <el-form-item label="联系人" prop="Contacts">
+                            <el-form-item label="受委托方联系人" prop="Contacts">
                                 <el-input v-model="AddFormData.Contacts" :readonly="Dialog.IsDetail" placeholder="请输入联系人"></el-input>
                             </el-form-item>
                             <el-form-item label="联系电话" prop="ContactsPhone">
@@ -432,10 +432,10 @@
                                 <el-radio v-model="AddFormData.ChargeStatus" :label="true" :disabled="!AddFormData.ChargeStatus&&!Dialog.IsAdd" border>已收费</el-radio>
                                 <el-radio v-model="AddFormData.ChargeStatus" :label="false" :disabled="AddFormData.ChargeStatus&&!Dialog.IsAdd" border>未收费</el-radio>
                             </el-form-item>
-                            <el-form-item label="收费金额" prop="ChargeAmount" v-if="AddFormData.ChargeStatus">
+                            <el-form-item label="收费金额" prop="ChargeAmount" @*v-if="AddFormData.ChargeStatus"*@>
                                 <el-input v-model="AddFormData.ChargeAmount" :readonly="Dialog.IsDetail" placeholder="请输入收费金额"></el-input>
                             </el-form-item>
-                            <el-form-item label="是否开票" prop="IsInvoice" v-if="AddFormData.ChargeStatus">
+                            <el-form-item label="是否开票" prop="IsInvoice" @*v-if="AddFormData.ChargeStatus"*@>
                                 <el-radio v-model="AddFormData.IsInvoice" :label="true" :disabled="!AddFormData.IsInvoice&&!Dialog.IsAdd" border>是</el-radio>
                                 <el-radio v-model="AddFormData.IsInvoice" :label="false" :disabled="AddFormData.IsInvoice&&!Dialog.IsAdd" border>否</el-radio>
                             </el-form-item>

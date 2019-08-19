@@ -52,7 +52,8 @@ namespace Data.RMData
                            CreateDepName=depci.DepName,
                            ReportEntruster=hr.ReportEntruster,
                            ReportUser=hr.ReportUser,
-                           Salesman=hr.Salesman
+                           Salesman=hr.Salesman,
+                           SignAppraiserText=hr.SignAppraiserText
                        };
             if (filter.ReportType.IsNotNullAndCountGtZero())
             {

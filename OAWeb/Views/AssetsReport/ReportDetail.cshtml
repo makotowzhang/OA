@@ -153,7 +153,7 @@
                             <el-input v-model="AddFormData.Salesman" readonly></el-input>
                         </el-form-item>
                         <div style="margin-bottom:20px;border-top:1px solid #dcdfe6;"></div>
-                        <el-form-item label="联系人" prop="Contacts">
+                        <el-form-item label="受委托方联系人" prop="Contacts">
                             <el-input v-model="AddFormData.Contacts" readonly></el-input>
                         </el-form-item>
                         <el-form-item label="联系电话" prop="ContactsPhone">
@@ -163,10 +163,10 @@
                             <el-radio v-model="AddFormData.ChargeStatus" :label="true" v-if="AddFormData.ChargeStatus" border>已收费</el-radio>
                             <el-radio v-model="AddFormData.ChargeStatus" :label="false" v-if="!AddFormData.ChargeStatus" border>未收费</el-radio>
                         </el-form-item>
-                        <el-form-item label="收费金额" prop="ChargeAmount" v-if="AddFormData.ChargeStatus">
+                        <el-form-item label="收费金额" prop="ChargeAmount" @*v-if="AddFormData.ChargeStatus"*@>
                             <el-input v-model="AddFormData.ChargeAmount" readonly></el-input>
                         </el-form-item>
-                        <el-form-item label="是否开票" prop="IsInvoice" v-if="AddFormData.ChargeStatus">
+                        <el-form-item label="是否开票" prop="IsInvoice" @*v-if="AddFormData.ChargeStatus"*@>
                             <el-radio v-model="AddFormData.IsInvoice" :label="true" v-if="AddFormData" border>是</el-radio>
                             <el-radio v-model="AddFormData.IsInvoice" :label="false" v-if="!AddFormData.IsInvoice" border>否</el-radio>
                         </el-form-item>
