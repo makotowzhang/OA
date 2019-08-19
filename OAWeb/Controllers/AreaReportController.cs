@@ -76,7 +76,7 @@ namespace OAWeb.Controllers
                 filter.AuditUserId = CurrentUser.Id;
             }
             var data = service.GetReportList(filter, out int total);
-            return Json(new TableDataModel(0, data));
+            return Json(new TableDataModel(total, data));
         }
 
         public ActionResult DownloadReportFile(Guid? reportId)

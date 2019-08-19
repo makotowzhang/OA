@@ -30,6 +30,11 @@ namespace OAWeb.Controllers
             return View();
         }
 
+        public ActionResult AddReportIndex()
+        {
+            return View();
+        }
+
         public ActionResult GetUserCreateReport()
         {
             return EnumJson(service.GetOrCreateModel(CurrentUser.Id));
@@ -76,7 +81,7 @@ namespace OAWeb.Controllers
                 filter.AuditUserId = CurrentUser.Id;
             }
             var data = service.GetReportList(filter, out int total);
-            return Json(new TableDataModel(0, data));
+            return Json(new TableDataModel(total, data));
         }
 
 
