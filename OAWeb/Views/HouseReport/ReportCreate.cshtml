@@ -52,7 +52,7 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                      
+
                     </el-row>
                     <el-row>
                         <el-col :span="8">
@@ -93,20 +93,20 @@
                                 <el-input v-model="QueryFormData.SignAppraiserText" placeholder="请输入估价师"></el-input>
                             </el-form-item>
                             @*<el-form-item label="估价师" prop="SignAppraiser">
-                                <el-select v-model="QueryFormData.SignAppraiser"
-                                           placeholder="请选择签字估价师"
-                                           :clearable="true"
-                                           multiple
-                                           collapse-tags>
-                                    <el-option v-for="item in SelectOption.EmpList"
-                                               :key="item.RelateUserId"
-                                               :label="item.EmpName"
-                                               :value="item.RelateUserId">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>*@
+                                    <el-select v-model="QueryFormData.SignAppraiser"
+                                               placeholder="请选择签字估价师"
+                                               :clearable="true"
+                                               multiple
+                                               collapse-tags>
+                                        <el-option v-for="item in SelectOption.EmpList"
+                                                   :key="item.RelateUserId"
+                                                   :label="item.EmpName"
+                                                   :value="item.RelateUserId">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>*@
                         </el-col>
-                      
+
                     </el-row>
                     <el-row>
                         <el-col :span="8">
@@ -186,12 +186,12 @@
                                  width="100">
                 </el-table-column>
                 @*<el-table-column prop="SignAppraiserName"
-                                 label="签字估价师"
-                                 width="300">
-                    <template slot-scope="scope">
-                        <el-tag style="margin-left:10px;" v-for="SName in scope.row.SignAppraiserName" :key="SName">{{SName}}</el-tag>
-                    </template>
-                </el-table-column>*@
+                                     label="签字估价师"
+                                     width="300">
+                        <template slot-scope="scope">
+                            <el-tag style="margin-left:10px;" v-for="SName in scope.row.SignAppraiserName" :key="SName">{{SName}}</el-tag>
+                        </template>
+                    </el-table-column>*@
                 <el-table-column prop="Salesman"
                                  label="业务员"
                                  width="100">
@@ -357,19 +357,19 @@
                                 <el-input v-model="AddFormData.SignAppraiserText" :readonly="Dialog.IsDetail" placeholder="请输入签字估价师"></el-input>
                             </el-form-item>
                             @*<el-form-item label="签字估价师" prop="SignAppraiser">
-                                <el-select v-model="AddFormData.SignAppraiser"
-                                           placeholder="请选择签字估价师"
-                                           :clearable="true"
-                                           multiple
-                                           :collapse-tags="!Dialog.IsDetail"
-                                           :disabled="Dialog.IsDetail">
-                                    <el-option v-for="item in SelectOption.EmpList"
-                                               :key="item.RelateUserId"
-                                               :label="item.EmpName"
-                                               :value="item.RelateUserId">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>*@
+                                    <el-select v-model="AddFormData.SignAppraiser"
+                                               placeholder="请选择签字估价师"
+                                               :clearable="true"
+                                               multiple
+                                               :collapse-tags="!Dialog.IsDetail"
+                                               :disabled="Dialog.IsDetail">
+                                        <el-option v-for="item in SelectOption.EmpList"
+                                                   :key="item.RelateUserId"
+                                                   :label="item.EmpName"
+                                                   :value="item.RelateUserId">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>*@
                             <el-form-item label="报告描述" prop="ReportDesc">
                                 <el-input v-model="AddFormData.ReportDesc" type="textarea" :readonly="Dialog.IsDetail" placeholder="请输入报告描述"></el-input>
                             </el-form-item>
@@ -470,7 +470,7 @@
                             </div>
                         </el-tab-pane>
                     </el-tabs>
-                    
+
                 </el-form>
                 <span slot="footer" class="dialog-footer" v-if="!Dialog.IsDetail">
                     <el-button type="primary" @@click="submitAddForm">提 交</el-button>
@@ -490,14 +490,14 @@
         el: "#App",
         data: {
             QueryFormData: {
-                LeaseIds:[],
+                LeaseIds: [],
                 AuditStatus: [],
                 AuditUserName: "",
                 CreateBeginTime: "",
                 CreateEndTime: "",
                 AuditBeginTime: "",
-                AuditEndTime:"",
-                ListType:"Personal",
+                AuditEndTime: "",
+                ListType: "Personal",
                 Page: 1,
                 PageSize: 10,
             },
@@ -511,7 +511,7 @@
             Dialog: {
                 addDialog: false,
                 editDialog: false,
-                IsDetail: false, 
+                IsDetail: false,
                 IsShowEditResult: false,
                 IsAdd: false
             },
@@ -519,7 +519,7 @@
                 Id: null,
                 ReportCode: "",
                 ReportName: "",
-                ReportEntruster:"",
+                ReportEntruster: "",
                 ReportUser: "",
                 Obligee: "",
                 LocationAddress: "",
@@ -556,8 +556,8 @@
                 AuditReason: "",
                 AuditFileName: "",
                 AuditFilePath: "",
-                ReportStatus:"",
-                ReportStatusString:""
+                ReportStatus: "",
+                ReportStatusString: ""
             },
             AddFormRule: {
                 ReportCode: [
@@ -647,7 +647,7 @@
                 ReportType: [
                     { required: true, message: '请选择报告类型', trigger: 'change' }
                 ],
-                AuditDep:[
+                AuditDep: [
                     { validator: checkAuditId, trigger: 'change' }
                 ],
                 AuditUserIds: [
@@ -667,9 +667,9 @@
                 ],
                 ValuationObjectiveList: [],
                 ValuationMethodsList: [],
-                ChargeStatusList:[],
+                ChargeStatusList: [],
                 DepList: [],
-                EmpList:[]
+                EmpList: []
             },
             PaginationData: {
                 pageSizes: [10, 20, 50, 100],
@@ -680,7 +680,7 @@
             ActionPermission: {
                 Add: false,
                 Detail: false
-            } ,
+            },
             modifyTitle: "",
             Dic: {
                 AuditStatus: {
@@ -696,7 +696,7 @@
                 }
             },
             TabName: "first",
-            panelHeight:200
+            panelHeight: 200
         },
         methods: {
             onQuery: function () {
@@ -711,28 +711,47 @@
                 this.$refs.QueryForm.resetFields();
             },
             openAddDialog: function () {
-                this.modifyTitle = "新增报告";
-                this.TabName = "first";
-                $vue.Loading.bodyLoading = true;
-                $vue.Dialog.IsDetail = false;
-                $vue.Dialog.IsShowEditResult = false;
-                $vue.Dialog.IsAdd = true;
-                setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 500);
-                axios.post("GetUserCreateReport").then(function (response) {
-                    AutoMapper($vue.AddFormData, response.data);
-                    $vue.Dialog.addDialog = true;
-                }).catch(function (error) {
-                    ErrorCommonHandle($vue);
-                }).finally(function () {
-                    $vue.Loading.bodyLoading = false;
-                });
+                //this.modifyTitle = "新增报告";
+                //this.TabName = "first";
+                //$vue.Loading.bodyLoading = true;
+                //$vue.Dialog.IsDetail = false;
+                //$vue.Dialog.IsShowEditResult = false;
+                //$vue.Dialog.IsAdd = true;
+                //setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 500);
+                //axios.post("GetUserCreateReport").then(function (response) {
+                //    AutoMapper($vue.AddFormData, response.data);
+                //    $vue.Dialog.addDialog = true;
+                //}).catch(function (error) {
+                //    ErrorCommonHandle($vue);
+                //}).finally(function () {
+                //    $vue.Loading.bodyLoading = false;
+                //});
+                var temp = null;
+                top.$app.editableTabs.forEach(function (tab, index) {
+                    if (tab.name == "AddHouseReportIndex") {
+                        temp = tab;
+                    }
+                })
+                if (temp != null) {
+                    top.$app.editableTabsValue = temp.name;
+                }
+                else {
+                    top.$app.editableTabs.push({
+                        title: "新增房产报告",
+                        name: "AddHouseReportIndex",
+                        IconClass: "icon iconfont icon-file-add",
+                        content: "/HouseReport/AddReportIndex",
+                        url: "/HouseReport/AddReportIndex"
+                    });
+                    top.$app.editableTabsValue = "AddHouseReportIndex";
+                }
             },
             openDetailDialog: function () {
                 this.TabName = "first";
                 $vue.Loading.bodyLoading = true;
                 $vue.Dialog.IsAdd = false;
                 this.modifyTitle = "查看报告";
-                axios.post("GetRoportModel", { id: this.$refs.dataTable.selection[0].Id}).then(function (response) {
+                axios.post("GetRoportModel", { id: this.$refs.dataTable.selection[0].Id }).then(function (response) {
                     AutoMapper($vue.AddFormData, response.data);
                     $vue.Dialog.IsShowEditResult = true;
                     if ($vue.AddFormData.ReportStatusString == "Reject") {
@@ -798,14 +817,14 @@
                 done();
             },
             ReportCodeBlur: function (value) {
-                if (this.AddFormData.ReportType == "PreAssessment" && this.AddFormData.ReportCode.substr(0,1)!="预") {
-                    this.AddFormData.ReportCode = "预"+this.AddFormData.ReportCode;
+                if (this.AddFormData.ReportType == "PreAssessment" && this.AddFormData.ReportCode.substr(0, 1) != "预") {
+                    this.AddFormData.ReportCode = "预" + this.AddFormData.ReportCode;
                 }
             },
             saveReprotData: function () {
                 axios.post("SaveReport", $vue.AddFormData);
                 this.Dialog.addDialog = false;
-            } ,
+            },
             DateFormat: DateFormat,
             DownloadReportFile: function (reportId) {
                 window.open("DownloadReportFile?reportId=" + reportId);
@@ -842,23 +861,23 @@
         $vue.SelectOption.EmpList = response.data;
     }).catch(function (error) {
         console.log(error);
-        });
+    });
 
     axios.post("/Department/GetAllDep", {}).then(function (response) {
         $vue.SelectOption.DepList = response.data;
     }).catch(function (error) {
         console.log(error);
-        });
+    });
     axios.post("/Dictionary/GetGroupItemList", { groupCode: "ValuationObjective" }).then(function (response) {
         $vue.SelectOption.ValuationObjectiveList = response.data;
     }).catch(function (error) {
         console.log(error);
-        });
+    });
     axios.post("/Dictionary/GetGroupItemList", { groupCode: "ValuationMethods" }).then(function (response) {
         $vue.SelectOption.ValuationMethodsList = response.data;
     }).catch(function (error) {
         console.log(error);
-        });
+    });
     axios.post("/Dictionary/GetGroupItemList", { groupCode: "ChargeStatus" }).then(function (response) {
         $vue.SelectOption.ChargeStatusList = response.data;
     }).catch(function (error) {
