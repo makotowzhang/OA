@@ -321,11 +321,11 @@
                                 </el-input>
                             </el-form-item>
                             @*<el-form-item label="估价对象用途" prop="ValuationPurpose">
-                <el-input readonly v-model="AddFormData.ValuationPurpose" placeholder="请输入估价对象用途"></el-input>
-            </el-form-item>
-            <el-form-item label="估价对象结构" prop="ValuationStruct">
-                <el-input readonly v-model="AddFormData.ValuationStruct" placeholder="请输入估价对象结构"></el-input>
-            </el-form-item>*@
+                                    <el-input readonly v-model="AddFormData.ValuationPurpose" placeholder="请输入估价对象用途"></el-input>
+                                </el-form-item>
+                                <el-form-item label="估价对象结构" prop="ValuationStruct">
+                                    <el-input readonly v-model="AddFormData.ValuationStruct" placeholder="请输入估价对象结构"></el-input>
+                                </el-form-item>*@
                             <el-form-item label="估价目的" prop="ValuationObjective">
                                 <el-select v-model="AddFormData.ValuationObjective"
                                            placeholder="请选择估价目的"
@@ -450,7 +450,7 @@
                     </el-tabs>
                 </el-form>
 
-                
+
             </el-dialog>
         </template>
     </div>
@@ -462,14 +462,14 @@
         el: "#App",
         data: {
             QueryFormData: {
-                LeaseIds:[],
+                LeaseIds: [],
                 AuditStatus: [],
                 AuditUserName: "",
                 CreateBeginTime: "",
                 CreateEndTime: "",
                 AuditBeginTime: "",
-                AuditEndTime:"",
-                ListType:"AllList",
+                AuditEndTime: "",
+                ListType: "AllList",
                 Page: 1,
                 PageSize: 10,
             },
@@ -487,7 +487,7 @@
                 Id: null,
                 ReportCode: "",
                 ReportName: "",
-                ReportEntruster:"",
+                ReportEntruster: "",
                 ReportUser: "",
                 Obligee: "",
                 LocationAddress: "",
@@ -527,7 +527,7 @@
                 ReportStatus: "Passed",
                 AuditReason: "",
                 AuditFileName: "",
-                AuditFilePath:""
+                AuditFilePath: ""
             },
             AddFormRule: {
             },
@@ -544,9 +544,9 @@
                 ],
                 ValuationObjectiveList: [],
                 ValuationMethodsList: [],
-                ChargeStatusList:[],
+                ChargeStatusList: [],
                 DepList: [],
-                EmpList:[]
+                EmpList: []
             },
             PaginationData: {
                 pageSizes: [10, 20, 50, 100],
@@ -557,7 +557,7 @@
             ActionPermission: {
                 Detail: false,
                 Audit: false
-            } ,
+            },
             modifyTitle: "",
             Dic: {
                 AuditStatus: {
@@ -588,19 +588,28 @@
                 this.$refs.QueryForm.resetFields();
             },
             openAddDialog: function () {
-                this.modifyTitle = "查看报告";
-                this.TabName = "first";
-                this.Dialog.IsAudit = false;
-                $vue.Loading.bodyLoading = true;
-                setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 500);
-                axios.post("GetRoportModel", { id: this.$refs.dataTable.selection[0].Id}).then(function (response) {
-                    AutoMapper($vue.AddFormData, response.data);
-                    $vue.Dialog.addDialog = true;
-                }).catch(function (error) {
-                    ErrorCommonHandle($vue);
-                }).finally(function () {
-                    $vue.Loading.bodyLoading = false;
+                //this.modifyTitle = "查看报告";
+                //this.TabName = "first";
+                //this.Dialog.IsAudit = false;
+                //$vue.Loading.bodyLoading = true;
+                //setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 500);
+                //axios.post("GetRoportModel", { id: this.$refs.dataTable.selection[0].Id}).then(function (response) {
+                //    AutoMapper($vue.AddFormData, response.data);
+                //    $vue.Dialog.addDialog = true;
+                //}).catch(function (error) {
+                //    ErrorCommonHandle($vue);
+                //}).finally(function () {
+                //    $vue.Loading.bodyLoading = false;
+                //});
+                var tabname = new Date().getTime() + "";
+                top.$app.editableTabs.push({
+                    title: "土地报告详细",
+                    name: tabname,
+                    IconClass: "icon iconfont icon-eye",
+                    content: "/AreaReport/AddReportIndex?reportid=" + this.$refs.dataTable.selection[0].Id,
+                    url: "/AreaReport/AddReportIndex" + this.$refs.dataTable.selection[0].Id
                 });
+                top.$app.editableTabsValue = tabname;
             },
             cancelAddForm: function () {
                 this.Dialog.addDialog = false;
@@ -611,12 +620,12 @@
                     this.ButtonState.btnDetail = true;
                 }
                 else if (this.$refs.dataTable.selection.length == 1) {
-                   
+
                     this.ButtonState.btnDetail = false;
-                    
+
                 }
                 else {
-                  
+
                     this.ButtonState.btnDetail = true;
                 }
             },
@@ -640,14 +649,14 @@
                 done();
             },
             ReportCodeBlur: function (value) {
-                if (this.AddFormData.ReportType == "PreAssessment" && this.AddFormData.ReportCode.substr(0,1)!="预") {
-                    this.AddFormData.ReportCode = "预"+this.AddFormData.ReportCode;
+                if (this.AddFormData.ReportType == "PreAssessment" && this.AddFormData.ReportCode.substr(0, 1) != "预") {
+                    this.AddFormData.ReportCode = "预" + this.AddFormData.ReportCode;
                 }
             },
             saveReprotData: function () {
                 axios.post("SaveReport", $vue.AddFormData);
                 this.Dialog.addDialog = false;
-            } ,
+            },
             DateFormat: DateFormat,
             DownloadReportFile: function (reportId) {
                 window.open("DownloadReportFile?reportId=" + reportId);
@@ -684,32 +693,32 @@
         $vue.SelectOption.EmpList = response.data;
     }).catch(function (error) {
         console.log(error);
-        });
+    });
 
     axios.post("/Department/GetAllDep", {}).then(function (response) {
         $vue.SelectOption.DepList = response.data;
     }).catch(function (error) {
         console.log(error);
-        });
+    });
     axios.post("/Dictionary/GetGroupItemList", { groupCode: "ValuationObjective" }).then(function (response) {
         $vue.SelectOption.ValuationObjectiveList = response.data;
     }).catch(function (error) {
         console.log(error);
-        });
+    });
     axios.post("/Dictionary/GetGroupItemList", { groupCode: "ValuationMethods" }).then(function (response) {
         $vue.SelectOption.ValuationMethodsList = response.data;
     }).catch(function (error) {
         console.log(error);
-        });
+    });
     axios.post("/Dictionary/GetGroupItemList", { groupCode: "ChargeStatus" }).then(function (response) {
         $vue.SelectOption.ChargeStatusList = response.data;
     }).catch(function (error) {
         console.log(error);
     });
 
-   
 
-    
+
+
 
 
     window.onresize = function () {

@@ -747,26 +747,35 @@
                 }
             },
             openDetailDialog: function () {
-                this.TabName = "first";
-                $vue.Loading.bodyLoading = true;
-                $vue.Dialog.IsAdd = false;
-                this.modifyTitle = "查看报告";
-                axios.post("GetRoportModel", { id: this.$refs.dataTable.selection[0].Id }).then(function (response) {
-                    AutoMapper($vue.AddFormData, response.data);
-                    $vue.Dialog.IsShowEditResult = true;
-                    if ($vue.AddFormData.ReportStatusString == "Reject") {
-                        $vue.Dialog.IsDetail = false;
-                    }
-                    else {
-                        $vue.Dialog.IsDetail = true;
-                    }
-                    $vue.Dialog.addDialog = true;
-                    setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 500);
-                }).catch(function (error) {
-                    ErrorCommonHandle($vue);
-                }).finally(function () {
-                    $vue.Loading.bodyLoading = false;
+                //this.TabName = "first";
+                //$vue.Loading.bodyLoading = true;
+                //$vue.Dialog.IsAdd = false;
+                //this.modifyTitle = "查看报告";
+                //axios.post("GetRoportModel", { id: this.$refs.dataTable.selection[0].Id }).then(function (response) {
+                //    AutoMapper($vue.AddFormData, response.data);
+                //    $vue.Dialog.IsShowEditResult = true;
+                //    if ($vue.AddFormData.ReportStatusString == "Reject") {
+                //        $vue.Dialog.IsDetail = false;
+                //    }
+                //    else {
+                //        $vue.Dialog.IsDetail = true;
+                //    }
+                //    $vue.Dialog.addDialog = true;
+                //    setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 500);
+                //}).catch(function (error) {
+                //    ErrorCommonHandle($vue);
+                //}).finally(function () {
+                //    $vue.Loading.bodyLoading = false;
+                //});
+                var tabname = new Date().getTime() + "";
+                top.$app.editableTabs.push({
+                    title: "房产报告详细",
+                    name: tabname,
+                    IconClass: "icon iconfont icon-eye",
+                    content: "/HouseReport/AddReportIndex?reportid=" + this.$refs.dataTable.selection[0].Id,
+                    url: "/HouseReport/AddReportIndex" + this.$refs.dataTable.selection[0].Id
                 });
+                 top.$app.editableTabsValue = tabname;
             },
             submitAddForm: function () {
                 this.$refs.AddForm.validate(function (success, validateobj) {
@@ -909,7 +918,7 @@
 
     }
 
-    setInterval(autoSave, 5000);
+    //setInterval(autoSave, 5000);
 
     window.onresize = function () {
         $vue.tableHeight = $vue.$refs.App.getBoundingClientRect().height -
