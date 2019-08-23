@@ -418,7 +418,7 @@
                                 <single-file-uploader :filename.sync="AddFormData.AuditFileName"
                                                       :filepath.sync="AddFormData.AuditFilePath"
                                                       placeholder="请选择附件"
-                                                       :isread="true"></single-file-uploader>
+                                                      :isread="true"></single-file-uploader>
                             </el-form-item>
                             <el-form-item label="审核理由" prop="AuditReason">
                                 <el-input v-model="AddFormData.AuditReason" readonly type="textarea" placeholder="请输入审核理由"></el-input>
@@ -432,7 +432,7 @@
                     </el-tabs>
                 </el-form>
 
-               
+
             </el-dialog>
         </template>
     </div>
@@ -444,14 +444,14 @@
         el: "#App",
         data: {
             QueryFormData: {
-                LeaseIds:[],
+                LeaseIds: [],
                 AuditStatus: [],
                 AuditUserName: "",
                 CreateBeginTime: "",
                 CreateEndTime: "",
                 AuditBeginTime: "",
-                AuditEndTime:"",
-                ListType:"Auditor",
+                AuditEndTime: "",
+                ListType: "Auditor",
                 Page: 1,
                 PageSize: 10,
             },
@@ -469,12 +469,12 @@
                 Id: null,
                 ReportCode: "",
                 ReportName: "",
-                ReportEntruster:"",
+                ReportEntruster: "",
                 ReportUser: "",
                 AssessmentObject: "",
                 AssessmentScope: "",
-                AssetsNature:"",
-                ValueType:"",
+                AssetsNature: "",
+                ValueType: "",
                 ValuationValue: "",
                 ValueTime: "",
                 ReportTime: "",
@@ -499,7 +499,7 @@
                 ReportStatus: "Passed",
                 AuditReason: "",
                 AuditFileName: "",
-                AuditFilePath:""
+                AuditFilePath: ""
             },
             AddFormRule: {
             },
@@ -516,12 +516,12 @@
                 ],
                 ValuationObjectiveList: [],
                 ValuationMethodsList: [],
-                ChargeStatusList:[],
+                ChargeStatusList: [],
                 DepList: [],
                 EmpList: [],
                 AssessmentObjectList: [],
                 AssetsNatureList: [],
-                ValueTypeList:[]
+                ValueTypeList: []
 
             },
             PaginationData: {
@@ -533,7 +533,7 @@
             ActionPermission: {
                 Detail: false,
                 Audit: false
-            } ,
+            },
             modifyTitle: "",
             Dic: {
                 AuditStatus: {
@@ -564,19 +564,28 @@
                 this.$refs.QueryForm.resetFields();
             },
             openAddDialog: function () {
-                this.TabName = "first";
-                this.modifyTitle = "查看报告";
-                this.Dialog.IsAudit = false;
-                $vue.Loading.bodyLoading = true;
-                setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 500);
-                axios.post("GetRoportModel", { id: this.$refs.dataTable.selection[0].Id}).then(function (response) {
-                    AutoMapper($vue.AddFormData, response.data);
-                    $vue.Dialog.addDialog = true;
-                }).catch(function (error) {
-                    ErrorCommonHandle($vue);
-                }).finally(function () {
-                    $vue.Loading.bodyLoading = false;
+                //this.TabName = "first";
+                //this.modifyTitle = "查看报告";
+                //this.Dialog.IsAudit = false;
+                //$vue.Loading.bodyLoading = true;
+                //setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 500);
+                //axios.post("GetRoportModel", { id: this.$refs.dataTable.selection[0].Id}).then(function (response) {
+                //    AutoMapper($vue.AddFormData, response.data);
+                //    $vue.Dialog.addDialog = true;
+                //}).catch(function (error) {
+                //    ErrorCommonHandle($vue);
+                //}).finally(function () {
+                //    $vue.Loading.bodyLoading = false;
+                //});
+                var tabname = new Date().getTime() + "";
+                top.$app.editableTabs.push({
+                    title: "资产报告详细",
+                    name: tabname,
+                    IconClass: "icon iconfont icon-eye",
+                    content: "/AssetsReport/AddReportIndex?reportid=" + this.$refs.dataTable.selection[0].Id,
+                    url: "/AssetsReport/AddReportIndex" + this.$refs.dataTable.selection[0].Id
                 });
+                top.$app.editableTabsValue = tabname;
             },
             cancelAddForm: function () {
                 this.Dialog.addDialog = false;
@@ -612,14 +621,14 @@
                 done();
             },
             ReportCodeBlur: function (value) {
-                if (this.AddFormData.ReportType == "PreAssessment" && this.AddFormData.ReportCode.substr(0,1)!="预") {
-                    this.AddFormData.ReportCode = "预"+this.AddFormData.ReportCode;
+                if (this.AddFormData.ReportType == "PreAssessment" && this.AddFormData.ReportCode.substr(0, 1) != "预") {
+                    this.AddFormData.ReportCode = "预" + this.AddFormData.ReportCode;
                 }
             },
             saveReprotData: function () {
                 axios.post("SaveReport", $vue.AddFormData);
                 this.Dialog.addDialog = false;
-            } ,
+            },
             DateFormat: DateFormat,
             DownloadReportFile: function (reportId) {
                 window.open("DownloadReportFile?reportId=" + reportId);
@@ -656,33 +665,33 @@
         $vue.SelectOption.EmpList = response.data;
     }).catch(function (error) {
         console.log(error);
-        });
+    });
 
     axios.post("/Department/GetAllDep", {}).then(function (response) {
         $vue.SelectOption.DepList = response.data;
     }).catch(function (error) {
         console.log(error);
-        });
+    });
     axios.post("/Dictionary/GetGroupItemList", { groupCode: "ValuationObjective" }).then(function (response) {
         $vue.SelectOption.ValuationObjectiveList = response.data;
     }).catch(function (error) {
         console.log(error);
-        });
+    });
     axios.post("/Dictionary/GetGroupItemList", { groupCode: "ValuationMethods" }).then(function (response) {
         $vue.SelectOption.ValuationMethodsList = response.data;
     }).catch(function (error) {
         console.log(error);
-        });
+    });
     axios.post("/Dictionary/GetGroupItemList", { groupCode: "AssessmentObject" }).then(function (response) {
         $vue.SelectOption.AssessmentObjectList = response.data;
     }).catch(function (error) {
         console.log(error);
-        });
+    });
     axios.post("/Dictionary/GetGroupItemList", { groupCode: "AssetsNature" }).then(function (response) {
         $vue.SelectOption.AssetsNatureList = response.data;
     }).catch(function (error) {
         console.log(error);
-        });
+    });
     axios.post("/Dictionary/GetGroupItemList", { groupCode: "ValueType" }).then(function (response) {
         $vue.SelectOption.ValueTypeList = response.data;
     }).catch(function (error) {
@@ -694,7 +703,7 @@
         console.log(error);
     });
 
-   
+
 
 
     window.onresize = function () {

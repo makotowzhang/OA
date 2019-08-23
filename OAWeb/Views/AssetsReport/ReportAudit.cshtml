@@ -582,34 +582,62 @@
                 this.$refs.QueryForm.resetFields();
             },
             openAddDialog: function () {
-                this.TabName = "first";
-                this.modifyTitle = "查看报告";
-                this.Dialog.IsAudit = false;
-                $vue.Loading.bodyLoading = true;
-                setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 500);
-                axios.post("GetRoportModel", { id: this.$refs.dataTable.selection[0].Id}).then(function (response) {
-                    AutoMapper($vue.AddFormData, response.data);
-                    $vue.Dialog.addDialog = true;
-                }).catch(function (error) {
-                    ErrorCommonHandle($vue);
-                }).finally(function () {
-                    $vue.Loading.bodyLoading = false;
+                //this.TabName = "first";
+                //this.modifyTitle = "查看报告";
+                //this.Dialog.IsAudit = false;
+                //$vue.Loading.bodyLoading = true;
+                //setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 500);
+                //axios.post("GetRoportModel", { id: this.$refs.dataTable.selection[0].Id}).then(function (response) {
+                //    AutoMapper($vue.AddFormData, response.data);
+                //    $vue.Dialog.addDialog = true;
+                //}).catch(function (error) {
+                //    ErrorCommonHandle($vue);
+                //}).finally(function () {
+                //    $vue.Loading.bodyLoading = false;
+                //});
+                var tabname = new Date().getTime() + "";
+                top.$app.editableTabs.push({
+                    title: "资产报告详细",
+                    name: tabname,
+                    IconClass: "icon iconfont icon-eye",
+                    content: "/AssetsReport/AddReportIndex?reportid=" + this.$refs.dataTable.selection[0].Id,
+                    url: "/AssetsReport/AddReportIndex" + this.$refs.dataTable.selection[0].Id
                 });
+                top.$app.editableTabsValue = tabname;
             },
             openAuditDialog: function () {
-                this.TabName = "first";
-                this.modifyTitle = "审核报告";
-                this.Dialog.IsAudit = true;
-                $vue.Loading.bodyLoading = true;
-                setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 500);
-                axios.post("GetRoportModel", { id: this.$refs.dataTable.selection[0].Id }).then(function (response) {
-                    AutoMapper($vue.AddFormData, response.data);
-                    $vue.Dialog.addDialog = true;
-                }).catch(function (error) {
-                    ErrorCommonHandle($vue);
-                }).finally(function () {
-                    $vue.Loading.bodyLoading = false;
-                });
+                //this.TabName = "first";
+                //this.modifyTitle = "审核报告";
+                //this.Dialog.IsAudit = true;
+                //$vue.Loading.bodyLoading = true;
+                //setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 500);
+                //axios.post("GetRoportModel", { id: this.$refs.dataTable.selection[0].Id }).then(function (response) {
+                //    AutoMapper($vue.AddFormData, response.data);
+                //    $vue.Dialog.addDialog = true;
+                //}).catch(function (error) {
+                //    ErrorCommonHandle($vue);
+                //}).finally(function () {
+                //    $vue.Loading.bodyLoading = false;
+                //});
+                var temp = null;
+                top.$app.editableTabs.forEach(function (tab, index) {
+                    if (tab.name == "audit" + $vue.$refs.dataTable.selection[0].Id) {
+                        temp = tab;
+                    }
+                })
+                if (temp != null) {
+                    top.$app.editableTabsValue = temp.name;
+                }
+                else {
+                    top.$app.editableTabs.push({
+                        title: "审核资产报告",
+                        name: "audit" + this.$refs.dataTable.selection[0].Id,
+                        IconClass: "icon iconfont icon-file-add",
+                        content: "/AssetsReport/AddReportIndex?isauidt=1&reportid=" + this.$refs.dataTable.selection[0].Id,
+                        url: "/AssetsReport/AddReportIndex?isauidt=1&reportid=" + this.$refs.dataTable.selection[0].Id
+                    });
+                    top.$app.editableTabsValue = "audit" + this.$refs.dataTable.selection[0].Id;
+                }
             },
             submitAuditForm: function () {
                 this.$refs.AddForm.validate(function (success, validateobj) {

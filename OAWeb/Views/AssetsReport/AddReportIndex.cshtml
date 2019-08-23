@@ -1,0 +1,626 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>新增资产评估报告</title>
+    @Html.Partial("~/Views/Shared/_Head.cshtml")
+    @Html.Partial("~/Views/Shared/SingleFileUploader.cshtml")
+    <style>
+        .tabhead {
+            font-size: 16px;
+            font-weight: 600;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="App" ref="App" v-loading="Loading.bodyLoading">
+        <template>
+            <el-form :model="AddFormData" :rules="AddFormRule" label-width="120px" ref="AddForm" @@submit.native.prevent>
+                <div class="tabhead">报告信息</div>
+
+                <el-form-item label="报告类型" prop="ReportType">
+                    <el-radio v-model="AddFormData.ReportType" label="Formal" :disabled="AddFormData.ReportType!='Formal'&&!Dialog.IsAdd" border>正式</el-radio>
+                    <el-radio v-model="AddFormData.ReportType" label="PreAssessment" :disabled="AddFormData.ReportType!='PreAssessment'&&!Dialog.IsAdd" border>预评</el-radio>
+                    @*<el-radio v-model="AddFormData.ReportType" label="Consultation" :disabled="AddFormData.ReportType!='Consultation'&&!Dialog.IsAdd" border>咨询</el-radio>*@
+                </el-form-item>
+                <el-form-item label="报告编号" prop="ReportCode">
+                    <el-input v-model="AddFormData.ReportCode" :readonly="Dialog.IsDetail" placeholder="请输入报告编号" @@blur="ReportCodeBlur"></el-input>
+                </el-form-item>
+                <el-form-item label="项目名称" prop="ReportName">
+                    <el-input v-model="AddFormData.ReportName" :readonly="Dialog.IsDetail" placeholder="请输入项目名称"></el-input>
+                </el-form-item>
+                <div style="margin-bottom:20px;border-top:1px solid #dcdfe6;"></div>
+                <el-form-item label="报告委托方" prop="ReportEntruster">
+                    <el-input v-model="AddFormData.ReportEntruster" :readonly="Dialog.IsDetail" placeholder="请输入报告委托方"></el-input>
+                </el-form-item>
+                <el-form-item label="报告使用方" prop="ReportUser">
+                    <el-input v-model="AddFormData.ReportUser" :readonly="Dialog.IsDetail" placeholder="请输入报告使用方"></el-input>
+                </el-form-item>
+                <el-form-item label="评估对象" prop="AssessmentObject">
+                    <el-select v-model="AddFormData.AssessmentObject"
+                               placeholder="请选择评估对象"
+                               :clearable="true"
+                               :disabled="Dialog.IsDetail">
+                        <el-option v-for="item in SelectOption.AssessmentObjectList"
+                                   :key="item.Id"
+                                   :label="item.ItemDesc"
+                                   :value="item.Id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="评估范围" prop="AssessmentScope">
+                    <el-input :readonly="Dialog.IsDetail" v-model="AddFormData.AssessmentScope" placeholder="请输入报告使用方"></el-input>
+                </el-form-item>
+
+
+                <el-form-item label="资产性质" prop="AssetsNature">
+                    <el-select v-model="AddFormData.AssetsNature"
+                               placeholder="请选择资产性质"
+                               :clearable="true"
+                               :disabled="Dialog.IsDetail">
+                        <el-option v-for="item in SelectOption.AssetsNatureList"
+                                   :key="item.Id"
+                                   :label="item.ItemDesc"
+                                   :value="item.Id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="价值类型" prop="ValueType">
+                    <el-select v-model="AddFormData.ValueType"
+                               placeholder="请选择价值类型"
+                               :clearable="true"
+                               :disabled="Dialog.IsDetail">
+                        <el-option v-for="item in SelectOption.ValueTypeList"
+                                   :key="item.Id"
+                                   :label="item.ItemDesc"
+                                   :value="item.Id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="估价目的" prop="ValuationObjective">
+                    <el-select v-model="AddFormData.ValuationObjective"
+                               placeholder="请选择估价目的"
+                               :clearable="true"
+                               multiple
+                               :collapse-tags="!Dialog.IsDetail"
+                               :disabled="Dialog.IsDetail">
+                        <el-option v-for="item in SelectOption.ValuationObjectiveList"
+                                   :key="item.Id"
+                                   :label="item.ItemDesc"
+                                   :value="item.Id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="估价方法" prop="ValuationMethods">
+                    <el-select v-model="AddFormData.ValuationMethods"
+                               placeholder="请选择估价方法"
+                               :clearable="true"
+                               multiple
+                               :collapse-tags="!Dialog.IsDetail"
+                               :disabled="Dialog.IsDetail">
+                        <el-option v-for="item in SelectOption.ValuationMethodsList"
+                                   :key="item.Id"
+                                   :label="item.ItemDesc"
+                                   :value="item.Id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="评估价值" prop="ValuationValue">
+                    <el-input v-model="AddFormData.ValuationValue" :readonly="Dialog.IsDetail" placeholder="请输入评估价值">
+                        <template slot="append">
+                            万元
+                        </template>
+                    </el-input>
+                </el-form-item>
+
+                <el-form-item label="价值时点" prop="ValueTime">
+                    <el-date-picker v-model="AddFormData.ValueTime"
+                                    type="datetime"
+                                    placeholder="选择日期时间"
+                                    :clearable="true"
+                                    :readonly="Dialog.IsDetail">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="报告日期" prop="ReportTime">
+                    <el-date-picker v-model="AddFormData.ReportTime"
+                                    type="datetime"
+                                    placeholder="报告日期"
+                                    :clearable="true"
+                                    :readonly="Dialog.IsDetail">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="签字估价师" prop="SignAppraiserText">
+                    <el-input v-model="AddFormData.SignAppraiserText" :readonly="Dialog.IsDetail" placeholder="请输入签字估价师"></el-input>
+                </el-form-item>
+                @*<el-form-item label="签字估价师" prop="SignAppraiser">
+            <el-select v-model="AddFormData.SignAppraiser"
+                       placeholder="请选择签字估价师"
+                       :clearable="true"
+                       multiple
+                       :collapse-tags="!Dialog.IsDetail"
+                       :disabled="Dialog.IsDetail">
+                <el-option v-for="item in SelectOption.EmpList"
+                           :key="item.RelateUserId"
+                           :label="item.EmpName"
+                           :value="item.RelateUserId">
+                </el-option>
+            </el-select>
+        </el-form-item>*@
+                <el-form-item label="报告描述" prop="ReportDesc">
+                    <el-input v-model="AddFormData.ReportDesc" type="textarea" :readonly="Dialog.IsDetail" placeholder="请输入报告描述"></el-input>
+                </el-form-item>
+                <div class="tabhead">工作内容</div>
+
+                <el-form-item label="工作名称" prop="WorkName">
+                    <el-input v-model="AddFormData.WorkName" :readonly="Dialog.IsDetail" placeholder="请输入工作名称"></el-input>
+                </el-form-item>
+                <el-form-item label="工作描述" prop="WorkDesc">
+                    <el-input v-model="AddFormData.WorkDesc" type="textarea" :readonly="Dialog.IsDetail" placeholder="请输入工作描述"></el-input>
+                </el-form-item>
+                <el-form-item label="附件" prop="EnclosureName">
+                    <single-file-uploader :filename.sync="AddFormData.EnclosureName"
+                                          :filepath.sync="AddFormData.EnclusurePath"
+                                          :isread="Dialog.IsDetail"
+                                          placeholder="请选择附件"></single-file-uploader>
+                </el-form-item>
+                <div class="tabhead">业务信息</div>
+
+                <el-form-item label="经办人" prop="Operator">
+                    <el-input v-model="AddFormData.Operator" :readonly="Dialog.IsDetail" placeholder="请输入经办人"></el-input>
+                </el-form-item>
+                <el-form-item label="业务员" prop="Salesman">
+                    <el-input v-model="AddFormData.Salesman" :readonly="Dialog.IsDetail" placeholder="请输入业务员"></el-input>
+                </el-form-item>
+                <div style="margin-bottom:20px;border-top:1px solid #dcdfe6;"></div>
+                <el-form-item label="受委托方联系人" prop="Contacts">
+                    <el-input v-model="AddFormData.Contacts" :readonly="Dialog.IsDetail" placeholder="请输入联系人"></el-input>
+                </el-form-item>
+                <el-form-item label="联系电话" prop="ContactsPhone">
+                    <el-input v-model="AddFormData.ContactsPhone" :readonly="Dialog.IsDetail" placeholder="请输入联系电话"></el-input>
+                </el-form-item>
+                <el-form-item label="收费状态" prop="ChargeStatus">
+                    <el-radio v-model="AddFormData.ChargeStatus" :label="true" :disabled="!AddFormData.ChargeStatus&&!Dialog.IsAdd" border>已收费</el-radio>
+                    <el-radio v-model="AddFormData.ChargeStatus" :label="false" :disabled="AddFormData.ChargeStatus&&!Dialog.IsAdd" border>未收费</el-radio>
+                </el-form-item>
+                <el-form-item label="收费金额" prop="ChargeAmount" @*v-if="AddFormData.ChargeStatus"*@>
+                    <el-input v-model="AddFormData.ChargeAmount" :readonly="Dialog.IsDetail" placeholder="请输入收费金额"></el-input>
+                </el-form-item>
+                <el-form-item label="是否开票" prop="IsInvoice" @*v-if="AddFormData.ChargeStatus"*@>
+                    <el-radio v-model="AddFormData.IsInvoice" :label="true" :disabled="!AddFormData.IsInvoice&&!Dialog.IsAdd" border>是</el-radio>
+                    <el-radio v-model="AddFormData.IsInvoice" :label="false" :disabled="AddFormData.IsInvoice&&!Dialog.IsAdd" border>否</el-radio>
+                </el-form-item>
+
+                <template v-if="Dialog.IsAdd">
+                    <div class="tabhead">审核信息</div>
+                    <el-form-item label="审核部门" prop="AuditDep">
+                        <el-select v-model="AddFormData.AuditDep"
+                                   placeholder="请选择审核部门"
+                                   :clearable="true"
+                                   multiple
+                                   :collapse-tags="!Dialog.IsDetail"
+                                   :disabled="Dialog.IsDetail">
+                            <el-option v-for="item in SelectOption.DepList"
+                                       :key="item.Id"
+                                       :label="item.DepName"
+                                       :value="item.Id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="审核人" prop="AuditUserIds">
+                        <el-select v-model="AddFormData.AuditUserIds"
+                                   placeholder="请选择审核人"
+                                   :clearable="true"
+                                   multiple
+                                   :collapse-tags="!Dialog.IsDetail"
+                                   :disabled="Dialog.IsDetail">
+                            <el-option v-for="item in SelectOption.EmpList"
+                                       :key="item.RelateUserId"
+                                       :label="item.EmpName"
+                                       :value="item.RelateUserId">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </template>
+                <template v-if="Dialog.IsShowEditResult">
+                    <div class="tabhead">审核结果</div>
+                    <el-form-item label="审核人" prop="AuditUserName">
+                        <el-input readonly v-model="AddFormData.AuditUserName" placeholder=""></el-input>
+                    </el-form-item>
+                    <el-form-item label="审核结果" prop="ReportStatus">
+                        <el-radio-group v-model="AddFormData.ReportStatus">
+                            <el-radio label="Passed" :disabled="AddFormData.ReportStatus!='Passed'" border>通过</el-radio>
+                            <el-radio label="Reject" :disabled="AddFormData.ReportStatus!='Reject'" border>驳回</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="审核文件" prop="AuditFilePath">
+                        <single-file-uploader :filename.sync="AddFormData.AuditFileName"
+                                              :filepath.sync="AddFormData.AuditFilePath"
+                                              placeholder=""
+                                              :isread="true"></single-file-uploader>
+                    </el-form-item>
+                    <el-form-item label="审核理由" prop="AuditReason">
+                        <el-input v-model="AddFormData.AuditReason" readonly type="textarea" placeholder=""></el-input>
+                    </el-form-item>
+                </template>
+                <template v-if="Dialog.IsAudit">
+                    <div class="tabhead">审核结果</div>
+                    <el-form-item label="审核结果" prop="ReportStatus">
+                        <el-radio-group v-model="AddFormData.ReportStatus">
+                            <el-radio label="Passed" border>通过</el-radio>
+                            <el-radio label="Reject" border>驳回</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="审核文件" prop="AuditFilePath">
+                        <single-file-uploader :filename.sync="AddFormData.AuditFileName"
+                                              :filepath.sync="AddFormData.AuditFilePath"
+                                              placeholder="请选择附件"></single-file-uploader>
+                    </el-form-item>
+                    <el-form-item label="审核理由" prop="AuditReason">
+                        <el-input v-model="AddFormData.AuditReason" type="textarea" placeholder="请输入审核理由"></el-input>
+                    </el-form-item>
+                </template>
+                <template v-if="AddFormData.ReportStatus=='Passed'&&!Dialog.IsAudit&&!Dialog.IsAdd">
+                    <div class="tabhead">二维码</div>
+                    <div style="text-align:center;padding-top:20px;">
+                        <img :src="'/Base/GetReportQRCode?ReportId='+AddFormData.Id+'&ControllerName=HouseReport'" />
+                    </div>
+                </template>
+            </el-form>
+            <div v-if="Dialog.IsAdd" style="text-align:center;padding:20px;">
+                <el-button type="primary" @@click="submitAddForm">提 交</el-button>
+                <el-button @@click="saveReprotData">保 存</el-button>
+            </div>
+            <div v-if="Dialog.IsAudit" style="text-align:center;padding:20px;">
+                <el-button type="primary" @@click="auditAddForm">审 核</el-button>
+
+            </div>
+        </template>
+    </div>
+</body>
+</html>
+<script>
+    var lastAddFormData = null;
+    $vue = new Vue({
+        el: "#App",
+        data: {
+            AddFormData: {
+                Id: null,
+                ReportCode: "",
+                ReportName: "",
+                ReportEntruster:"",
+                ReportUser: "",
+                AssessmentObject: "",
+                AssessmentScope: "",
+                AssetsNature: "",
+                ValueType: "",
+                ValuationValue: "",
+                ValueTime: "",
+                ReportTime: "",
+                ReportDesc: "",
+                WorkName: "",
+                WorkDesc: "",
+                SignAppraiserText: "",
+                EnclosureName: "",
+                EnclusurePath: "",
+                Operator: "",
+                Salesman: "",
+                Contacts: "",
+                ContactsPhone: "",
+                ChargeAmount: "",
+                ChargeStatus: true,
+                IsInvoice: true,
+                ReportType: "Formal",
+                ValuationObjective: [],
+                ValuationMethods: [],
+                SignAppraiser: [],
+                AuditDep: [],
+                AuditUserIds: [],
+                AuditUserName: "",
+                AuditReason: "",
+                AuditFileName: "",
+                AuditFilePath: "",
+                ReportStatus: "",
+                ReportStatusString: ""
+            },
+            AddFormRule: {
+                ReportCode: [
+                    { required: true, message: '请填写报告编号', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                ReportName: [
+                    { required: true, message: '请填写项目名称', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                ReportEntruster: [
+                    { required: true, message: '请填写报告委托方', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                ReportUser: [
+                    { required: true, message: '请填写报告使用方', trigger: 'change' },
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                AssessmentScope: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                ValuationValue: [
+                    { validator: checkNumber, trigger: 'change' }
+                ],
+                SignAppraiserText: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                ReportDesc: [
+                    { max: 250, message: '长度不能超过250个字符', trigger: 'change' }
+                ],
+                WorkName: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                WorkDesc: [
+                    { max: 250, message: '长度不能超过250个字符', trigger: 'change' }
+                ],
+                SignAppraiserText: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                Operator: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                Salesman: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                Contacts: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                ContactsPhone: [
+                    { max: 25, message: '长度不能超过25个字符', trigger: 'change' }
+                ],
+                ChargeAmount: [
+                    { validator: checkNumber, trigger: 'change' }
+                ],
+                ChargeStatus: [
+                    { required: true, message: '请选择收费状态', trigger: 'change' }
+                ],
+                IsInvoice: [
+                    { required: true, message: '请选择是否开票', trigger: 'change' }
+                ],
+                ReportType: [
+                    { required: true, message: '请选择报告类型', trigger: 'change' }
+                ],
+                AuditDep: [
+                    { validator: checkAuditId, trigger: 'change' }
+                ],
+                AuditUserIds: [
+                    { validator: checkAuditId, trigger: 'change' }
+                ],
+                  ReportStatus: [
+                    { required: true, message: '请选择审核结果', trigger: 'change' }
+                ],
+                AuditReason: [
+                    { validator: checkAuditReason, trigger: 'change' }
+                ]
+            },
+            SelectOption: {
+                AuditStatus: [
+                    { Value: "WaitAudit", Text: "审核中" },
+                    { Value: "Passed", Text: "已结审" },
+                    { Value: "Reject", Text: "未通过" },
+                    { Value: "Revoke", Text: "已撤销" }
+                ],
+                ValuationObjectiveList: [],
+                ValuationMethodsList: [],
+                ChargeStatusList: [],
+                DepList: [],
+                EmpList: [],
+                AssessmentObjectList: [],
+                AssetsNatureList: [],
+                ValueTypeList: []
+            },
+            Dic: {
+                AuditStatus: {
+                    WaitAudit: "审核中",
+                    Passed: "已结审",
+                    Reject: "未通过",
+                    Revoke: "已撤销"
+                },
+                ReportType: {
+                    Formal: "正式",
+                    PreAssessment: "预评",
+                    Consultation: "咨询",
+                }
+            },
+            TabName: "first",
+            Dialog: {
+                IsAdd: true,
+                IsDetail: false,
+                IsShowEditResult: false,
+                IsAudit: false
+            },
+            Loading: {
+                bodyLoading: false,
+                tableLoading: false
+            },
+            panelHeight: 200,
+            isAudit:"@ViewBag.isaudit"
+        },
+        methods: {
+            submitAddForm: function () {
+                this.$refs.AddForm.validate(function (success, validateobj) {
+                    if (success) {
+                        axios.post("SubmitReport", $vue.AddFormData).then(function (response) {
+                            $Msg.success("保存成功！");
+                            setTimeout(function () { closeTag("AddHouseReportIndex") }, 2000);
+                        }).catch(function (error) {
+                            $Msg.error("提交失败！")
+                        });
+                    }
+                });
+            },
+            auditAddForm: function () {
+                this.$refs.AddForm.validate(function (success, validateobj) {
+                    console.log(validateobj);
+                    if (success) {
+                        axios.post("Audit", $vue.AddFormData).then(function (response) {
+                            $Msg.success("审核成功！");
+                            setTimeout(function () { closeTag("audit"+$vue.AddFormData.Id) }, 2000);
+                        }).catch(function (error) {
+                            $Msg.error("审核失败！")
+                        });
+                    }
+                });
+            },
+            ReportCodeBlur: function (value) {
+                if (this.AddFormData.ReportType == "PreAssessment" && this.AddFormData.ReportCode.substr(0, 1) != "预") {
+                    this.AddFormData.ReportCode = "预" + this.AddFormData.ReportCode;
+                }
+            },
+            saveReprotData: function () {
+                axios.post("SaveReport", $vue.AddFormData).then(function () {
+                    $Msg.success("保存成功");
+                });
+            }
+        },
+        created: function () {
+            if (this.AddFormData.Id) {
+                if (this.isAudit == "1") {
+                    this.Dialog.IsDetail = true;
+                    this.Dialog.IsShowEditResult = false;
+                    this.Dialog.IsAdd = false;
+                    this.Dialog.IsAudit = true;
+                }
+                else {
+                    this.Dialog.IsDetail = true;
+                    this.Dialog.IsShowEditResult = true;
+                    this.Dialog.IsAdd = false;
+                    this.Dialog.IsAudit = false;
+                }
+
+                axios.post("GetRoportModel", { id: this.AddFormData.Id }).then(function (response) {
+                    AutoMapper($vue.AddFormData, response.data);
+                    if ($vue.isAudit == "1") {
+                        $vue.AddFormData.ReportStatus = "Passed";
+                    }
+                }).catch(function (error) {
+                    ErrorCommonHandle($vue);
+                })
+            }
+            else {
+                this.Dialog.IsDetail = false;
+                this.Dialog.IsShowEditResult = false;
+                this.Dialog.IsAdd = true;
+                axios.post("GetUserCreateReport").then(function (response) {
+                    AutoMapper($vue.AddFormData, response.data);
+                }).catch(function (error) {
+                    ErrorCommonHandle($vue);
+                });
+            }
+        },
+        mounted: function () {
+            //setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 1000);
+        }
+
+    });
+    axios.post("/Employee/GetUserEmp", {}).then(function (response) {
+        $vue.SelectOption.EmpList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+
+    axios.post("/Department/GetAllDep", {}).then(function (response) {
+        $vue.SelectOption.DepList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "ValuationObjective" }).then(function (response) {
+        $vue.SelectOption.ValuationObjectiveList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "ValuationMethods" }).then(function (response) {
+        $vue.SelectOption.ValuationMethodsList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "AssessmentObject" }).then(function (response) {
+        $vue.SelectOption.AssessmentObjectList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "AssetsNature" }).then(function (response) {
+        $vue.SelectOption.AssetsNatureList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "ValueType" }).then(function (response) {
+        $vue.SelectOption.ValueTypeList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+    axios.post("/Dictionary/GetGroupItemList", { groupCode: "ChargeStatus" }).then(function (response) {
+        $vue.SelectOption.ChargeStatusList = response.data;
+    }).catch(function (error) {
+        console.log(error);
+    });
+
+    function autoSave() {
+        if ($vue.Dialog.IsDetail) {
+            return;
+        }
+        if (lastAddFormData == null) {
+            lastAddFormData = JSON.stringify($vue.AddFormData);
+        }
+        if (lastAddFormData != JSON.stringify($vue.AddFormData)) {
+            lastAddFormData = JSON.stringify($vue.AddFormData);
+            axios.post("SaveReport", $vue.AddFormData);
+        }
+    }
+
+    function checkAuditId(rule, value, callback) {
+        $vue.$refs.AddForm.clearValidate(["AuditDep", "AuditUserIds"]);
+        if ($vue.AddFormData.AuditDep.length == 0 && $vue.AddFormData.AuditUserIds.length == 0) {
+
+            callback(new Error("请选择审核人或者审核部门！"));
+        }
+        else {
+            callback();
+        }
+
+    }
+     function checkAuditReason(rule, value, callback) {
+        var status = $vue.AddFormData.ReportStatus;
+        var reason = $vue.AddFormData.AuditReason;
+        if (status == "Reject" && (reason == null || reason == "")) {
+            callback(new Error("请选择填写审核理由！"));
+        }
+        else {
+            callback();
+        }
+
+    }
+    setInterval(autoSave, 5000);
+
+    function closeTag(name) {
+        if (!name) {
+            name = top.$app.editableTabsValue;
+        }
+        var temp = null;
+        top.$app.editableTabs.forEach(function (tab, index) {
+            if (tab.name == name) {
+                top.$app.editableTabs.splice(index, 1);
+                var i = index - 1;
+                if (i < 0) {
+                    i = 0;
+                }
+                top.$app.editableTabsValue = top.$app.editableTabs[i].name;
+            }
+
+        })
+    }
+</script>

@@ -705,6 +705,7 @@
     <Content Include="Views\SysWork\Index.cshtml" />
     <Content Include="Views\HouseReport\AddReportIndex.cshtml" />
     <Content Include="Views\AreaReport\AddReportIndex.cshtml" />
+    <Content Include="Views\AssetsReport\AddReportIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">

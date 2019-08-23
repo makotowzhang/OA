@@ -32,6 +32,13 @@ namespace OAWeb.Controllers
             return View();
         }
 
+        public ActionResult AddReportIndex(Guid? reportid, int? isauidt)
+        {
+            ViewBag.reportid = reportid;
+            ViewBag.isaudit = isauidt;
+            return View();
+        }
+
         public ActionResult GetUserCreateReport()
         {
             return EnumJson(service.GetOrCreateModel(CurrentUser.Id));
