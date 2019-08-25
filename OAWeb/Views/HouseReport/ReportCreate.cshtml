@@ -136,6 +136,7 @@
                 <el-row class="Table_Button_Row">
                     <el-col :span="24">
                         <el-button type="primary" v-if="ActionPermission.Add" ref="btnAdd" @@click="openAddDialog" icon="icon iconfont icon-file-add">新增</el-button>
+                        <el-button type="primary" v-if="ActionPermission.Edit" :disabled="ButtonState.btnEdit" ref="btnEdit" @@click="openEditDialog" icon="icon iconfont icon-edit">编辑</el-button>
                         <el-button type="primary" v-if="ActionPermission.Detail" :disabled="ButtonState.btnDetail" ref="btnDetail" @@click="openDetailDialog" icon="icon iconfont icon-eye">详细</el-button>
                     </el-col>
                 </el-row>
@@ -679,7 +680,8 @@
             },
             ActionPermission: {
                 Add: false,
-                Detail: false
+                Detail: false,
+                Edit: false
             },
             modifyTitle: "",
             Dic: {
@@ -746,6 +748,27 @@
                     top.$app.editableTabsValue = "AddHouseReportIndex";
                 }
             },
+            openEditDialog: function () {
+               var temp = null;
+                top.$app.editableTabs.forEach(function (tab, index) {
+                    if (tab.name == "edit"+$vue.$refs.dataTable.selection[0].Id) {
+                        temp = tab;
+                    }
+                })
+                if (temp != null) {
+                    top.$app.editableTabsValue = temp.name;
+                }
+                else {
+                    top.$app.editableTabs.push({
+                        title: "编辑房产报告",
+                        name: "edit"+this.$refs.dataTable.selection[0].Id,
+                        IconClass: "icon iconfont icon-edit",
+                        content: "/HouseReport/AddReportIndex?isedit=1&reportid=" + this.$refs.dataTable.selection[0].Id,
+                        url: "/HouseReport/AddReportIndex?isedit=1&reportid=" + this.$refs.dataTable.selection[0].Id
+                    });
+                    top.$app.editableTabsValue = "edit"+this.$refs.dataTable.selection[0].Id;
+                }
+            },
             openDetailDialog: function () {
                 //this.TabName = "first";
                 //$vue.Loading.bodyLoading = true;
@@ -798,12 +821,20 @@
             selectChange: function (selectValue) {
                 if (this.$refs.dataTable.selection.length == 0) {
                     this.ButtonState.btnDetail = true;
+                     this.ButtonState.btnEdit = true;
                 }
                 else if (this.$refs.dataTable.selection.length == 1) {
                     this.ButtonState.btnDetail = false;
+                    if (this.$refs.dataTable.selection[0].ReportStatusString == 'Reject') {
+                        this.ButtonState.btnEdit = false;
+                    }
+                    else {
+                        this.ButtonState.btnEdit = true;
+                    }
                 }
                 else {
                     this.ButtonState.btnDetail = true;
+                     this.ButtonState.btnEdit = true;
                 }
             },
             rowClick: function (row, event, column) {

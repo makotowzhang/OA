@@ -194,8 +194,8 @@
                     <el-radio v-model="AddFormData.IsInvoice" :label="true" :disabled="!AddFormData.IsInvoice&&!Dialog.IsAdd" border>是</el-radio>
                     <el-radio v-model="AddFormData.IsInvoice" :label="false" :disabled="AddFormData.IsInvoice&&!Dialog.IsAdd" border>否</el-radio>
                 </el-form-item>
-             
-                <template v-if="Dialog.IsAdd">
+
+                <template v-if="Dialog.IsAdd&&!Dialog.IsEdit">
                     <div class="tabhead">审核信息</div>
                     <el-form-item label="审核部门" prop="AuditDep">
                         <el-select v-model="AddFormData.AuditDep"
@@ -464,22 +464,29 @@
                 IsAdd: true,
                 IsDetail: false,
                 IsShowEditResult: false,
-                IsAudit: false
+                IsAudit: false,
+                IsEdit: false
             },
             Loading: {
                 bodyLoading: false,
                 tableLoading: false
             },
             panelHeight: 200,
-            isAudit:"@ViewBag.isaudit"
+            isAudit: "@ViewBag.isaudit",
+            isEdit: "@ViewBag.isedit"
         },
         methods: {
             submitAddForm: function () {
                 this.$refs.AddForm.validate(function (success, validateobj) {
                     if (success) {
                         axios.post("SubmitReport", $vue.AddFormData).then(function (response) {
-                            $Msg.success("保存成功！");
-                            setTimeout(function () { closeTag("AddHouseReportIndex") }, 2000);
+                            $Msg.success("提交成功！"); 
+                            if ($vue.isEdit) {
+                                setTimeout(function () { closeTag("edit" + $vue.AddFormData.Id); }, 2000);
+                            }
+                            else {
+                                setTimeout(function () { closeTag("AddHouseReportIndex"); }, 2000);
+                            }
                         }).catch(function (error) {
                             $Msg.error("提交失败！")
                         });
@@ -512,19 +519,29 @@
         },
         created: function () {
             if (this.AddFormData.Id) {
-                if (this.isAudit == "1") {
-                    this.Dialog.IsDetail = true;
-                    this.Dialog.IsShowEditResult = false;
-                    this.Dialog.IsAdd = false;
-                    this.Dialog.IsAudit = true;
+                if (this.isEdit) {
+                    this.Dialog.IsDetail = false;
+                    this.Dialog.IsShowEditResult = true;
+                    this.Dialog.IsAdd = true;
+                    this.Dialog.IsAudit = false;
+                    this.Dialog.IsEdit = true;
                 }
                 else {
-                    this.Dialog.IsDetail = true;
-                    this.Dialog.IsShowEditResult = true;
-                    this.Dialog.IsAdd = false;
-                    this.Dialog.IsAudit = false;
+                    if (this.isAudit == "1") {
+                        this.Dialog.IsDetail = true;
+                        this.Dialog.IsShowEditResult = false;
+                        this.Dialog.IsAdd = false;
+                        this.Dialog.IsAudit = true;
+                        this.Dialog.IsEdit = false;
+                    }
+                    else {
+                        this.Dialog.IsDetail = true;
+                        this.Dialog.IsShowEditResult = true;
+                        this.Dialog.IsAdd = false;
+                        this.Dialog.IsAudit = false;
+                        this.Dialog.IsEdit = false;
+                    }
                 }
-
                 axios.post("GetRoportModel", { id: this.AddFormData.Id }).then(function (response) {
                     AutoMapper($vue.AddFormData, response.data);
                     if ($vue.isAudit == "1") {

@@ -30,10 +30,11 @@ namespace OAWeb.Controllers
             return View();
         }
 
-        public ActionResult AddReportIndex(Guid? reportid, int? isauidt)
+        public ActionResult AddReportIndex(Guid? reportid, int? isauidt, int? isedit)
         {
             ViewBag.reportid = reportid;
             ViewBag.isaudit = isauidt;
+            ViewBag.isedit = isedit;
             return View();
         }
 
