@@ -53,5 +53,11 @@ namespace Entity
         public virtual DbSet<System_Message> System_Message { get; set; }
         public virtual DbSet<System_MessageReceiver> System_MessageReceiver { get; set; }
         public virtual DbSet<PM_SysWork> PM_SysWork { get; set; }
+        public virtual DbSet<CC_Budgeting> CC_Budgeting { get; set; }
+        public virtual DbSet<CC_Estimate> CC_Estimate { get; set; }
+        public virtual DbSet<CC_Settlement> CC_Settlement { get; set; }
+        public virtual DbSet<CC_Investment> CC_Investment { get; set; }
+        public virtual DbSet<CC_Appraisal> CC_Appraisal { get; set; }
+        public virtual DbSet<RM_BiddingAgency> RM_BiddingAgency { get; set; }
     }
 }

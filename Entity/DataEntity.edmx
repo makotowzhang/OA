@@ -5,6 +5,180 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="FrameworkModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CC_Appraisal">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ReportCode" Type="varchar" MaxLength="50" />
+          <Property Name="ReportName" Type="varchar" MaxLength="50" />
+          <Property Name="EntrustingParty" Type="varchar" MaxLength="50" />
+          <Property Name="AppraisalAmount" Type="varchar" MaxLength="50" />
+          <Property Name="CostConsultantor" Type="varchar" MaxLength="50" />
+          <Property Name="CostChecker" Type="varchar" MaxLength="50" />
+          <Property Name="BZDate" Type="datetime" />
+          <Property Name="ReportDesc" Type="varchar" MaxLength="200" />
+          <Property Name="Operator" Type="varchar" MaxLength="50" />
+          <Property Name="Salesman" Type="varchar" MaxLength="50" />
+          <Property Name="Contacts" Type="varchar" MaxLength="50" />
+          <Property Name="ContactsPhone" Type="varchar" MaxLength="50" />
+          <Property Name="ChargeAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ChargeStatus" Type="bit" Nullable="false" />
+          <Property Name="IsInvoice" Type="bit" Nullable="false" />
+          <Property Name="ReportType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ReportStatus" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AuditUser" Type="uniqueidentifier" />
+          <Property Name="AuditReason" Type="varchar" MaxLength="400" />
+          <Property Name="AuditFileName" Type="varchar" MaxLength="50" />
+          <Property Name="AuditFilePath" Type="varchar" MaxLength="200" />
+          <Property Name="AuditTime" Type="datetime" />
+          <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="SubmitTime" Type="datetime" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+          <Property Name="UpdateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CC_Budgeting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ReportCode" Type="varchar" MaxLength="50" />
+          <Property Name="ReportName" Type="varchar" MaxLength="50" />
+          <Property Name="EntrustingParty" Type="varchar" MaxLength="50" />
+          <Property Name="BudgetAmount" Type="varchar" MaxLength="50" />
+          <Property Name="CostConsultantor" Type="varchar" MaxLength="50" />
+          <Property Name="CostChecker" Type="varchar" MaxLength="50" />
+          <Property Name="BZDate" Type="datetime" />
+          <Property Name="ReportDesc" Type="varchar" MaxLength="200" />
+          <Property Name="Operator" Type="varchar" MaxLength="50" />
+          <Property Name="Salesman" Type="varchar" MaxLength="50" />
+          <Property Name="Contacts" Type="varchar" MaxLength="50" />
+          <Property Name="ContactsPhone" Type="varchar" MaxLength="50" />
+          <Property Name="ChargeAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ChargeStatus" Type="bit" Nullable="false" />
+          <Property Name="IsInvoice" Type="bit" Nullable="false" />
+          <Property Name="ReportType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ReportStatus" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AuditUser" Type="uniqueidentifier" />
+          <Property Name="AuditReason" Type="varchar" MaxLength="400" />
+          <Property Name="AuditFileName" Type="varchar" MaxLength="50" />
+          <Property Name="AuditFilePath" Type="varchar" MaxLength="200" />
+          <Property Name="AuditTime" Type="datetime" />
+          <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="SubmitTime" Type="datetime" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+          <Property Name="UpdateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CC_Estimate">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ReportCode" Type="varchar" MaxLength="50" />
+          <Property Name="ReportName" Type="varchar" MaxLength="50" />
+          <Property Name="EntrustingParty" Type="varchar" MaxLength="50" />
+          <Property Name="EstimateAmount" Type="varchar" MaxLength="50" />
+          <Property Name="CostConsultantor" Type="varchar" MaxLength="50" />
+          <Property Name="CostChecker" Type="varchar" MaxLength="50" />
+          <Property Name="BZDate" Type="datetime" />
+          <Property Name="ReportDesc" Type="varchar" MaxLength="200" />
+          <Property Name="Operator" Type="varchar" MaxLength="50" />
+          <Property Name="Salesman" Type="varchar" MaxLength="50" />
+          <Property Name="Contacts" Type="varchar" MaxLength="50" />
+          <Property Name="ContactsPhone" Type="varchar" MaxLength="50" />
+          <Property Name="ChargeAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ChargeStatus" Type="bit" Nullable="false" />
+          <Property Name="IsInvoice" Type="bit" Nullable="false" />
+          <Property Name="ReportType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ReportStatus" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AuditUser" Type="uniqueidentifier" />
+          <Property Name="AuditReason" Type="varchar" MaxLength="400" />
+          <Property Name="AuditFileName" Type="varchar" MaxLength="50" />
+          <Property Name="AuditFilePath" Type="varchar" MaxLength="200" />
+          <Property Name="AuditTime" Type="datetime" />
+          <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="SubmitTime" Type="datetime" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+          <Property Name="UpdateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CC_Investment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ReportCode" Type="varchar" MaxLength="50" />
+          <Property Name="ReportName" Type="varchar" MaxLength="50" />
+          <Property Name="EntrustingParty" Type="varchar" MaxLength="50" />
+          <Property Name="ReportAmount" Type="varchar" MaxLength="50" />
+          <Property Name="ApprovalAmount" Type="varchar" MaxLength="50" />
+          <Property Name="ReductionAmount" Type="varchar" MaxLength="50" />
+          <Property Name="CostConsultantor" Type="varchar" MaxLength="50" />
+          <Property Name="CostChecker" Type="varchar" MaxLength="50" />
+          <Property Name="BZDate" Type="datetime" />
+          <Property Name="ReportDesc" Type="varchar" MaxLength="200" />
+          <Property Name="Operator" Type="varchar" MaxLength="50" />
+          <Property Name="Salesman" Type="varchar" MaxLength="50" />
+          <Property Name="Contacts" Type="varchar" MaxLength="50" />
+          <Property Name="ContactsPhone" Type="varchar" MaxLength="50" />
+          <Property Name="ChargeAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ChargeStatus" Type="bit" Nullable="false" />
+          <Property Name="IsInvoice" Type="bit" Nullable="false" />
+          <Property Name="ReportType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ReportStatus" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AuditUser" Type="uniqueidentifier" />
+          <Property Name="AuditReason" Type="varchar" MaxLength="400" />
+          <Property Name="AuditFileName" Type="varchar" MaxLength="50" />
+          <Property Name="AuditFilePath" Type="varchar" MaxLength="200" />
+          <Property Name="AuditTime" Type="datetime" />
+          <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="SubmitTime" Type="datetime" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+          <Property Name="UpdateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CC_Settlement">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ReportCode" Type="varchar" MaxLength="50" />
+          <Property Name="ReportName" Type="varchar" MaxLength="50" />
+          <Property Name="EntrustingParty" Type="varchar" MaxLength="50" />
+          <Property Name="ReportAmount" Type="varchar" MaxLength="50" />
+          <Property Name="ApprovalAmount" Type="varchar" MaxLength="50" />
+          <Property Name="ReductionAmount" Type="varchar" MaxLength="50" />
+          <Property Name="CostConsultantor" Type="varchar" MaxLength="50" />
+          <Property Name="CostChecker" Type="varchar" MaxLength="50" />
+          <Property Name="BZDate" Type="datetime" />
+          <Property Name="ReportDesc" Type="varchar" MaxLength="200" />
+          <Property Name="Operator" Type="varchar" MaxLength="50" />
+          <Property Name="Salesman" Type="varchar" MaxLength="50" />
+          <Property Name="Contacts" Type="varchar" MaxLength="50" />
+          <Property Name="ContactsPhone" Type="varchar" MaxLength="50" />
+          <Property Name="ChargeAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ChargeStatus" Type="bit" Nullable="false" />
+          <Property Name="IsInvoice" Type="bit" Nullable="false" />
+          <Property Name="ReportType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ReportStatus" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="AuditUser" Type="uniqueidentifier" />
+          <Property Name="AuditReason" Type="varchar" MaxLength="400" />
+          <Property Name="AuditFileName" Type="varchar" MaxLength="50" />
+          <Property Name="AuditFilePath" Type="varchar" MaxLength="200" />
+          <Property Name="AuditTime" Type="datetime" />
+          <Property Name="IsDel" Type="bit" Nullable="false" />
+          <Property Name="CreateUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="SubmitTime" Type="datetime" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+          <Property Name="UpdateTime" Type="datetime" />
+        </EntityType>
         <EntityType Name="PM_AuditUser">
           <Key>
             <PropertyRef Name="Id" />
@@ -292,6 +466,42 @@
           <Property Name="UpdateTime" Type="datetime" />
           <Property Name="SignAppraiserText" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="RM_BiddingAgency">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TenderType" Type="varchar" MaxLength="50" />
+          <Property Name="TenderWay" Type="varchar" MaxLength="50" />
+          <Property Name="AgentMan" Type="varchar" MaxLength="50" />
+          <Property Name="Salesman" Type="varchar" MaxLength="50" />
+          <Property Name="ProjectName" Type="varchar" MaxLength="50" />
+          <Property Name="EntrustingParty" Type="varchar" MaxLength="50" />
+          <Property Name="EPMan" Type="varchar" MaxLength="50" />
+          <Property Name="EPTel" Type="varchar" MaxLength="50" />
+          <Property Name="OpenTime" Type="datetime" />
+          <Property Name="SignUpCount" Type="varchar" MaxLength="50" />
+          <Property Name="WinningUnit" Type="varchar" MaxLength="50" />
+          <Property Name="AuthorizedMan" Type="varchar" MaxLength="50" />
+          <Property Name="AuthorizedTel" Type="varchar" MaxLength="50" />
+          <Property Name="WinningAmount" Type="varchar" MaxLength="50" />
+          <Property Name="WinningM" Type="varchar" MaxLength="50" />
+          <Property Name="WorkTime" Type="datetime" />
+          <Property Name="WorkDesc" Type="varchar" MaxLength="500" />
+          <Property Name="EnclosureName" Type="varchar" MaxLength="50" />
+          <Property Name="EnclusurePath" Type="varchar" MaxLength="200" />
+          <Property Name="RegFee" Type="varchar" MaxLength="50" />
+          <Property Name="RegFeeWay" Type="varchar" MaxLength="50" />
+          <Property Name="AgencyFee" Type="varchar" MaxLength="50" />
+          <Property Name="AgencyUnit" Type="varchar" MaxLength="50" />
+          <Property Name="AppraisalFee" Type="varchar" MaxLength="50" />
+          <Property Name="ChargeStatus" Type="varchar" MaxLength="50" />
+          <Property Name="InvoiceStatus" Type="varchar" MaxLength="50" />
+          <Property Name="CreateUser" Type="uniqueidentifier" />
+          <Property Name="CreateTime" Type="datetime" />
+          <Property Name="UpdateUser" Type="uniqueidentifier" />
+          <Property Name="UpdateTime" Type="datetime" />
+        </EntityType>
         <EntityType Name="RM_HouseReport">
           <Key>
             <PropertyRef Name="Id" />
@@ -520,6 +730,11 @@
           <Property Name="ReportFlag" Type="varchar" MaxLength="12" Nullable="false" />
         </EntityType>
         <EntityContainer Name="FrameworkModelStoreContainer">
+          <EntitySet Name="CC_Appraisal" EntityType="Self.CC_Appraisal" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CC_Budgeting" EntityType="Self.CC_Budgeting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CC_Estimate" EntityType="Self.CC_Estimate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CC_Investment" EntityType="Self.CC_Investment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CC_Settlement" EntityType="Self.CC_Settlement" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_AuditUser" EntityType="Self.PM_AuditUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_DataLibrary" EntityType="Self.PM_DataLibrary" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PM_Department" EntityType="Self.PM_Department" Schema="dbo" store:Type="Tables" />
@@ -534,6 +749,7 @@
           <EntitySet Name="PM_ThingsTodo" EntityType="Self.PM_ThingsTodo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RM_AreaReport" EntityType="Self.RM_AreaReport" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RM_AssetsReport" EntityType="Self.RM_AssetsReport" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RM_BiddingAgency" EntityType="Self.RM_BiddingAgency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RM_HouseReport" EntityType="Self.RM_HouseReport" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RM_ReportAudit" EntityType="Self.RM_ReportAudit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RM_ReportDicItem" EntityType="Self.RM_ReportDicItem" Schema="dbo" store:Type="Tables" />
@@ -596,6 +812,12 @@
           <EntitySet Name="System_Message" EntityType="Entity.System_Message" />
           <EntitySet Name="System_MessageReceiver" EntityType="Entity.System_MessageReceiver" />
           <EntitySet Name="PM_SysWork" EntityType="Entity.PM_SysWork" />
+          <EntitySet Name="CC_Budgeting" EntityType="Entity.CC_Budgeting" />
+          <EntitySet Name="CC_Estimate" EntityType="Entity.CC_Estimate" />
+          <EntitySet Name="CC_Settlement" EntityType="Entity.CC_Settlement" />
+          <EntitySet Name="CC_Investment" EntityType="Entity.CC_Investment" />
+          <EntitySet Name="CC_Appraisal" EntityType="Entity.CC_Appraisal" />
+          <EntitySet Name="RM_BiddingAgency" EntityType="Entity.RM_BiddingAgency" />
         </EntityContainer>
         <EntityType Name="System_User">
           <Key>
@@ -1108,6 +1330,216 @@
           <Property Name="CreateUser" Type="Guid" Nullable="false" />
           <Property Name="UpdateTime" Type="DateTime" Precision="3" />
           <Property Name="UpdateUser" Type="Guid" />
+        </EntityType>
+        <EntityType Name="CC_Budgeting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="ReportCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EntrustingParty" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BudgetAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CostConsultantor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CostChecker" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BZDate" Type="DateTime" Precision="3" />
+          <Property Name="ReportDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Operator" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Salesman" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Contacts" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ContactsPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ChargeAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ChargeStatus" Type="Boolean" Nullable="false" />
+          <Property Name="IsInvoice" Type="Boolean" Nullable="false" />
+          <Property Name="ReportType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportStatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AuditUser" Type="Guid" />
+          <Property Name="AuditReason" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="AuditFileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AuditFilePath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="AuditTime" Type="DateTime" Precision="3" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SubmitTime" Type="DateTime" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="CC_Estimate">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="ReportCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EntrustingParty" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EstimateAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CostConsultantor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CostChecker" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BZDate" Type="DateTime" Precision="3" />
+          <Property Name="ReportDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Operator" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Salesman" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Contacts" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ContactsPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ChargeAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ChargeStatus" Type="Boolean" Nullable="false" />
+          <Property Name="IsInvoice" Type="Boolean" Nullable="false" />
+          <Property Name="ReportType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportStatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AuditUser" Type="Guid" />
+          <Property Name="AuditReason" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="AuditFileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AuditFilePath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="AuditTime" Type="DateTime" Precision="3" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SubmitTime" Type="DateTime" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="CC_Settlement">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="ReportCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EntrustingParty" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReductionAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CostConsultantor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CostChecker" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BZDate" Type="DateTime" Precision="3" />
+          <Property Name="ReportDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Operator" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Salesman" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Contacts" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ContactsPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ChargeAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ChargeStatus" Type="Boolean" Nullable="false" />
+          <Property Name="IsInvoice" Type="Boolean" Nullable="false" />
+          <Property Name="ReportType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportStatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AuditUser" Type="Guid" />
+          <Property Name="AuditReason" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="AuditFileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AuditFilePath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="AuditTime" Type="DateTime" Precision="3" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SubmitTime" Type="DateTime" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="CC_Investment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="ReportCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EntrustingParty" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ApprovalAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReductionAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CostConsultantor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CostChecker" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BZDate" Type="DateTime" Precision="3" />
+          <Property Name="ReportDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Operator" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Salesman" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Contacts" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ContactsPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ChargeAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ChargeStatus" Type="Boolean" Nullable="false" />
+          <Property Name="IsInvoice" Type="Boolean" Nullable="false" />
+          <Property Name="ReportType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportStatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AuditUser" Type="Guid" />
+          <Property Name="AuditReason" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="AuditFileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AuditFilePath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="AuditTime" Type="DateTime" Precision="3" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SubmitTime" Type="DateTime" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="CC_Appraisal">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="ReportCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EntrustingParty" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AppraisalAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CostConsultantor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CostChecker" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BZDate" Type="DateTime" Precision="3" />
+          <Property Name="ReportDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Operator" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Salesman" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Contacts" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ContactsPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ChargeAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ChargeStatus" Type="Boolean" Nullable="false" />
+          <Property Name="IsInvoice" Type="Boolean" Nullable="false" />
+          <Property Name="ReportType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ReportStatus" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AuditUser" Type="Guid" />
+          <Property Name="AuditReason" Type="String" MaxLength="400" FixedLength="false" Unicode="false" />
+          <Property Name="AuditFileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AuditFilePath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="AuditTime" Type="DateTime" Precision="3" />
+          <Property Name="IsDel" Type="Boolean" Nullable="false" />
+          <Property Name="CreateUser" Type="Guid" Nullable="false" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SubmitTime" Type="DateTime" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="RM_BiddingAgency">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="TenderType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TenderWay" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AgentMan" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Salesman" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProjectName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EntrustingParty" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EPMan" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EPTel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OpenTime" Type="DateTime" Precision="3" />
+          <Property Name="SignUpCount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="WinningUnit" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AuthorizedMan" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AuthorizedTel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="WinningAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="WinningM" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="WorkTime" Type="DateTime" Precision="3" />
+          <Property Name="WorkDesc" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="EnclosureName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EnclusurePath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="RegFee" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RegFeeWay" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AgencyFee" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AgencyUnit" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AppraisalFee" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ChargeStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="InvoiceStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreateUser" Type="Guid" />
+          <Property Name="CreateTime" Type="DateTime" Precision="3" />
+          <Property Name="UpdateUser" Type="Guid" />
+          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1646,6 +2078,222 @@
                 <ScalarProperty Name="Principal" ColumnName="Principal" />
                 <ScalarProperty Name="WorkName" ColumnName="WorkName" />
                 <ScalarProperty Name="WorkNo" ColumnName="WorkNo" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CC_Budgeting">
+            <EntityTypeMapping TypeName="Entity.CC_Budgeting">
+              <MappingFragment StoreEntitySet="CC_Budgeting">
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="SubmitTime" ColumnName="SubmitTime" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="AuditTime" ColumnName="AuditTime" />
+                <ScalarProperty Name="AuditFilePath" ColumnName="AuditFilePath" />
+                <ScalarProperty Name="AuditFileName" ColumnName="AuditFileName" />
+                <ScalarProperty Name="AuditReason" ColumnName="AuditReason" />
+                <ScalarProperty Name="AuditUser" ColumnName="AuditUser" />
+                <ScalarProperty Name="ReportStatus" ColumnName="ReportStatus" />
+                <ScalarProperty Name="ReportType" ColumnName="ReportType" />
+                <ScalarProperty Name="IsInvoice" ColumnName="IsInvoice" />
+                <ScalarProperty Name="ChargeStatus" ColumnName="ChargeStatus" />
+                <ScalarProperty Name="ChargeAmount" ColumnName="ChargeAmount" />
+                <ScalarProperty Name="ContactsPhone" ColumnName="ContactsPhone" />
+                <ScalarProperty Name="Contacts" ColumnName="Contacts" />
+                <ScalarProperty Name="Salesman" ColumnName="Salesman" />
+                <ScalarProperty Name="Operator" ColumnName="Operator" />
+                <ScalarProperty Name="ReportDesc" ColumnName="ReportDesc" />
+                <ScalarProperty Name="BZDate" ColumnName="BZDate" />
+                <ScalarProperty Name="CostChecker" ColumnName="CostChecker" />
+                <ScalarProperty Name="CostConsultantor" ColumnName="CostConsultantor" />
+                <ScalarProperty Name="BudgetAmount" ColumnName="BudgetAmount" />
+                <ScalarProperty Name="EntrustingParty" ColumnName="EntrustingParty" />
+                <ScalarProperty Name="ReportName" ColumnName="ReportName" />
+                <ScalarProperty Name="ReportCode" ColumnName="ReportCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CC_Estimate">
+            <EntityTypeMapping TypeName="Entity.CC_Estimate">
+              <MappingFragment StoreEntitySet="CC_Estimate">
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="SubmitTime" ColumnName="SubmitTime" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="AuditTime" ColumnName="AuditTime" />
+                <ScalarProperty Name="AuditFilePath" ColumnName="AuditFilePath" />
+                <ScalarProperty Name="AuditFileName" ColumnName="AuditFileName" />
+                <ScalarProperty Name="AuditReason" ColumnName="AuditReason" />
+                <ScalarProperty Name="AuditUser" ColumnName="AuditUser" />
+                <ScalarProperty Name="ReportStatus" ColumnName="ReportStatus" />
+                <ScalarProperty Name="ReportType" ColumnName="ReportType" />
+                <ScalarProperty Name="IsInvoice" ColumnName="IsInvoice" />
+                <ScalarProperty Name="ChargeStatus" ColumnName="ChargeStatus" />
+                <ScalarProperty Name="ChargeAmount" ColumnName="ChargeAmount" />
+                <ScalarProperty Name="ContactsPhone" ColumnName="ContactsPhone" />
+                <ScalarProperty Name="Contacts" ColumnName="Contacts" />
+                <ScalarProperty Name="Salesman" ColumnName="Salesman" />
+                <ScalarProperty Name="Operator" ColumnName="Operator" />
+                <ScalarProperty Name="ReportDesc" ColumnName="ReportDesc" />
+                <ScalarProperty Name="BZDate" ColumnName="BZDate" />
+                <ScalarProperty Name="CostChecker" ColumnName="CostChecker" />
+                <ScalarProperty Name="CostConsultantor" ColumnName="CostConsultantor" />
+                <ScalarProperty Name="EstimateAmount" ColumnName="EstimateAmount" />
+                <ScalarProperty Name="EntrustingParty" ColumnName="EntrustingParty" />
+                <ScalarProperty Name="ReportName" ColumnName="ReportName" />
+                <ScalarProperty Name="ReportCode" ColumnName="ReportCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CC_Settlement">
+            <EntityTypeMapping TypeName="Entity.CC_Settlement">
+              <MappingFragment StoreEntitySet="CC_Settlement">
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="SubmitTime" ColumnName="SubmitTime" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="AuditTime" ColumnName="AuditTime" />
+                <ScalarProperty Name="AuditFilePath" ColumnName="AuditFilePath" />
+                <ScalarProperty Name="AuditFileName" ColumnName="AuditFileName" />
+                <ScalarProperty Name="AuditReason" ColumnName="AuditReason" />
+                <ScalarProperty Name="AuditUser" ColumnName="AuditUser" />
+                <ScalarProperty Name="ReportStatus" ColumnName="ReportStatus" />
+                <ScalarProperty Name="ReportType" ColumnName="ReportType" />
+                <ScalarProperty Name="IsInvoice" ColumnName="IsInvoice" />
+                <ScalarProperty Name="ChargeStatus" ColumnName="ChargeStatus" />
+                <ScalarProperty Name="ChargeAmount" ColumnName="ChargeAmount" />
+                <ScalarProperty Name="ContactsPhone" ColumnName="ContactsPhone" />
+                <ScalarProperty Name="Contacts" ColumnName="Contacts" />
+                <ScalarProperty Name="Salesman" ColumnName="Salesman" />
+                <ScalarProperty Name="Operator" ColumnName="Operator" />
+                <ScalarProperty Name="ReportDesc" ColumnName="ReportDesc" />
+                <ScalarProperty Name="BZDate" ColumnName="BZDate" />
+                <ScalarProperty Name="CostChecker" ColumnName="CostChecker" />
+                <ScalarProperty Name="CostConsultantor" ColumnName="CostConsultantor" />
+                <ScalarProperty Name="ReductionAmount" ColumnName="ReductionAmount" />
+                <ScalarProperty Name="ApprovalAmount" ColumnName="ApprovalAmount" />
+                <ScalarProperty Name="ReportAmount" ColumnName="ReportAmount" />
+                <ScalarProperty Name="EntrustingParty" ColumnName="EntrustingParty" />
+                <ScalarProperty Name="ReportName" ColumnName="ReportName" />
+                <ScalarProperty Name="ReportCode" ColumnName="ReportCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CC_Investment">
+            <EntityTypeMapping TypeName="Entity.CC_Investment">
+              <MappingFragment StoreEntitySet="CC_Investment">
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="SubmitTime" ColumnName="SubmitTime" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="AuditTime" ColumnName="AuditTime" />
+                <ScalarProperty Name="AuditFilePath" ColumnName="AuditFilePath" />
+                <ScalarProperty Name="AuditFileName" ColumnName="AuditFileName" />
+                <ScalarProperty Name="AuditReason" ColumnName="AuditReason" />
+                <ScalarProperty Name="AuditUser" ColumnName="AuditUser" />
+                <ScalarProperty Name="ReportStatus" ColumnName="ReportStatus" />
+                <ScalarProperty Name="ReportType" ColumnName="ReportType" />
+                <ScalarProperty Name="IsInvoice" ColumnName="IsInvoice" />
+                <ScalarProperty Name="ChargeStatus" ColumnName="ChargeStatus" />
+                <ScalarProperty Name="ChargeAmount" ColumnName="ChargeAmount" />
+                <ScalarProperty Name="ContactsPhone" ColumnName="ContactsPhone" />
+                <ScalarProperty Name="Contacts" ColumnName="Contacts" />
+                <ScalarProperty Name="Salesman" ColumnName="Salesman" />
+                <ScalarProperty Name="Operator" ColumnName="Operator" />
+                <ScalarProperty Name="ReportDesc" ColumnName="ReportDesc" />
+                <ScalarProperty Name="BZDate" ColumnName="BZDate" />
+                <ScalarProperty Name="CostChecker" ColumnName="CostChecker" />
+                <ScalarProperty Name="CostConsultantor" ColumnName="CostConsultantor" />
+                <ScalarProperty Name="ReductionAmount" ColumnName="ReductionAmount" />
+                <ScalarProperty Name="ApprovalAmount" ColumnName="ApprovalAmount" />
+                <ScalarProperty Name="ReportAmount" ColumnName="ReportAmount" />
+                <ScalarProperty Name="EntrustingParty" ColumnName="EntrustingParty" />
+                <ScalarProperty Name="ReportName" ColumnName="ReportName" />
+                <ScalarProperty Name="ReportCode" ColumnName="ReportCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CC_Appraisal">
+            <EntityTypeMapping TypeName="Entity.CC_Appraisal">
+              <MappingFragment StoreEntitySet="CC_Appraisal">
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="SubmitTime" ColumnName="SubmitTime" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="IsDel" ColumnName="IsDel" />
+                <ScalarProperty Name="AuditTime" ColumnName="AuditTime" />
+                <ScalarProperty Name="AuditFilePath" ColumnName="AuditFilePath" />
+                <ScalarProperty Name="AuditFileName" ColumnName="AuditFileName" />
+                <ScalarProperty Name="AuditReason" ColumnName="AuditReason" />
+                <ScalarProperty Name="AuditUser" ColumnName="AuditUser" />
+                <ScalarProperty Name="ReportStatus" ColumnName="ReportStatus" />
+                <ScalarProperty Name="ReportType" ColumnName="ReportType" />
+                <ScalarProperty Name="IsInvoice" ColumnName="IsInvoice" />
+                <ScalarProperty Name="ChargeStatus" ColumnName="ChargeStatus" />
+                <ScalarProperty Name="ChargeAmount" ColumnName="ChargeAmount" />
+                <ScalarProperty Name="ContactsPhone" ColumnName="ContactsPhone" />
+                <ScalarProperty Name="Contacts" ColumnName="Contacts" />
+                <ScalarProperty Name="Salesman" ColumnName="Salesman" />
+                <ScalarProperty Name="Operator" ColumnName="Operator" />
+                <ScalarProperty Name="ReportDesc" ColumnName="ReportDesc" />
+                <ScalarProperty Name="BZDate" ColumnName="BZDate" />
+                <ScalarProperty Name="CostChecker" ColumnName="CostChecker" />
+                <ScalarProperty Name="CostConsultantor" ColumnName="CostConsultantor" />
+                <ScalarProperty Name="AppraisalAmount" ColumnName="AppraisalAmount" />
+                <ScalarProperty Name="EntrustingParty" ColumnName="EntrustingParty" />
+                <ScalarProperty Name="ReportName" ColumnName="ReportName" />
+                <ScalarProperty Name="ReportCode" ColumnName="ReportCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RM_BiddingAgency">
+            <EntityTypeMapping TypeName="Entity.RM_BiddingAgency">
+              <MappingFragment StoreEntitySet="RM_BiddingAgency">
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="InvoiceStatus" ColumnName="InvoiceStatus" />
+                <ScalarProperty Name="ChargeStatus" ColumnName="ChargeStatus" />
+                <ScalarProperty Name="AppraisalFee" ColumnName="AppraisalFee" />
+                <ScalarProperty Name="AgencyUnit" ColumnName="AgencyUnit" />
+                <ScalarProperty Name="AgencyFee" ColumnName="AgencyFee" />
+                <ScalarProperty Name="RegFeeWay" ColumnName="RegFeeWay" />
+                <ScalarProperty Name="RegFee" ColumnName="RegFee" />
+                <ScalarProperty Name="EnclusurePath" ColumnName="EnclusurePath" />
+                <ScalarProperty Name="EnclosureName" ColumnName="EnclosureName" />
+                <ScalarProperty Name="WorkDesc" ColumnName="WorkDesc" />
+                <ScalarProperty Name="WorkTime" ColumnName="WorkTime" />
+                <ScalarProperty Name="WinningM" ColumnName="WinningM" />
+                <ScalarProperty Name="WinningAmount" ColumnName="WinningAmount" />
+                <ScalarProperty Name="AuthorizedTel" ColumnName="AuthorizedTel" />
+                <ScalarProperty Name="AuthorizedMan" ColumnName="AuthorizedMan" />
+                <ScalarProperty Name="WinningUnit" ColumnName="WinningUnit" />
+                <ScalarProperty Name="SignUpCount" ColumnName="SignUpCount" />
+                <ScalarProperty Name="OpenTime" ColumnName="OpenTime" />
+                <ScalarProperty Name="EPTel" ColumnName="EPTel" />
+                <ScalarProperty Name="EPMan" ColumnName="EPMan" />
+                <ScalarProperty Name="EntrustingParty" ColumnName="EntrustingParty" />
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+                <ScalarProperty Name="Salesman" ColumnName="Salesman" />
+                <ScalarProperty Name="AgentMan" ColumnName="AgentMan" />
+                <ScalarProperty Name="TenderWay" ColumnName="TenderWay" />
+                <ScalarProperty Name="TenderType" ColumnName="TenderType" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

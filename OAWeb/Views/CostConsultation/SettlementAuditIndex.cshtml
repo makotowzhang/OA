@@ -1,0 +1,363 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>结算审计报告审核</title>
+    @Html.Partial("~/Views/Shared/_Head.cshtml")
+    @Html.Partial("~/Views/Shared/SingleFileUploader.cshtml")
+    <style>
+    </style>
+</head>
+<body>
+    <div id="App" ref="App" v-loading="Loading.bodyLoading">
+        <template>
+            <div ref="QueryFormDiv">
+                <el-form :model="QueryFormData" :inline="true" class="Query_Form" ref="QueryForm" @@submit.native.prevent label-width="80px">
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="报告编号" prop="ReportCode">
+                                <el-input v-model="QueryFormData.ReportCode" placeholder="请输入报告编号"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="项目名称" prop="ReportName">
+                                <el-input v-model="QueryFormData.ReportName" placeholder="请输入项目名称"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="收费状态" prop="ChargeStatus">
+                                <el-select v-model="QueryFormData.ChargeStatus"
+                                           placeholder="请选择收费状态"
+                                           :clearable="true"
+                                           multiple
+                                           collapse-tags>
+                                    <el-option key="true"
+                                               label="已收费"
+                                               :value="true">
+                                    </el-option>
+                                    <el-option key="false"
+                                               label="未收费"
+                                               :value="false">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                       
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="开始时间" prop="CreateBeginTime">
+                                <el-date-picker v-model="QueryFormData.CreateBeginTime"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="结束时间" prop="CreateEndTime">
+                                <el-date-picker v-model="QueryFormData.CreateEndTime"
+                                                type="datetime"
+                                                placeholder="选择日期时间"
+                                                :clearable="true">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-button type="primary" @@click="onQuery" icon="el-icon-search">查询</el-button>
+                            <el-button type="primary" @@click="resetQueryForm" icon="el-icon-refresh">重置</el-button>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <el-row class="Table_Button_Row">
+                    <el-col :span="24">
+                        <el-button type="primary" v-if="ActionPermission.Detail" ref="btnDetail" :disabled="ButtonState.btnDetail" @@click="openAddDialog" icon="icon iconfont icon-eye">查看</el-button>
+                        <el-button type="primary" v-if="ActionPermission.Audit" ref="btnAudit" :disabled="ButtonState.btnAudit" @@click="openAuditDialog" icon="icon iconfont icon-audit">审核</el-button>
+                    </el-col>
+                </el-row>
+            </div>
+            <el-table ref="dataTable"
+                      :data="tableData"
+                      :border="true"
+                      :height="tableHeight"
+                      @@selection-change="selectChange"
+                      @@row-click="rowClick"
+                      style="width: 100%;margin-top:20px;"
+                      element-loading-text="拼命加载中"
+                      element-loading-spinner="el-icon-loading"
+                      element-loading-background="rgba(200, 200,200, 0.5)"
+                      v-loading="Loading.tableLoading">
+                <el-table-column type="index"
+                                 :index="showIdex"
+                                 label=" ">
+                </el-table-column>
+                <el-table-column type="selection"
+                                 width="50">
+                </el-table-column>
+                <el-table-column prop="ReportCode"
+                                 label="报告编号"
+                                 width="150">
+                </el-table-column>
+                <el-table-column prop="ReportName"
+                                 label="项目名称"
+                                 width="300">
+                </el-table-column>
+                <el-table-column prop="EntrustingParty"
+                                 label="委托方"
+                                 width="150">
+                </el-table-column>
+                <el-table-column prop="ReportAmount"
+                                 label="报送金额"
+                                 width="150">
+                </el-table-column>
+                <el-table-column prop="ApprovalAmount"
+                                 label="审定额"
+                                 width="150">
+                </el-table-column>
+                <el-table-column prop="ReductionAmount"
+                                 label="核减额"
+                                 width="150">
+                </el-table-column>
+                <el-table-column prop="CostConsultantor"
+                                 label="造价咨询员"
+                                 width="150">
+                </el-table-column>
+                <el-table-column prop="CostChecker"
+                                 label="造价复核员"
+                                 width="150">
+                </el-table-column>
+                <el-table-column prop="AuditStatus"
+                                 label="状态"
+                                 width="100">
+                    <template slot-scope="scope">
+                        {{ Dic.AuditStatus[scope.row.ReportStatus] }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="SubmitTime"
+                                 label="创建时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        {{ DateFormat(scope.row.SubmitTime,'yyyy-MM-dd HH:mm:ss') }}
+                    </template>
+                </el-table-column>
+                <el-table-column v-if="QueryFormData.ListType!='Personal'"
+                                 prop="CreateUserName"
+                                 label="发起人员"
+                                 width="100">
+                </el-table-column>
+                <el-table-column v-if="QueryFormData.ListType!='Personal'"
+                                 prop="CreateDepName"
+                                 label="发起部门"
+                                 width="100">
+                </el-table-column>
+            </el-table>
+            <div ref="Pagination">
+                <el-pagination @@size-change="handleSizeChange"
+                               @@current-change="handleCurrentChange"
+                               :current-page.sync="QueryFormData.Page"
+                               :page-size.sync="QueryFormData.PageSize"
+                               :page-sizes="PaginationData.pageSizes"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="PaginationData.total"
+                               style="width:100%;padding-left:20px;box-sizing:border-box">
+                </el-pagination>
+            </div>
+        </template>
+    </div>
+</body>
+</html>
+<script>
+    var lastAddFormData = null;
+    $vue = new Vue({
+        el: "#App",
+        data: {
+            QueryFormData: {
+                ReportCode: "",
+                ReportName: "",
+                ChargeStatus: [],
+                AuditStatus: [],
+                AuditUserName: "",
+                CreateBeginTime: "",
+                CreateEndTime: "",
+                AuditBeginTime: "",
+                AuditEndTime: "",
+                ListType: "Auditor",
+                Page: 1,
+                PageSize: 10,
+            },
+            tableData: [],
+            tableHeight: 500,
+            ButtonState: {
+                btnDetail: true,
+                btnAudit: true
+            },
+            Dialog: {
+                addDialog: false,
+                IsAudit: false
+            },
+            Loading: {
+                bodyLoading: false,
+                tableLoading: false
+            },
+            SelectOption: {
+                AuditStatus: [
+                    { Value: "WaitAudit", Text: "审核中" },
+                    { Value: "Passed", Text: "已结审" },
+                    { Value: "Reject", Text: "未通过" },
+                    { Value: "Revoke", Text: "已撤销" }
+                ]
+            },
+            PaginationData: {
+                pageSizes: [10, 20, 50, 100],
+                total: 0
+            },
+            PaginationFilter: {
+            },
+            ActionPermission: {
+                Detail: false,
+                Audit: false
+            },
+            modifyTitle: "",
+            Dic: {
+                AuditStatus: {
+                    WaitAudit: "审核中",
+                    Passed: "已结审",
+                    Reject: "未通过",
+                    Revoke: "已撤销"
+                },
+                ReportType: {
+                    Formal: "正式",
+                    PreAssessment: "预评",
+                    Consultation: "咨询",
+                }
+            },
+            TabName: "first",
+            panelHeight: 200
+        },
+        methods: {
+            onQuery: function () {
+                this.QueryFormData.Page = 1;
+                this.PaginationFilter = JSON.parse(JSON.stringify(this.QueryFormData));
+                getList();
+            },
+            showIdex: function (index) {
+                return (this.QueryFormData.Page - 1) * this.QueryFormData.PageSize + 1 + index;
+            },
+            resetQueryForm: function () {
+                this.$refs.QueryForm.resetFields();
+            },
+            openAddDialog: function () {
+                var tabname = new Date().getTime() + "";
+                top.$app.editableTabs.push({
+                    title: "结算审计详细",
+                    name: tabname,
+                    IconClass: "icon iconfont icon-eye",
+                    content: "/CostConsultation/AddSettlementIndex?reportid=" + this.$refs.dataTable.selection[0].Id,
+                    url: "/CostConsultation/AddSettlementIndex" + this.$refs.dataTable.selection[0].Id
+                });
+                top.$app.editableTabsValue = tabname;
+            },
+            openAuditDialog: function () {
+                var temp = null;
+                top.$app.editableTabs.forEach(function (tab, index) {
+                    if (tab.name == "audit" + $vue.$refs.dataTable.selection[0].Id) {
+                        temp = tab;
+                    }
+                })
+                if (temp != null) {
+                    top.$app.editableTabsValue = temp.name;
+                }
+                else {
+                    top.$app.editableTabs.push({
+                        title: "审核结算审计",
+                        name: "audit" + this.$refs.dataTable.selection[0].Id,
+                        IconClass: "icon iconfont icon-file-add",
+                        content: "/CostConsultation/AddSettlementIndex?isauidt=1&reportid=" + this.$refs.dataTable.selection[0].Id,
+                        url: "/CostConsultation/AddSettlementIndex?isauidt=1&reportid=" + this.$refs.dataTable.selection[0].Id
+                    });
+                    top.$app.editableTabsValue = "audit" + this.$refs.dataTable.selection[0].Id;
+                }
+            },
+            selectChange: function (selectValue) {
+                if (this.$refs.dataTable.selection.length == 0) {
+                    this.ButtonState.btnAudit = true;
+                    this.ButtonState.btnDetail = true;
+                }
+                else if (this.$refs.dataTable.selection.length == 1) {
+                    var status = this.$refs.dataTable.selection[0].ReportStatus;
+                    this.ButtonState.btnDetail = false;
+                    if (status == "WaitAudit") {
+                        this.ButtonState.btnAudit = false;
+                    }
+                    else {
+                        this.ButtonState.btnAudit = true;
+                    }
+                }
+                else {
+                    this.ButtonState.btnAudit = true;
+                    this.ButtonState.btnDetail = true;
+                }
+            },
+            rowClick: function (row, event, column) {
+                this.$refs.dataTable.toggleRowSelection(row);
+            },
+            handleSizeChange: function (val) {
+                if (this.QueryFormData.Page > (this.PaginationData.total / val + 1)) {
+                    return;
+                }
+                this.PaginationFilter.Page = this.QueryFormData.Page;
+                this.PaginationFilter.PageSize = val;
+                getList(this.PaginationFilter);
+            },
+            handleCurrentChange: function (val) {
+                this.PaginationFilter.Page = val;
+                this.PaginationFilter.PageSize = this.QueryFormData.PageSize;
+                getList(this.PaginationFilter);
+            },
+            DateFormat: DateFormat
+        }
+
+    });
+
+    function getList(filter) {
+        if (filter == null) {
+            filter = $vue.QueryFormData;
+        }
+        $vue.$refs.dataTable.clearSelection();
+        $vue.ButtonState.btnEdit = true;
+        $vue.ButtonState.btnDelete = true;
+        $vue.Loading.tableLoading = true;
+        axios.post("GetSettlementList", filter).then(function (response) {
+            $vue.Loading.tableLoading = false;
+            $vue.tableData = response.data.List;
+            $vue.PaginationData.total = response.data.Total;
+        }).catch(function (error) {
+            $vue.Loading.tableLoading = false;
+            $vue.tableData = [];
+            $vue.PaginationData.total = 0;
+            $vue.$message({
+                type: 'error',
+                message: '服务器出错'
+            });
+        });
+    }
+
+
+
+
+    window.onresize = function () {
+        $vue.tableHeight = $vue.$refs.App.getBoundingClientRect().height -
+            $vue.$refs.QueryFormDiv.getBoundingClientRect().height -
+            $vue.$refs.Pagination.getBoundingClientRect().height - 20;
+        $vue.panelHeight = $vue.$refs.App.getBoundingClientRect().height - 350;
+    }
+    getList();
+
+    GetActionAuthorize($vue);
+</script>

@@ -8,6 +8,7 @@ using Entity;
 using Model.SystemModel;
 using Model.PMModel;
 using Model.RMModel;
+using Model.CCModel;
 
 namespace Business.SystemBusiness
 {
@@ -77,6 +78,21 @@ namespace Business.SystemBusiness
 
                 m.CreateMap<View_Achievements, AchievementsModel>();
                 m.CreateMap<AchievementsModel, View_Achievements>();
+
+                m.CreateMap<CC_Budgeting, BudgetingModel>();
+                m.CreateMap<BudgetingModel, CC_Budgeting>();
+
+                m.CreateMap<CC_Estimate, EstimateModel>();
+                m.CreateMap<EstimateModel, CC_Estimate>();
+
+                m.CreateMap<CC_Settlement, SettlementModel>();
+                m.CreateMap<SettlementModel, CC_Settlement>();
+
+                m.CreateMap<CC_Investment, InvestmentModel>();
+                m.CreateMap<InvestmentModel, CC_Investment>();
+
+                m.CreateMap<CC_Appraisal, AppraisalModel>();
+                m.CreateMap<AppraisalModel, CC_Appraisal>();
             });
         }
     }

@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CCBusiness\CostConsultationBusiness.cs" />
     <Compile Include="PMBusiness\DataLibraryBusiness.cs" />
     <Compile Include="PMBusiness\AchievementsBusiness.cs" />
     <Compile Include="PMBusiness\DepartmentBusiness.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RMBusiness\AreaReportBusiness.cs" />
     <Compile Include="RMBusiness\AssetsReportBusiness.cs" />
+    <Compile Include="RMBusiness\BiddingAgencyBusiness.cs" />
     <Compile Include="RMBusiness\HouseReportBusiness.cs" />
     <Compile Include="SystemBusiness\AuthorizeBusiness.cs" />
     <Compile Include="SystemBusiness\AutoMapperConfig.cs" />

@@ -22,17 +22,23 @@
         <EntityTypeShape EntityType="Entity.PM_MoneyApply" Width="1.5" PointX="10.75" PointY="5.75" />
         <EntityTypeShape EntityType="Entity.PM_Notice" Width="1.5" PointX="10.75" PointY="10.75" />
         <EntityTypeShape EntityType="Entity.PM_Lease" Width="1.5" PointX="0.75" PointY="12.75" />
-        <EntityTypeShape EntityType="Entity.PM_LeaseApply" Width="1.5" PointX="13.375" PointY="0.75" />
-        <EntityTypeShape EntityType="Entity.RM_ReportAudit" Width="1.5" PointX="13.375" PointY="5.75" />
+        <EntityTypeShape EntityType="Entity.PM_LeaseApply" Width="1.5" PointX="13.375" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Entity.RM_ReportAudit" Width="1.5" PointX="13.375" PointY="5.75" IsExpanded="false" />
         <EntityTypeShape EntityType="Entity.RM_ReportDicItem" Width="1.5" PointX="5.375" PointY="13.75" />
         <EntityTypeShape EntityType="Entity.RM_HouseReport" Width="1.5" PointX="7.375" PointY="13.75" />
         <EntityTypeShape EntityType="Entity.RM_AreaReport" Width="1.5" PointX="13.375" PointY="8.75" />
-        <EntityTypeShape EntityType="Entity.RM_AssetsReport" Width="1.5" PointX="15.375" PointY="0.75" />
+        <EntityTypeShape EntityType="Entity.RM_AssetsReport" Width="1.5" PointX="15.375" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Entity.PM_ThingsTodo" Width="1.5" PointX="15.375" PointY="12.75" />
         <EntityTypeShape EntityType="Entity.View_Achievements" Width="1.5" PointX="0.75" PointY="16.75" />
         <EntityTypeShape EntityType="Entity.System_Message" Width="1.5" PointX="9.375" PointY="14.75" />
         <EntityTypeShape EntityType="Entity.System_MessageReceiver" Width="1.5" PointX="15.375" PointY="9.75" />
         <EntityTypeShape EntityType="Entity.PM_SysWork" Width="1.5" PointX="3.375" PointY="16.75" />
+        <EntityTypeShape EntityType="Entity.CC_Budgeting" Width="1.5" PointX="15.375" PointY="16.75" />
+        <EntityTypeShape EntityType="Entity.CC_Estimate" Width="1.5" PointX="17.375" PointY="0.75" />
+        <EntityTypeShape EntityType="Entity.CC_Settlement" Width="1.5" PointX="17.375" PointY="8.75" />
+        <EntityTypeShape EntityType="Entity.CC_Investment" Width="1.5" PointX="17.375" PointY="16.75" />
+        <EntityTypeShape EntityType="Entity.CC_Appraisal" Width="1.5" PointX="9.375" PointY="18.75" />
+        <EntityTypeShape EntityType="Entity.RM_BiddingAgency" Width="1.5" PointX="19.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

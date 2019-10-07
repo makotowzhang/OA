@@ -166,6 +166,8 @@
     <Compile Include="Controllers\AchievementsController.cs" />
     <Compile Include="Controllers\AuthorizeController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BiddingAgencyController.cs" />
+    <Compile Include="Controllers\CostConsultationController.cs" />
     <Compile Include="Controllers\DataLibraryController.cs" />
     <Compile Include="Controllers\AreaReportController.cs" />
     <Compile Include="Controllers\AssetsReportController.cs" />
@@ -706,6 +708,23 @@
     <Content Include="Views\HouseReport\AddReportIndex.cshtml" />
     <Content Include="Views\AreaReport\AddReportIndex.cshtml" />
     <Content Include="Views\AssetsReport\AddReportIndex.cshtml" />
+    <Content Include="Views\CostConsultation\BudgetingIndex.cshtml" />
+    <Content Include="Views\CostConsultation\BudgetingAuditIndex.cshtml" />
+    <Content Include="Views\CostConsultation\AddEstimateIndex.cshtml" />
+    <Content Include="Views\CostConsultation\AddBudgetingIndex.cshtml" />
+    <Content Include="Views\CostConsultation\EstimateAuditIndex.cshtml" />
+    <Content Include="Views\CostConsultation\EstimateIndex.cshtml" />
+    <Content Include="Views\CostConsultation\SettlementIndex.cshtml" />
+    <Content Include="Views\CostConsultation\SettlementAuditIndex.cshtml" />
+    <Content Include="Views\CostConsultation\AddSettlementIndex.cshtml" />
+    <Content Include="Views\CostConsultation\AddInvestmentIndex.cshtml" />
+    <Content Include="Views\CostConsultation\InvestmentAuditIndex.cshtml" />
+    <Content Include="Views\CostConsultation\InvestmentIndex.cshtml" />
+    <Content Include="Views\CostConsultation\AppraisalAuditIndex.cshtml" />
+    <Content Include="Views\CostConsultation\AppraisalIndex.cshtml" />
+    <Content Include="Views\CostConsultation\AddAppraisalIndex.cshtml" />
+    <Content Include="Views\BiddingAgency\Index.cshtml" />
+    <Content Include="Views\BiddingAgency\AddIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">
@@ -715,6 +734,10 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{90fa9562-63b4-427b-93b0-b6db2c66f27f}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Entity\Entity.csproj">
+      <Project>{cefde89b-e61f-491b-a773-d860a36b9a39}</Project>
+      <Name>Entity</Name>
     </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{0b51ae13-de95-4fc0-aab6-f2abcafebd9e}</Project>

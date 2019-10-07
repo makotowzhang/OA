@@ -46,6 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CCModel\AppraisalModel.cs" />
+    <Compile Include="CCModel\InvestmentModel.cs" />
+    <Compile Include="CCModel\SettlementModel.cs" />
+    <Compile Include="CCModel\EstimateModel.cs" />
+    <Compile Include="CCModel\BudgetingModel.cs" />
     <Compile Include="CommonModel.cs" />
     <Compile Include="EnumModel\AuditStatus.cs" />
     <Compile Include="EnumModel\DicGroupCode.cs" />
@@ -71,6 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RMModel\AreaReportModel.cs" />
     <Compile Include="RMModel\AssetsReportModel.cs" />
+    <Compile Include="RMModel\BiddingAgencyModel.cs" />
     <Compile Include="RMModel\HouseReportModel.cs" />
     <Compile Include="SystemModel\AuthorizeModel.cs" />
     <Compile Include="SystemModel\DicGroupModel.cs" />

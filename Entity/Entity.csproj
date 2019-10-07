@@ -50,6 +50,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CC_Appraisal.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_Budgeting.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_Estimate.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_Investment.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CC_Settlement.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataEntity.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -106,6 +121,9 @@
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="RM_AssetsReport.cs">
+      <DependentUpon>DataEntity.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RM_BiddingAgency.cs">
       <DependentUpon>DataEntity.tt</DependentUpon>
     </Compile>
     <Compile Include="RM_HouseReport.cs">
