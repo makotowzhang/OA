@@ -8,10 +8,252 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>AddIndex</title>
+    <title>新增招标代理</title>
+    @Html.Partial("~/Views/Shared/_Head.cshtml")
+    @Html.Partial("~/Views/Shared/SingleFileUploader.cshtml")
+    <style>
+        .tabhead {
+            font-size: 16px;
+            font-weight: 600;
+            padding: 20px;
+        }
+    </style>
 </head>
 <body>
-    <div> 
+    <div id="App" ref="App" v-loading="Loading.bodyLoading">
+        <template>
+            <el-form :model="AddFormData" :rules="AddFormRule" label-width="120px" ref="AddForm" @@submit.native.prevent>
+                <div class="tabhead">报告信息</div>
+                <el-form-item label="招标类型" prop="TenderType">
+                    <el-select v-model="AddFormData.TenderType"
+                               placeholder="请选择招标类型"
+                               :disabled="Dialog.IsDetail">
+                        <el-option label="工程类" value="工程类">  </el-option>
+                        <el-option label="货物类" value="货物类">  </el-option>
+                        <el-option label="服务类" value="服务类">  </el-option>
+                        <el-option label="其他" value="其他">  </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="招标方式" prop="TenderWay">
+                    <el-select v-model="AddFormData.TenderWay"
+                               placeholder="请选择招标方式"
+                               :disabled="Dialog.IsDetail">
+                        <el-option label="公开招标" value="公开招标">  </el-option>
+                        <el-option label="竞争性谈判" value="竞争性谈判">  </el-option>
+                        <el-option label="询价采购" value="询价采购">  </el-option>
+                        <el-option label="邀请招标" value="邀请招标">  </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="代理人员" prop="AgentMan">
+                    <el-input v-model="AddFormData.AgentMan" :readonly="Dialog.IsDetail" placeholder="请输入代理人员"></el-input>
+                </el-form-item>
+                <el-form-item label="业务员" prop="Salesman">
+                    <el-input v-model="AddFormData.Salesman" :readonly="Dialog.IsDetail" placeholder="请输入业务员"></el-input>
+                </el-form-item>
+                <el-form-item label="项目名称" prop="ProjectName">
+                    <el-input v-model="AddFormData.ProjectName" :readonly="Dialog.IsDetail" placeholder="请输入项目名称"></el-input>
+                </el-form-item>
+                <el-form-item label="委托方" prop="EntrustingParty">
+                    <el-input v-model="AddFormData.EntrustingParty" :readonly="Dialog.IsDetail" placeholder="请输入委托方"></el-input>
+                </el-form-item>
+                <el-form-item label="委托方联系人" prop="EPMan">
+                    <el-input v-model="AddFormData.EPMan" :readonly="Dialog.IsDetail" placeholder="请输入委托方联系人"></el-input>
+                </el-form-item>
+                <el-form-item label="委托方联系方式" prop="EPTel">
+                    <el-input v-model="AddFormData.EPTel" :readonly="Dialog.IsDetail" placeholder="请输入委托方联系方式"></el-input>
+                </el-form-item>
+                <el-form-item label="开标时间" prop="OpenTime">
+                    <el-date-picker v-model="AddFormData.OpenTime"
+                                    type="datetime"
+                                    placeholder="选择开标时间"
+                                    :clearable="true"
+                                    :readonly="Dialog.IsDetail">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="报名数量" prop="SignUpCount">
+                    <el-input v-model="AddFormData.SignUpCount" :readonly="Dialog.IsDetail" placeholder="请输入报名数量"></el-input>
+                </el-form-item>
+                <el-form-item label="中标单位" prop="WinningUnit">
+                    <el-input v-model="AddFormData.WinningUnit" :readonly="Dialog.IsDetail" placeholder="请输入中标单位"></el-input>
+                </el-form-item>
+                <el-form-item label="授权委托人" prop="AuthorizedMan">
+                    <el-input v-model="AddFormData.AuthorizedMan" :readonly="Dialog.IsDetail" placeholder="请输入授权委托人"></el-input>
+                </el-form-item>
+                <el-form-item label="联系方式" prop="AuthorizedTel">
+                    <el-input v-model="AddFormData.AuthorizedTel" :readonly="Dialog.IsDetail" placeholder="请输入联系方式"></el-input>
+                </el-form-item>
+                <el-form-item label="中标金额" prop="WinningAmount">
+                    <el-input v-model="AddFormData.WinningAmount" :readonly="Dialog.IsDetail" placeholder="请输入中标金额"></el-input>
+                </el-form-item>
+                <el-form-item label="中标单位项目负责人" prop="WinningM">
+                    <el-input v-model="AddFormData.WinningM" :readonly="Dialog.IsDetail" placeholder="请输入中标单位项目负责人"></el-input>
+                </el-form-item>
+
+                <div class="tabhead">工作内容</div>
+
+                <el-form-item label="创建时间" prop="WorkTime">
+                    <el-date-picker v-model="AddFormData.WorkTime"
+                                    type="datetime"
+                                    placeholder="选择创建时间"
+                                    :clearable="true"
+                                    :readonly="Dialog.IsDetail">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="工作描述" prop="WorkDesc">
+                    <el-input v-model="AddFormData.WorkDesc" type="textarea" :readonly="Dialog.IsDetail" placeholder="请输入工作描述"></el-input>
+                </el-form-item>
+                <el-form-item label="附件" prop="EnclosureName">
+                    <single-file-uploader :filename.sync="AddFormData.EnclosureName"
+                                          :filepath.sync="AddFormData.EnclusurePath"
+                                          :isread="Dialog.IsDetail"
+                                          placeholder="请选择附件"></single-file-uploader>
+                </el-form-item>
+                <div class="tabhead">收费情况</div>
+
+                <el-form-item label="报名费" prop="RegFee">
+                    <el-input v-model="AddFormData.RegFee" :readonly="Dialog.IsDetail" placeholder="请输入报名费"></el-input>
+                </el-form-item>
+                <el-form-item label="报名费支付方式" prop="RegFeeWay">
+                    <el-radio v-model="AddFormData.RegFeeWay" label="现金" :disabled="AddFormData.RegFeeWay=='现金'&&!Dialog.IsAdd" border>现金</el-radio>
+                    <el-radio v-model="AddFormData.RegFeeWay" label="转账" :disabled="AddFormData.RegFeeWay=='转账'&&!Dialog.IsAdd" border>转账</el-radio>
+                </el-form-item>
+                <el-form-item label="代理费" prop="AgencyFee">
+                    <el-input v-model="AddFormData.AgencyFee" :readonly="Dialog.IsDetail" placeholder="请输入代理费"></el-input>
+                </el-form-item>
+                <el-form-item label="代理费支付单位" prop="AgencyUnit">
+                    <el-input v-model="AddFormData.AgencyUnit" :readonly="Dialog.IsDetail" placeholder="请输入代理费支付单位"></el-input>
+                </el-form-item>
+                <el-form-item label="评审费" prop="AppraisalFee">
+                    <el-input v-model="AddFormData.AppraisalFee" :readonly="Dialog.IsDetail" placeholder="请输入评审费"></el-input>
+                </el-form-item>
+                <el-form-item label="收费状态" prop="ChargeStatus">
+                    <el-radio v-model="AddFormData.ChargeStatus" label="已收" :disabled="AddFormData.ChargeStatus=='已收'&&!Dialog.IsAdd" border>已收</el-radio>
+                    <el-radio v-model="AddFormData.ChargeStatus" label="未收" :disabled="AddFormData.ChargeStatus=='未收'&&!Dialog.IsAdd" border>未收</el-radio>
+                </el-form-item>
+                <el-form-item label="是否出具发票" prop="InvoiceStatus">
+                    <el-radio v-model="AddFormData.InvoiceStatus" label="已出" :disabled="AddFormData.InvoiceStatus=='已出'&&!Dialog.IsAdd" border>已出</el-radio>
+                    <el-radio v-model="AddFormData.InvoiceStatus" label="未出" :disabled="AddFormData.InvoiceStatus=='未出'&&!Dialog.IsAdd" border>未出</el-radio>
+                </el-form-item>
+            </el-form>
+            <div v-if="Dialog.IsAdd" style="text-align:center;padding:20px;">
+                <el-button @@click="submitAddForm">保 存</el-button>
+            </div>
+        </template>
     </div>
 </body>
 </html>
+<script>
+    var lastAddFormData = null;
+    $vue = new Vue({
+        el: "#App",
+        data: {
+            AddFormData: {
+                Id: "@ViewBag.reportid",
+                TenderType: "工程类",
+                TenderWay: "公开招标",
+                AgentMan: "",
+                Salesman: "",
+                ProjectName: "",
+                EntrustingParty: "",
+                EPMan: "",
+                EPTel: "",
+                OpenTime: "",
+                SignUpCount: "",
+                WinningUnit: "",
+                AuthorizedMan: "",
+                AuthorizedTel: "",
+                WinningAmount: "",
+                WinningM:"",
+                WorkTime: "",
+                WorkDesc: "",
+                EnclosureName: "",
+                EnclusurePath: "",
+                RegFee: "",
+                RegFeeWay: "现金",
+                AgencyFee: "",
+                AgencyUnit: "",
+                AppraisalFee: "",
+                ChargeStatus: "已收",
+                InvoiceStatus: "已出",
+            },
+            AddFormRule: {
+            },
+            Dialog: {
+                IsAdd: true,
+                IsDetail: false,
+                IsEdit: false
+            },
+            Loading: {
+                bodyLoading: false,
+                tableLoading: false
+            },
+            isAudit: "@ViewBag.isaudit",
+            isEdit: "@ViewBag.isedit"
+        },
+        methods: {
+            submitAddForm: function () {
+                this.$refs.AddForm.validate(function (success, validateobj) {
+                    if (success) {
+                        axios.post("Add", $vue.AddFormData).then(function (response) {
+                            $Msg.success("提交成功！");
+                            if ($vue.isEdit) {
+                                setTimeout(function () { closeTag("edit" + $vue.AddFormData.Id); }, 2000);
+                            }
+                            else {
+                                setTimeout(function () { closeTag("AddHouseReportIndex"); }, 2000);
+                            }
+                        }).catch(function (error) {
+                            $Msg.error("提交失败！")
+                        });
+                    }
+                });
+            }
+        },
+        created: function () {
+            if (this.AddFormData.Id) {
+                if (this.isEdit) {
+                    this.Dialog.IsDetail = false;
+                    this.Dialog.IsAdd = true;
+                    this.Dialog.IsEdit = true;
+                }
+                else {
+                    this.Dialog.IsDetail = true;
+                    this.Dialog.IsAdd = false;
+                    this.Dialog.IsEdit = false;
+                }
+
+                axios.post("GetModel", { id: this.AddFormData.Id }).then(function (response) {
+                    AutoMapper($vue.AddFormData, response.data);
+                }).catch(function (error) {
+                    ErrorCommonHandle($vue);
+                })
+            }
+            else {
+                this.Dialog.IsDetail = false;
+                this.Dialog.IsAdd = true;
+            }
+        },
+        mounted: function () {
+            //setTimeout(function () { $vue.$refs.AddForm.clearValidate(); }, 1000);
+        }
+
+    });
+
+    function closeTag(name) {
+        if (!name) {
+            name = top.$app.editableTabsValue;
+        }
+        var temp = null;
+        top.$app.editableTabs.forEach(function (tab, index) {
+            if (tab.name == name) {
+                top.$app.editableTabs.splice(index, 1);
+                var i = index - 1;
+                if (i < 0) {
+                    i = 0;
+                }
+                top.$app.editableTabsValue = top.$app.editableTabs[i].name;
+            }
+
+        })
+    }
+</script>

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Entity;
 using Business.RMBusiness;
 using Model.SystemModel;
+using Model.RMModel;
 
 namespace OAWeb.Controllers
 {
@@ -38,6 +39,12 @@ namespace OAWeb.Controllers
         public ActionResult GetModel(Guid id)
         {
             return EnumJson(service.GetModel(id));
+        }
+
+        public ActionResult GetList(BiddingAgencyFilter filter)
+        {
+            var list = service.GetList(filter, CurrentUser.Id, out int total);
+            return Json(new TableDataModel(total, list));
         }
     }
 }
