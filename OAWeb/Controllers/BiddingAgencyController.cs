@@ -18,8 +18,11 @@ namespace OAWeb.Controllers
         {
             return View();
         }
-        public ActionResult AddIndex()
+        public ActionResult AddIndex(Guid? reportid, int? isauidt, int? isedit)
         {
+            ViewBag.reportid = reportid;
+            ViewBag.isaudit = isauidt;
+            ViewBag.isedit = isedit;
             return View();
         }
         public ActionResult Add(RM_BiddingAgency entity)

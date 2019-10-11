@@ -22,7 +22,7 @@
 <body>
     <div id="App" ref="App" v-loading="Loading.bodyLoading">
         <template>
-            <el-form :model="AddFormData" :rules="AddFormRule" label-width="120px" ref="AddForm" @@submit.native.prevent>
+            <el-form :model="AddFormData" :rules="AddFormRule" label-width="150px" ref="AddForm" @@submit.native.prevent>
                 <div class="tabhead">报告信息</div>
                 <el-form-item label="招标类型" prop="TenderType">
                     <el-select v-model="AddFormData.TenderType"
@@ -136,7 +136,7 @@
                 </el-form-item>
             </el-form>
             <div v-if="Dialog.IsAdd" style="text-align:center;padding:20px;">
-                <el-button @@click="submitAddForm">保 存</el-button>
+                <el-button type="primary" @@click="submitAddForm">保 存</el-button>
             </div>
         </template>
     </div>
@@ -200,7 +200,7 @@
                                 setTimeout(function () { closeTag("edit" + $vue.AddFormData.Id); }, 2000);
                             }
                             else {
-                                setTimeout(function () { closeTag("AddHouseReportIndex"); }, 2000);
+                                setTimeout(function () { closeTag("AddBiddingAgency"); }, 2000);
                             }
                         }).catch(function (error) {
                             $Msg.error("提交失败！")

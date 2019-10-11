@@ -17,6 +17,7 @@ namespace Business.RMBusiness
             {
                 if (entity.Id == Guid.Empty)
                 {
+                    entity.Id = Guid.NewGuid();
                     entity.CreateTime = DateTime.Now;
                     dp.RM_BiddingAgency.Add(entity);
                 }
@@ -77,12 +78,12 @@ namespace Business.RMBusiness
             using (DataProvider dp = new DataProvider())
             {
 
-                Guid? depid = dp.PM_Department.FirstOrDefault(m => m.DepName == "招标代理部")?.Id;
-                if (!dp.PM_Employee.Any(x => x.RelateUserId == userid && x.DepartmentId == depid))
-                {
-                    total = 0;
-                    return new List<RM_BiddingAgency>();
-                }
+                //Guid? depid = dp.PM_Department.FirstOrDefault(m => m.DepName == "招标代理部")?.Id;
+                //if (!dp.PM_Employee.Any(x => x.RelateUserId == userid && x.DepartmentId == depid))
+                //{
+                //    total = 0;
+                //    return new List<RM_BiddingAgency>();
+                //}
                 var list = dp.RM_BiddingAgency.Where(m => true);
                 if (filter.TenderType.IsNotNullAndCountGtZero())
                 {

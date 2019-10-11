@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = null;
 }
 
@@ -8,10 +7,318 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
+    <title>招标代理</title>
+    @Html.Partial("~/Views/Shared/_Head.cshtml")
+    @Html.Partial("~/Views/Shared/SingleFileUploader.cshtml")
+    <style>
+    </style>
 </head>
 <body>
-    <div> 
+    <div id="App" ref="App" v-loading="Loading.bodyLoading">
+        <template>
+            <div ref="QueryFormDiv">
+                <el-form :model="QueryFormData" :inline="true" class="Query_Form" ref="QueryForm" @@submit.native.prevent label-width="80px">
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="招标类型" prop="TenderType">
+                                <el-select v-model="QueryFormData.TenderType"
+                                           placeholder="请选择招标类型"
+                                           :clearable="true"
+                                           multiple
+                                           collapse-tags>
+                                    <el-option label="工程类" value="工程类">  </el-option>
+                                    <el-option label="货物类" value="货物类">  </el-option>
+                                    <el-option label="服务类" value="服务类">  </el-option>
+                                    <el-option label="其他" value="其他">  </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="招标方式" prop="TenderWay">
+                                <el-select v-model="QueryFormData.TenderWay"
+                                           placeholder="请选择招标方式"
+                                           :clearable="true"
+                                           multiple
+                                           collapse-tags>
+                                    <el-option label="公开招标" value="公开招标">  </el-option>
+                                    <el-option label="竞争性谈判" value="竞争性谈判">  </el-option>
+                                    <el-option label="询价采购" value="询价采购">  </el-option>
+                                    <el-option label="邀请招标" value="邀请招标">  </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="代理人" prop="AgentMan">
+                                <el-input v-model="QueryFormData.AgentMan"   placeholder="请输入代理人"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="业务员" prop="Salesman">
+                                <el-input v-model="QueryFormData.Salesman" placeholder="请输入业务员"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="项目名称" prop="ProjectName">
+                                <el-input v-model="QueryFormData.ProjectName" placeholder="请输入项目名称"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-button type="primary" @@click="onQuery" icon="el-icon-search">查询</el-button>
+                            <el-button type="primary" @@click="resetQueryForm" icon="el-icon-refresh">重置</el-button>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <el-row class="Table_Button_Row">
+                    <el-col :span="24">
+                        <el-button type="primary" v-if="ActionPermission.Add" ref="btnAdd" @@click="openAddDialog" icon="icon iconfont icon-file-add">新增</el-button>
+                        <el-button type="primary" v-if="ActionPermission.Edit" :disabled="ButtonState.btnEdit" ref="btnEdit" @@click="openEditDialog" icon="icon iconfont icon-edit">编辑</el-button>
+                        <el-button type="primary" v-if="ActionPermission.Detail" :disabled="ButtonState.btnDetail" ref="btnDetail" @@click="openDetailDialog" icon="icon iconfont icon-eye">详细</el-button>
+                    </el-col>
+                </el-row>
+            </div>
+            <el-table ref="dataTable"
+                      :data="tableData"
+                      :border="true"
+                      :height="tableHeight"
+                      @@selection-change="selectChange"
+                      @@row-click="rowClick"
+                      style="width: 100%;margin-top:20px;"
+                      element-loading-text="拼命加载中"
+                      element-loading-spinner="el-icon-loading"
+                      element-loading-background="rgba(200, 200,200, 0.5)"
+                      v-loading="Loading.tableLoading">
+                <el-table-column type="index"
+                                 :index="showIdex"
+                                 label=" ">
+                </el-table-column>
+                <el-table-column type="selection"
+                                 width="50">
+                </el-table-column>
+                <el-table-column prop="TenderType"
+                                 label="招标类型"
+                                 width="150">
+                </el-table-column>
+                <el-table-column prop="TenderWay"
+                                 label="招标方式"
+                                 width="150">
+                </el-table-column>
+                <el-table-column prop="AgentMan"
+                                 label="代理人"
+                                 width="150">
+                </el-table-column>
+                <el-table-column prop="Salesman"
+                                 label="业务员"
+                                 width="150">
+                </el-table-column>
+                <el-table-column prop="ProjectName"
+                                 label="项目名称"
+                                 width="150">
+                </el-table-column>
+                <el-table-column prop="EntrustingParty"
+                                 label="委托方"
+                                 width="150">
+                </el-table-column>
+                <el-table-column prop="EPMan"
+                                 label="委托方联系人"
+                                 width="150">
+                </el-table-column>
+                <el-table-column prop="OpenTime"
+                                 label="开标时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        {{ DateFormat(scope.row.OpenTime,'yyyy-MM-dd HH:mm:ss') }}
+                    </template>
+                </el-table-column>
+                <el-table-column prop="WorkTime"
+                                 label="创建时间"
+                                 width="200">
+                    <template slot-scope="scope">
+                        {{ DateFormat(scope.row.WorkTime,'yyyy-MM-dd HH:mm:ss') }}
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div ref="Pagination">
+                <el-pagination @@size-change="handleSizeChange"
+                               @@current-change="handleCurrentChange"
+                               :current-page.sync="QueryFormData.Page"
+                               :page-size.sync="QueryFormData.PageSize"
+                               :page-sizes="PaginationData.pageSizes"
+                               layout="total, sizes, prev, pager, next, jumper"
+                               :total="PaginationData.total"
+                               style="width:100%;padding-left:20px;box-sizing:border-box">
+                </el-pagination>
+            </div>
+        </template>
     </div>
 </body>
 </html>
+<script>
+    var lastAddFormData = null;
+    $vue = new Vue({
+        el: "#App",
+        data: {
+            QueryFormData: {
+                TenderType: [],
+                TenderWay: [],
+                AgentMan: "",
+                Salesman: "",
+                ProjectName: "",
+                Page: 1,
+                PageSize: 10,
+            },
+            tableData: [],
+            tableHeight: 500,
+            ButtonState: {
+                btnEdit: true,
+                btnDetail: true
+            },
+            Loading: {
+                bodyLoading: false,
+                tableLoading: false
+            },
+            PaginationData: {
+                pageSizes: [10, 20, 50, 100],
+                total: 0
+            },
+            PaginationFilter: {
+            },
+            ActionPermission: {
+                Add: false,
+                Detail: false,
+                Edit: false
+            }
+        },
+        methods: {
+            onQuery: function () {
+                this.QueryFormData.Page = 1;
+                this.PaginationFilter = JSON.parse(JSON.stringify(this.QueryFormData));
+                getList();
+            },
+            showIdex: function (index) {
+                return (this.QueryFormData.Page - 1) * this.QueryFormData.PageSize + 1 + index;
+            },
+            resetQueryForm: function () {
+                this.$refs.QueryForm.resetFields();
+            },
+            openAddDialog: function () {
+                var temp = null;
+                top.$app.editableTabs.forEach(function (tab, index) {
+                    if (tab.name == "AddBiddingAgency") {
+                        temp = tab;
+                    }
+                })
+                if (temp != null) {
+                    top.$app.editableTabsValue = temp.name;
+                }
+                else {
+                    top.$app.editableTabs.push({
+                        title: "新增招标代理",
+                        name: "AddBiddingAgency",
+                        IconClass: "icon iconfont icon-file-add",
+                        content: "/BiddingAgency/AddIndex",
+                        url: "/BiddingAgency/AddIndex"
+                    });
+                    top.$app.editableTabsValue = "AddBiddingAgency";
+                }
+            },
+            openEditDialog: function () {
+                var temp = null;
+                top.$app.editableTabs.forEach(function (tab, index) {
+                    if (tab.name == "edit" + $vue.$refs.dataTable.selection[0].Id) {
+                        temp = tab;
+                    }
+                })
+                if (temp != null) {
+                    top.$app.editableTabsValue = temp.name;
+                }
+                else {
+                    top.$app.editableTabs.push({
+                        title: "编辑招标代理",
+                        name: "edit" + this.$refs.dataTable.selection[0].Id,
+                        IconClass: "icon iconfont icon-edit",
+                        content: "/BiddingAgency/AddIndex?isedit=1&reportid=" + this.$refs.dataTable.selection[0].Id,
+                        url: "/BiddingAgency/AddIndex?isedit=1&reportid=" + this.$refs.dataTable.selection[0].Id
+                    });
+                    top.$app.editableTabsValue = "edit" + this.$refs.dataTable.selection[0].Id;
+                }
+            },
+            openDetailDialog: function () {
+                var tabname = new Date().getTime() + "";
+                top.$app.editableTabs.push({
+                    title: "招标代理详细",
+                    name: tabname,
+                    IconClass: "icon iconfont icon-eye",
+                    content: "/BiddingAgency/AddIndex?reportid=" + this.$refs.dataTable.selection[0].Id,
+                    url: "/BiddingAgency/AddIndex" + this.$refs.dataTable.selection[0].Id
+                });
+                top.$app.editableTabsValue = tabname;
+            },
+            selectChange: function (selectValue) {
+                if (this.$refs.dataTable.selection.length == 0) {
+                    this.ButtonState.btnDetail = true;
+                    this.ButtonState.btnEdit = true;
+                }
+                else if (this.$refs.dataTable.selection.length == 1) {
+                    this.ButtonState.btnDetail = false;
+                    this.ButtonState.btnEdit = false;
+                }
+                else {
+                    this.ButtonState.btnDetail = true;
+                    this.ButtonState.btnEdit = true;
+                }
+            },
+            rowClick: function (row, event, column) {
+                this.$refs.dataTable.toggleRowSelection(row);
+            },
+            handleSizeChange: function (val) {
+                if (this.QueryFormData.Page > (this.PaginationData.total / val + 1)) {
+                    return;
+                }
+                this.PaginationFilter.Page = this.QueryFormData.Page;
+                this.PaginationFilter.PageSize = val;
+                getList(this.PaginationFilter);
+            },
+            handleCurrentChange: function (val) {
+                this.PaginationFilter.Page = val;
+                this.PaginationFilter.PageSize = this.QueryFormData.PageSize;
+                getList(this.PaginationFilter);
+            },
+            DateFormat: DateFormat
+        }
+
+    });
+
+    function getList(filter) {
+        if (filter == null) {
+            filter = $vue.QueryFormData;
+        }
+        $vue.$refs.dataTable.clearSelection();
+        $vue.ButtonState.btnEdit = true;
+        $vue.ButtonState.btnDelete = true;
+        $vue.Loading.tableLoading = true;
+        axios.post("GetList", filter).then(function (response) {
+            $vue.Loading.tableLoading = false;
+            $vue.tableData = response.data.List;
+            $vue.PaginationData.total = response.data.Total;
+        }).catch(function (error) {
+            $vue.Loading.tableLoading = false;
+            $vue.tableData = [];
+            $vue.PaginationData.total = 0;
+            $vue.$message({
+                type: 'error',
+                message: '服务器出错'
+            });
+        });
+    }
+    window.onresize = function () {
+        $vue.tableHeight = $vue.$refs.App.getBoundingClientRect().height -
+            $vue.$refs.QueryFormDiv.getBoundingClientRect().height -
+            $vue.$refs.Pagination.getBoundingClientRect().height - 20;
+        $vue.panelHeight = $vue.$refs.App.getBoundingClientRect().height - 350;
+    }
+    getList();
+
+    GetActionAuthorize($vue);
+</script>
